@@ -12,12 +12,17 @@ export default async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    await updateSupabaseSession(request, response);
+    try {
+      await updateSupabaseSession(request, response);
+    } catch {
+      // No bloquear redirect i18n si el refresh de cookies falla en el edge
+    }
   }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!api|auth|_next|_vercel|.*\\..*|@).*)"],
+  // Debe coincidir con `routing.locales` (en, es) y con `/` para el redirect a locale
+  matcher: ["/", "/(en|es)/:path*"],
 };

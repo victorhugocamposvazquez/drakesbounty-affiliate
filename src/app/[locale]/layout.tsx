@@ -4,7 +4,6 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Fraunces, Work_Sans, JetBrains_Mono, VT323 } from "next/font/google";
 import { routing } from "@/i18n/routing";
-import "../globals.css";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",

@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+/* =========================================================
+   DRAKE'S BOUNTY — Design Tokens
+   Paleta western noir elevado: pergamino + tinta + oxblood + latón
+   ========================================================= */
+
+@theme {
+  /* ---- Colors ---- */
+  --color-paper: #E8DCC0;
+  --color-paper-warm: #DFD1B1;
+  --color-paper-dark: #C9B994;
+  --color-paper-shadow: #A89573;
+
+  --color-ink: #1A130C;
+  --color-ink-soft: #2B2018;
+  --color-ink-dim: #4D3D2E;
+  --color-ink-faint: #75624C;
+
+  --color-brass: #A67C2E;
+  --color-brass-light: #C9A961;
+  --color-brass-deep: #7A5920;
+
+  --color-oxblood: #762525;
+  --color-oxblood-deep: #4F1818;
+
+  --color-absinthe: #4A5C3A;
+  --color-absinthe-light: #6B8257;
+
+  /* ---- Fonts (loaded via next/font in layout.tsx) ---- */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-crt: var(--font-vt323), ui-monospace, monospace;
+
+  /* ---- Rule / border opacities ---- */
+  --color-rule: rgba(26, 19, 12, 0.22);
+  --color-rule-strong: rgba(26, 19, 12, 0.45);
+  --color-rule-dim: rgba(26, 19, 12, 0.10);
+
+  /* ---- Easing ---- */
+  --ease-drake: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+:root {
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 15px;
+}
+
+body {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--color-paper);
+}
+
+/* Grano de pergamino — overlay global sutil */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* El contenido vive por encima del grano */
+nav, aside, main, footer, header { position: relative; z-index: 3; }
+
+/* =========================================================
+   TYPOGRAPHY HELPERS
+   ========================================================= */
+
+/* Eyebrow / caption mono en mayúsculas (patrón muy usado en Drake) */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* Display italic — para citas y títulos con alma */
+.display-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144;
+}
+
+/* Número ordinal romano grande (I. / II. / III.) */
+.roman {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-oxblood);
+  font-variation-settings: "opsz" 144;
+}
+
+/* =========================================================
+   SCROLLBAR — sutil, acorde con la paleta
+   ========================================================= */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-paper-shadow);
+  border-radius: 0;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }

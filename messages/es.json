@@ -9,7 +9,10 @@
     "code": "El Código",
     "ledger": "El Ledger",
     "index": "Standards Index",
-    "signIn": "Entrar"
+    "signIn": "Entrar",
+    "signOut": "Salir",
+    "memberDefault": "Miembro",
+    "back": "Volver"
   },
   "Threshold": {
     "overline": "· Solo miembros · Fundado MMXXVI · Por invitación o juramento ·",
@@ -30,50 +33,204 @@
     "operatorLabel": "El Operador",
     "operatorDesc": "Tú financias las bounties. Nosotros te traemos tráfico verificado de creadores bajo el Código.",
     "ctaEnter": "Prestar juramento",
+    "ctaReadCode": "Leer el Código primero",
     "closingQuote": "«El Código no es una jaula. Es un umbral.»",
     "closingAttribution": "— Drake",
     "languageToggle": "Idioma"
   },
+  "Code": {
+    "edition": "Edición I · Fundacional",
+    "title": "El Código",
+    "subtitle": "Estándares vinculantes para todos los miembros de Drake's Bounty.",
+    "downloadPdf": "Descargar en PDF",
+    "tocLabel": "Índice",
+    "toc": {
+      "preamble": "Preámbulo",
+      "operator": "Juramento del Operador",
+      "creator": "Juramento del Creador",
+      "house": "Obligaciones de la Casa",
+      "enforcement": "Aplicación",
+      "spirit": "Espíritu del Código"
+    },
+    "preambleTitle": "Preámbulo",
+    "preambleBody": "Este Código no es ley. Es un pacto. Vincula a quienes eligen entrar en Drake's Bounty —operadores que financian las bounties y creadores que aportan la audiencia— a un único estándar de conducta: transparente, honesto y exigible. Cada miembro firma el Código al entrar. Quien lo rompe, sale. El Standards Index es público. El Ledger es auditable. No hay excepciones privadas.",
+    "operatorTitle": "Juramento del Operador",
+    "operatorIntro": "Todo operador que entra en Drake's Bounty se compromete con los cinco artículos siguientes, auditados trimestralmente.",
+    "creatorTitle": "Juramento del Creador",
+    "creatorIntro": "Todo creador que entra en Drake's Bounty se compromete con los cinco artículos siguientes. El cumplimiento define tu rango y tus ingresos.",
+    "houseTitle": "Obligaciones de la Casa",
+    "houseIntro": "Lo que Drake's Bounty debe a sus miembros a cambio.",
+    "houseBody": "Publicaremos ratings sin favores. Aplicaremos los artículos sin excepciones. Reembolsaremos al Ledger si nuestro sistema causa la pérdida. No venderemos datos de audiencia de los creadores a los operadores. No venderemos datos de margen de los operadores a los creadores. Publicaremos enmiendas al Código con 30 días de aviso y voto de los miembros. El Ledger responde ante el Código, no ante el comercio.",
+    "enforcementTitle": "Aplicación",
+    "enforcementBody": "Las violaciones se clasifican en menores (aviso + corrección en 14 días), mayores (degradación de rating + nota pública en el Standards Index) o terminales (expulsión, registro permanente en la Lista de Expulsiones). Los miembros bajo investigación son notificados en 48 horas y pueden aportar pruebas. Las decisiones se pueden revisar una vez.",
+    "spiritTitle": "Espíritu del Código",
+    "spiritBody": "Lee los artículos al pie de la letra; honra su intención. El Código es un suelo, no un techo. Si te ves buscando huecos, ya estás del otro lado del umbral.",
+    "auditMark": "MARCA DE AUDITORÍA",
+    "creatorArticles": [
+      {
+        "title": "Solo tráfico humano.",
+        "body": "Sin bots, sin granjas de clicks, sin fuentes tergiversadas. Cada click y cada registro debe venir de una persona real alcanzada por un canal real."
+      },
+      {
+        "title": "Disclosure honesto.",
+        "body": "Lo que recomiendo, lo recomiendo como mío. Declaro la afiliación en el formato requerido por la plataforma de publicación y la jurisdicción de la audiencia."
+      },
+      {
+        "title": "Sin engañar a la audiencia.",
+        "body": "No fabricaré resultados, retornos, win rates ni cifras que sé falsas o no verificables. No presentaré pérdidas como ganancias."
+      },
+      {
+        "title": "Promoción responsable.",
+        "body": "Respeto la edad (mínimo 18, 21 donde sea exigido), las restricciones geográficas y las listas de autoexclusión. No promociono productos restringidos a audiencias restringidas."
+      },
+      {
+        "title": "Una identidad.",
+        "body": "Un creador, una cuenta. Las multi-cuentas para manipular rangos o comisiones de referidos son violación terminal."
+      }
+    ],
+    "operatorArticles": [
+      {
+        "title": "Atribución transparente.",
+        "body": "Doy visibilidad completa y en tiempo real sobre clicks, registros, depósitos e ingresos atribuibles a cada creador. Sin filtros ocultos, sin reclasificaciones silenciosas."
+      },
+      {
+        "title": "Sin shaving injustificado.",
+        "body": "Las reclasificaciones por encima del 3% del volumen mensual quedan documentadas caso a caso, con motivo, y visibles para el creador afectado en 24 horas."
+      },
+      {
+        "title": "Liquidación puntual.",
+        "body": "Honro la cadencia de pago acordada sin retrasos ocultos. Las retenciones y clawbacks se limitan a las ventanas pactadas en el Tratado."
+      },
+      {
+        "title": "Sin cambios retroactivos.",
+        "body": "Los términos pasados quedan sellados. Puedo enmendar términos futuros con aviso; no puedo modificar las condiciones de usuarios ya atribuidos."
+      },
+      {
+        "title": "Auditabilidad pública.",
+        "body": "Me comprometo con la auditoría trimestral de Drake's Bounty. Acepto el rating público del Standards Index que resulte. No litigo ratings en privado."
+      }
+    ]
+  },
   "Oath": {
     "stepLabel": "Folio",
-    "step1Title": "Tu nombre en el registro",
+    "step1Title": "Tu nombre en el Ledger",
+    "step1Subtitle": "Tres líneas. No pedimos lo que no necesitamos.",
     "step2Title": "Tu terreno",
+    "step2Subtitle": "Lo que aportas, hasta dónde llegas.",
     "step3Title": "Firmar el Código",
+    "step3Subtitle": "Lee cada artículo. Sellar este juramento te vincula a los cinco.",
     "fieldEmail": "Correo",
+    "fieldEmailPlaceholder": "tu@canal.com",
     "fieldHandle": "Handle o marca",
+    "fieldHandlePlaceholder": "andypsx",
+    "fieldDisplayName": "Nombre visible",
+    "fieldDisplayNamePlaceholder": "Andy P.",
+    "fieldLegalName": "Razón social",
+    "fieldLegalNamePlaceholder": "Operator Holdings Ltd.",
     "fieldCountry": "País",
+    "fieldCountryPlaceholder": "ES, MT, GB…",
     "fieldVertical": "Vertical",
-    "fieldAudience": "Alcance de audiencia",
+    "verticals": {
+      "casino": "Casino",
+      "sports": "Apuestas deportivas",
+      "trading": "Trading",
+      "crypto": "Cripto",
+      "poker": "Póker",
+      "other": "Otra"
+    },
     "fieldChannel": "Canal principal",
+    "channels": {
+      "twitch": "Twitch",
+      "kick": "Kick",
+      "telegram": "Telegram",
+      "x": "X / Twitter",
+      "youtube": "YouTube",
+      "instagram": "Instagram",
+      "discord": "Discord",
+      "other": "Otro"
+    },
+    "fieldAudience": "Alcance de audiencia",
+    "fieldAudiencePlaceholder": "ej. 12500",
+    "fieldAudienceHelp": "Total de seguidores / suscriptores en tu canal principal.",
+    "fieldMarkets": "Mercados de operación",
+    "fieldMarketsPlaceholder": "ES, IT, BR, MX",
+    "fieldMarketsHelp": "Códigos ISO de país, separados por coma.",
+    "fieldWebsite": "Website",
+    "fieldWebsitePlaceholder": "https://…",
     "codeIntro": "Al sellar este juramento, te comprometes con los cinco artículos siguientes.",
-    "articleIPrefix": "I.",
-    "articleIIPrefix": "II.",
-    "articleIIIPrefix": "III.",
-    "articleIVPrefix": "IV.",
-    "articleVPrefix": "V.",
-    "creatorArticle1": "Solo tráfico humano. Sin bots, sin granjas de clicks, sin fuentes tergiversadas.",
-    "creatorArticle2": "Disclosure honesto. Lo que recomiendo, lo recomiendo como mío.",
-    "creatorArticle3": "Sin engañar a la audiencia. No fabricaré resultados que sé falsos.",
-    "creatorArticle4": "Promoción responsable. Respeto restricciones de edad, geografía y autoexclusión.",
-    "creatorArticle5": "Una identidad. Un creador. Multi-cuentas para manipular rangos es violación.",
-    "operatorArticle1": "Atribución transparente. Doy visibilidad completa y en tiempo real sobre clicks, registros e ingresos.",
-    "operatorArticle2": "Sin shaving injustificado. Reclasificaciones por encima del 3% quedan documentadas y auditables.",
-    "operatorArticle3": "Liquidación puntual. Honro la cadencia de pago acordada sin retrasos ocultos.",
-    "operatorArticle4": "Sin cambios retroactivos. Los términos pasados quedan sellados.",
-    "operatorArticle5": "Me comprometo con la auditoría trimestral de Drake's Bounty y acepto el rating público del Standards Index.",
     "signCheckbox": "Si no puedo vivir con esto, no pertenezco aquí.",
     "signButton": "Sellar el juramento",
+    "signing": "Sellando…",
     "nextStep": "Continuar",
     "backStep": "Volver",
     "sealedTitle": "Juramento sellado",
+    "sealedSubtitle": "Estás vinculado al Código. Bienvenido al Ledger.",
     "sealedId": "ID de miembro",
     "sealedDate": "Fecha",
     "sealedRank": "Rango inicial",
+    "rankDeputy": "Deputy",
     "sealedQuote": "«El trabajo es el trabajo. Hazlo bien, y el camino camina contigo.»",
-    "sealedCta": "Entrar al Ledger"
+    "sealedCta": "Entrar al Ledger",
+    "creatorOathTitle": "El Juramento del Creador",
+    "operatorOathTitle": "El Juramento del Operador",
+    "creatorOverline": "· Folio Creador · Edición I ·",
+    "operatorOverline": "· Folio Operador · Edición I ·",
+    "errorRequired": "Este campo es obligatorio.",
+    "errorEmail": "Introduce un correo válido.",
+    "errorHandle": "Solo letras, números, guiones y guiones bajos (2–32 caracteres).",
+    "errorHandleTaken": "Ese handle ya está tomado. Elige otro.",
+    "errorNotAuthenticated": "Tu sesión ha caducado. Vuelve a entrar.",
+    "errorInvalidInput": "Revisa los datos introducidos.",
+    "errorMustAccept": "Debes aceptar El Código para sellar el juramento.",
+    "fieldEmailLocked": "Correo verificado al entrar. No se puede cambiar aquí."
+  },
+  "Auth": {
+    "thresholdTitle": "Cruzar el umbral",
+    "thresholdSubtitle": "Entra con tu canal o con correo. Después firmas el Código.",
+    "continueWith": "Continuar con {provider}",
+    "orDivider": "o con correo",
+    "fieldPassword": "Contraseña",
+    "fieldPasswordPlaceholder": "mínimo 8 caracteres",
+    "passwordHelp": "Guárdala en tu gestor. La usaremos para entrar la próxima vez.",
+    "createAccountCta": "Crear cuenta",
+    "signInCta": "Entrar",
+    "sendMagicLinkCta": "Enviar enlace mágico",
+    "useMagicLink": "· Prefiero un enlace mágico al correo ·",
+    "usePassword": "Usar contraseña en su lugar",
+    "alreadyMember": "¿Ya tienes cuenta? Entrar",
+    "needAccount": "¿Primera vez? Crear cuenta",
+    "working": "Procesando…",
+    "checkEmailOverline": "· Revisa tu bandeja ·",
+    "checkEmailTitle": "Enlace enviado",
+    "checkEmailBody": "Te hemos mandado un enlace para cruzar el umbral. Ábrelo en este mismo dispositivo.",
+    "useDifferentEmail": "Usar otro correo",
+    "errorAlreadyRegistered": "Ya existe una cuenta con ese correo. Prueba a entrar.",
+    "errorInvalidCredentials": "Correo o contraseña incorrectos.",
+    "errorNotConfirmed": "Tu correo no está confirmado todavía.",
+    "errorInvalidInput": "Revisa los datos introducidos."
+  },
+  "Ledger": {
+    "overline": "· Ledger personal · Edición I ·",
+    "welcome": "Bienvenido al Ledger, {name}.",
+    "subtitle": "Este es tu centro de operaciones. Aquí verás tus bounties, tus rutas y tu cofre. Todavía está tomando forma.",
+    "memberFallback": "miembro",
+    "statRole": "Rol",
+    "statHandle": "Handle",
+    "statJoined": "Fecha de juramento",
+    "roles": {
+      "creator": "Creador",
+      "operator": "Operador",
+      "admin": "Admin"
+    },
+    "comingSoonLabel": "Construyéndose",
+    "comingSoonTitle": "Tu Map Room llega pronto",
+    "comingSoonBody": "Estamos cableando el Ledger contra datos reales: clicks, conversiones, cofre y el mapa de audiencia. Vuelve en días, no semanas.",
+    "rereadCode": "Volver a leer el Código"
   },
   "Common": {
     "close": "Cerrar",
-    "loading": "Cargando..."
+    "loading": "Cargando…",
+    "back": "Volver",
+    "comingSoon": "Próximamente"
   }
 }

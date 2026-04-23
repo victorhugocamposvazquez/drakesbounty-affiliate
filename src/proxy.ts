@@ -21,8 +21,9 @@ export default async function proxy(request: NextRequest) {
 export const config = {
   // Match all paths except:
   //  - /api/*              (route handlers manage their own auth)
+  //  - /auth/*             (OAuth / magic-link callback, no locale prefix)
   //  - /_next/*, /_vercel  (Next internals)
   //  - Static files         (anything with a dot → .png, .svg, .webp, …)
   //  - /@handle             (creator public billboards, locale-less)
-  matcher: ["/((?!api|_next|_vercel|.*\\..*|@).*)"],
+  matcher: ["/((?!api|auth|_next|_vercel|.*\\..*|@).*)"],
 };

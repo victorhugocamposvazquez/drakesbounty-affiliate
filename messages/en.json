@@ -9,7 +9,10 @@
     "code": "The Code",
     "ledger": "The Ledger",
     "index": "Standards Index",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "memberDefault": "Member",
+    "back": "Back"
   },
   "Threshold": {
     "overline": "· Members Only · Est. MMXXVI · By Invitation or Oath ·",
@@ -30,50 +33,204 @@
     "operatorLabel": "The Operator",
     "operatorDesc": "You fund the bounties. We deliver verified traffic from creators bound by The Code.",
     "ctaEnter": "Take the oath",
+    "ctaReadCode": "Read the Code first",
     "closingQuote": "\"The Code is not a cage. It is a threshold.\"",
     "closingAttribution": "— Drake",
     "languageToggle": "Language"
   },
+  "Code": {
+    "edition": "Edition I · Foundational",
+    "title": "The Code",
+    "subtitle": "Standards binding on every member of Drake's Bounty.",
+    "downloadPdf": "Download as PDF",
+    "tocLabel": "Table of contents",
+    "toc": {
+      "preamble": "Preamble",
+      "operator": "Operator's Oath",
+      "creator": "Creator's Oath",
+      "house": "House Obligations",
+      "enforcement": "Enforcement",
+      "spirit": "Spirit of the Code"
+    },
+    "preambleTitle": "Preamble",
+    "preambleBody": "This Code is not law. It is a covenant. It binds those who choose to enter Drake's Bounty — operators who fund the bounties and creators who bring the audience — to a single standard of conduct: transparent, honest, and accountable. Every member signs the Code on entry. Members who break it are removed. The Standards Index is public. The Ledger is auditable. There are no private exceptions.",
+    "operatorTitle": "Operator's Oath",
+    "operatorIntro": "Every operator entering Drake's Bounty commits to the following five articles, audited quarterly.",
+    "creatorTitle": "Creator's Oath",
+    "creatorIntro": "Every creator entering Drake's Bounty commits to the following five articles. Compliance defines your tier and your earnings.",
+    "houseTitle": "House Obligations",
+    "houseIntro": "What Drake's Bounty owes its members in return.",
+    "houseBody": "We will publish ratings without favor. We will enforce articles without exception. We will refund the Ledger if our system causes loss. We will not sell creator audience data to operators. We will not sell operator margin data to creators. We will publish the Code's amendments with 30 days' notice and a member vote. The Ledger answers to the Code, not to commerce.",
+    "enforcementTitle": "Enforcement",
+    "enforcementBody": "Violations are categorized as minor (warning + correction within 14 days), major (rating downgrade + public note in the Standards Index), or terminal (expulsion, permanent listing in the Expulsion Roster). Members under investigation are notified within 48 hours and may submit evidence. Decisions are reviewable once.",
+    "spiritTitle": "Spirit of the Code",
+    "spiritBody": "Read the articles literally; honor their intent. The Code is a floor, not a ceiling. If you find yourself looking for loopholes, you are already on the wrong side of the threshold.",
+    "auditMark": "AUDIT MARK",
+    "creatorArticles": [
+      {
+        "title": "Human traffic only.",
+        "body": "No bots, no click farms, no misrepresented sources. Every click and registration must originate from a real human reached through a real channel."
+      },
+      {
+        "title": "Honest disclosure.",
+        "body": "What I recommend, I recommend as mine. I disclose the affiliation in the format required by the platform of publication and the jurisdiction of the audience."
+      },
+      {
+        "title": "No audience deception.",
+        "body": "I will not fabricate results, returns, win rates or outcomes I know to be false or unverifiable. I will not present losses as wins."
+      },
+      {
+        "title": "Responsible promotion.",
+        "body": "I respect age (18+ minimum, 21+ where required), geographic restrictions, and self-exclusion lists. I do not promote restricted products to restricted audiences."
+      },
+      {
+        "title": "One identity.",
+        "body": "One creator, one account. Multi-accounting to manipulate tier or referral commissions is a terminal violation."
+      }
+    ],
+    "operatorArticles": [
+      {
+        "title": "Transparent attribution.",
+        "body": "I provide full, real-time visibility on clicks, registrations, deposits, and revenue attributable to each creator. No hidden filters, no silent reclassifications."
+      },
+      {
+        "title": "No unjustified shaving.",
+        "body": "Reclassifications above 3% of monthly volume are documented per case, with reason, and visible to the affected creator within 24 hours."
+      },
+      {
+        "title": "Timely settlement.",
+        "body": "I honor the agreed payment cadence without hidden delays. Holds and clawbacks are limited to the windows agreed in the Treaty."
+      },
+      {
+        "title": "No retroactive term changes.",
+        "body": "Past terms are sealed. I may amend future terms with notice; I may not modify the conditions of users already attributed."
+      },
+      {
+        "title": "Public auditability.",
+        "body": "I commit to Drake's Bounty's quarterly audit. I accept the public Standards Index rating that results from it. I do not litigate ratings privately."
+      }
+    ]
+  },
   "Oath": {
     "stepLabel": "Folio",
-    "step1Title": "Your name on the ledger",
+    "step1Title": "Your name on the Ledger",
+    "step1Subtitle": "Three lines. We don't ask for what we don't need.",
     "step2Title": "Your ground",
+    "step2Subtitle": "What you bring, where you reach.",
     "step3Title": "Sign The Code",
+    "step3Subtitle": "Read each article. Sealing this oath binds you to all five.",
     "fieldEmail": "Email",
+    "fieldEmailPlaceholder": "you@channel.com",
     "fieldHandle": "Handle or brand",
+    "fieldHandlePlaceholder": "andypsx",
+    "fieldDisplayName": "Display name",
+    "fieldDisplayNamePlaceholder": "Andy P.",
+    "fieldLegalName": "Legal entity name",
+    "fieldLegalNamePlaceholder": "Operator Holdings Ltd.",
     "fieldCountry": "Country",
+    "fieldCountryPlaceholder": "ES, MT, GB…",
     "fieldVertical": "Vertical",
-    "fieldAudience": "Audience reach",
+    "verticals": {
+      "casino": "Casino",
+      "sports": "Sportsbook",
+      "trading": "Trading",
+      "crypto": "Crypto",
+      "poker": "Poker",
+      "other": "Other"
+    },
     "fieldChannel": "Main channel",
+    "channels": {
+      "twitch": "Twitch",
+      "kick": "Kick",
+      "telegram": "Telegram",
+      "x": "X / Twitter",
+      "youtube": "YouTube",
+      "instagram": "Instagram",
+      "discord": "Discord",
+      "other": "Other"
+    },
+    "fieldAudience": "Audience reach",
+    "fieldAudiencePlaceholder": "e.g. 12500",
+    "fieldAudienceHelp": "Total followers / subscribers across your main channel.",
+    "fieldMarkets": "Operating markets",
+    "fieldMarketsPlaceholder": "ES, IT, BR, MX",
+    "fieldMarketsHelp": "ISO country codes, comma separated.",
+    "fieldWebsite": "Website",
+    "fieldWebsitePlaceholder": "https://…",
     "codeIntro": "By sealing this oath, you commit to the five articles below.",
-    "articleIPrefix": "I.",
-    "articleIIPrefix": "II.",
-    "articleIIIPrefix": "III.",
-    "articleIVPrefix": "IV.",
-    "articleVPrefix": "V.",
-    "creatorArticle1": "Human traffic only. No bots, no click farms, no misrepresented sources.",
-    "creatorArticle2": "Honest disclosure. What I recommend, I recommend as mine.",
-    "creatorArticle3": "No audience deception. I will not fabricate results or outcomes I know to be false.",
-    "creatorArticle4": "Responsible promotion. I respect age, geo, and self-exclusion restrictions.",
-    "creatorArticle5": "One identity. One creator. Multi-accounting to manipulate tiers is a violation.",
-    "operatorArticle1": "Transparent attribution. I provide full, real-time visibility on clicks, registrations, and revenue.",
-    "operatorArticle2": "No unjustified shaving. Reclassifications above 3% are documented and auditable.",
-    "operatorArticle3": "Timely settlement. I honor the agreed payment cadence without hidden delays.",
-    "operatorArticle4": "No retroactive term changes. Past terms are sealed.",
-    "operatorArticle5": "I commit to Drake's Bounty's quarterly audit and accept the public Standards Index rating.",
     "signCheckbox": "If I can't live by this, I don't belong here.",
     "signButton": "Seal the oath",
+    "signing": "Sealing…",
     "nextStep": "Continue",
     "backStep": "Back",
     "sealedTitle": "Oath sealed",
+    "sealedSubtitle": "You are now bound by The Code. Welcome to the Ledger.",
     "sealedId": "Member ID",
     "sealedDate": "Date",
     "sealedRank": "Initial rank",
+    "rankDeputy": "Deputy",
     "sealedQuote": "\"The job is the job. Do it right, and the road runs with you.\"",
-    "sealedCta": "Enter the Ledger"
+    "sealedCta": "Enter the Ledger",
+    "creatorOathTitle": "The Creator's Oath",
+    "operatorOathTitle": "The Operator's Oath",
+    "creatorOverline": "· Folio Creator · Edition I ·",
+    "operatorOverline": "· Folio Operator · Edition I ·",
+    "errorRequired": "This field is required.",
+    "errorEmail": "Please enter a valid email.",
+    "errorHandle": "Letters, numbers, dashes and underscores only (2–32 chars).",
+    "errorHandleTaken": "That handle is taken. Pick another one.",
+    "errorNotAuthenticated": "Your session expired. Please sign in again.",
+    "errorInvalidInput": "Please review the data you entered.",
+    "errorMustAccept": "You must accept The Code to seal the oath.",
+    "fieldEmailLocked": "Email verified at entry. Not changeable here."
+  },
+  "Auth": {
+    "thresholdTitle": "Cross the threshold",
+    "thresholdSubtitle": "Enter with your channel or your email. You'll sign the Code next.",
+    "continueWith": "Continue with {provider}",
+    "orDivider": "or with email",
+    "fieldPassword": "Password",
+    "fieldPasswordPlaceholder": "8+ characters",
+    "passwordHelp": "Save it in your password manager. You'll use it to sign back in.",
+    "createAccountCta": "Create account",
+    "signInCta": "Sign in",
+    "sendMagicLinkCta": "Send magic link",
+    "useMagicLink": "· Send me a magic link instead ·",
+    "usePassword": "Use a password instead",
+    "alreadyMember": "Already a member? Sign in",
+    "needAccount": "First time? Create account",
+    "working": "Working…",
+    "checkEmailOverline": "· Check your inbox ·",
+    "checkEmailTitle": "Link sent",
+    "checkEmailBody": "We sent you a link to cross the threshold. Open it on this same device.",
+    "useDifferentEmail": "Use a different email",
+    "errorAlreadyRegistered": "An account already exists for this email. Try signing in.",
+    "errorInvalidCredentials": "Wrong email or password.",
+    "errorNotConfirmed": "Your email isn't confirmed yet.",
+    "errorInvalidInput": "Please review the data you entered."
+  },
+  "Ledger": {
+    "overline": "· Personal Ledger · Edition I ·",
+    "welcome": "Welcome to the Ledger, {name}.",
+    "subtitle": "This is your operations deck. Your bounties, routes and treasury will live here. Still taking shape.",
+    "memberFallback": "member",
+    "statRole": "Role",
+    "statHandle": "Handle",
+    "statJoined": "Oath date",
+    "roles": {
+      "creator": "Creator",
+      "operator": "Operator",
+      "admin": "Admin"
+    },
+    "comingSoonLabel": "Under construction",
+    "comingSoonTitle": "Your Map Room is coming",
+    "comingSoonBody": "We're wiring the Ledger to real data: clicks, conversions, treasury and the audience map. Back in days, not weeks.",
+    "rereadCode": "Reread the Code"
   },
   "Common": {
     "close": "Close",
-    "loading": "Loading..."
+    "loading": "Loading…",
+    "back": "Back",
+    "comingSoon": "Coming soon"
   }
 }

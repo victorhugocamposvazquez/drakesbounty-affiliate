@@ -61,7 +61,32 @@ SUPABASE_SERVICE_ROLE_KEY=<tu-service-role-key>
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 4. Instalar dependencias y arrancar
+### 4. Configurar auth en Supabase
+
+En el dashboard de Supabase, **Authentication → URL Configuration**:
+
+- **Site URL**: `https://drakesbounty.com` (o la URL definitiva de producción)
+- **Redirect URLs** (una por línea — añade las que uses):
+  ```
+  http://localhost:3000/auth/callback
+  https://<tu-preview>.vercel.app/auth/callback
+  https://drakesbounty.com/auth/callback
+  ```
+
+En **Authentication → Providers**, activa:
+
+| Proveedor | Dónde crear la app                                                  | Callback a registrar en el IdP                               |
+| --------- | ------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Email     | Ya viene activo.                                                    | —                                                            |
+| Google    | https://console.cloud.google.com/ → OAuth consent + credentials     | `https://<tu-proyecto>.supabase.co/auth/v1/callback`         |
+| Twitch    | https://dev.twitch.tv/console/apps                                  | `https://<tu-proyecto>.supabase.co/auth/v1/callback`         |
+| Discord   | https://discord.com/developers/applications                         | `https://<tu-proyecto>.supabase.co/auth/v1/callback`         |
+
+Pega en cada proveedor el Client ID y Client Secret que te da el IdP.
+
+> **Nota:** has elegido *no* obligar a verificar el correo antes de entrar. Asegúrate de que en **Authentication → Settings → Email** la opción **"Confirm email"** esté **desactivada** (si la dejas activa, los signups por email/password no podrán entrar hasta hacer clic en el enlace del correo).
+
+### 5. Instalar dependencias y arrancar
 
 ```bash
 npm install
@@ -86,7 +111,7 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 ## Próximos pasos (roadmap)
 
 - [x] Fase 1 — Scaffolding: Next.js + Tailwind Drake + i18n + Supabase base
-- [ ] Fase 1 — Threshold + auth flow (signup con firma del Código)
+- [x] Fase 1 — Threshold + auth flow (email/pass + magic link + OAuth Google/Twitch/Discord) con firma del Código
 - [ ] Fase 2 — Ledger (dashboard del creador con datos reales)
 - [ ] Fase 2 — Billboard editor + página pública del creador
 - [ ] Fase 3 — Pagadero (estados de cobro) + payouts USDC/SEPA

@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { LanguageToggle } from "@/components/language-toggle";
+import { SiteHeader } from "@/components/site-header";
+import { Link } from "@/i18n/navigation";
 
 export default async function ThresholdPage({
   params,
@@ -12,49 +13,27 @@ export default async function ThresholdPage({
   const t = await getTranslations("Threshold");
   const tBrand = await getTranslations("Brand");
 
-  // Split the founder body around {highlight} to render it inline
-  // without using t.rich (which can serialize oddly under Next 16 + Turbopack).
+  // Split the founder body around {highlight} to render it inline.
   const founderBody = t("founderNoteBody", {
     highlight: `¦${t("founderNoteHighlight")}¦`,
   });
   const [founderPre, founderHl, founderPost] = founderBody.split("¦");
 
   return (
-    <main className="min-h-screen flex flex-col">
-      {/* ============ TOP BAR ============ */}
-      <header className="border-b border-rule">
-        <div className="max-w-[1400px] mx-auto px-8 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <SealMark />
-            <div>
-              <div className="font-display text-[13px] tracking-[0.38em] uppercase font-medium">
-                {tBrand("wordmark")}{" "}
-                <em className="italic text-oxblood font-normal">
-                  {tBrand("wordmarkItalic")}
-                </em>
-              </div>
-              <div className="font-mono text-[8px] tracking-[0.3em] uppercase text-ink-faint mt-0.5">
-                {tBrand("issueLabel")}
-              </div>
-            </div>
-          </div>
-          <LanguageToggle />
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col">
+      <SiteHeader />
 
       {/* ============ HERO ============ */}
       <section className="flex-1 max-w-[1400px] mx-auto w-full px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-20">
         {/* Founder's Note */}
         <div className="max-w-xl">
           <p className="eyebrow mb-6">{t("overline")}</p>
-          <h1 className="font-display text-6xl lg:text-7xl leading-[1.02] tracking-tight mb-8">
+          <h1
+            className="font-display text-6xl lg:text-7xl leading-[1.02] tracking-tight mb-8"
+            style={{ fontVariationSettings: '"opsz" 144' }}
+          >
             {t("title")}{" "}
-            <em
-              className="italic text-oxblood"
-              style={{ fontVariationSettings: '"opsz" 144' }}
-            >
-              {t("titleItalic")}
-            </em>{" "}
+            <em className="italic text-oxblood">{t("titleItalic")}</em>{" "}
             {t("titleSuffix")}
           </h1>
           <p className="font-display text-xl leading-relaxed text-ink-soft mb-12 italic max-w-lg">
@@ -83,7 +62,12 @@ export default async function ThresholdPage({
         {/* Oath choice */}
         <div className="lg:pl-8 lg:border-l lg:border-rule flex flex-col justify-center">
           <div className="mb-10">
-            <h2 className="font-display text-3xl mb-2">{t("chooseTitle")}</h2>
+            <h2
+              className="font-display text-3xl mb-2"
+              style={{ fontVariationSettings: '"opsz" 144' }}
+            >
+              {t("chooseTitle")}
+            </h2>
             <p className="text-ink-faint">{t("chooseSubtitle")}</p>
           </div>
 
@@ -93,15 +77,24 @@ export default async function ThresholdPage({
               title={t("creatorLabel")}
               desc={t("creatorDesc")}
               cta={t("ctaEnter")}
-              href={`/${locale}/oath/creator`}
+              href="/oath/creator"
             />
             <OathOption
               roman="II."
               title={t("operatorLabel")}
               desc={t("operatorDesc")}
               cta={t("ctaEnter")}
-              href={`/${locale}/oath/operator`}
+              href="/oath/operator"
             />
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link
+              href="/code"
+              className="font-mono text-[10px] tracking-[0.28em] uppercase text-ink-faint hover:text-oxblood transition-colors underline-offset-4 hover:underline"
+            >
+              {t("ctaReadCode")} →
+            </Link>
           </div>
         </div>
       </section>
@@ -118,7 +111,7 @@ export default async function ThresholdPage({
           </div>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }
 
@@ -138,7 +131,7 @@ function OathOption({
   href: string;
 }) {
   return (
-    <a
+    <Link
       href={href}
       className="group block border border-rule hover:border-oxblood transition-colors duration-300 p-8 relative bg-paper-warm/30"
     >
@@ -160,42 +153,6 @@ function OathOption({
           </span>
         </div>
       </div>
-    </a>
-  );
-}
-
-function SealMark() {
-  return (
-    <svg
-      width="36"
-      height="36"
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <circle
-        cx="18"
-        cy="18"
-        r="16"
-        stroke="currentColor"
-        strokeWidth="1"
-        fill="none"
-        opacity="0.4"
-      />
-      <circle cx="18" cy="18" r="13" fill="#762525" />
-      <text
-        x="18"
-        y="23"
-        textAnchor="middle"
-        fontFamily="Fraunces, Georgia, serif"
-        fontSize="16"
-        fontStyle="italic"
-        fontWeight="500"
-        fill="#E8DCC0"
-      >
-        D
-      </text>
-    </svg>
+    </Link>
   );
 }

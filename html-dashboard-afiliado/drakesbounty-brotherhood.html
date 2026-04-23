@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Hermandad — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+/* Layout & sidebar (reused) */
+.app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+.nav-group { margin-bottom: 24px; }
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover { color: var(--ink); background: rgba(26, 19, 12, 0.04); }
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood);
+  color: var(--paper);
+}
+
+.nav-badge.new { background: var(--brass); color: var(--ink); }
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name { font-family: var(--display); font-weight: 500; font-size: 14px; color: var(--ink); }
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user-rank::before { content: "★"; color: var(--brass); }
+
+/* Main */
+.main { padding: 0; min-width: 0; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 16px; }
+
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.topbar-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.topbar-btn.primary:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.content { padding: 28px 32px 48px; max-width: 1500px; }
+
+/* Page header */
+.page-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: end;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  margin-bottom: 10px;
+}
+
+.page-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.page-subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--ink-dim);
+  max-width: 72ch;
+  line-height: 1.5;
+}
+
+.page-subtitle em { color: var(--ink); }
+
+/* ============ INVITE BLOCK ============ */
+.invite-panel {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+  margin-bottom: 36px;
+}
+
+.invite-card {
+  border: 1px solid var(--ink);
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(166, 124, 46, 0.12) 0%, transparent 60%),
+    linear-gradient(135deg, #241810 0%, #1A130C 100%);
+  color: var(--paper);
+  padding: 32px 34px;
+  position: relative;
+  overflow: hidden;
+}
+
+.invite-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(166, 124, 46, 0.2) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.invite-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brass), transparent);
+}
+
+.invite-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.invite-label::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--brass);
+}
+
+.invite-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 1.1;
+  color: var(--paper);
+  letter-spacing: -0.015em;
+  margin-bottom: 12px;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  position: relative;
+}
+
+.invite-title em { font-style: italic; color: var(--brass-light); font-weight: 500; }
+
+.invite-desc {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--paper-shadow);
+  line-height: 1.55;
+  max-width: 52ch;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.invite-desc strong { font-style: normal; font-weight: 500; color: var(--brass-light); }
+
+.invite-link-box {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(232, 220, 192, 0.08);
+  border: 1px solid var(--paper-shadow);
+  padding: 0;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+.invite-link-text {
+  flex: 1;
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--paper);
+  letter-spacing: 0.03em;
+}
+
+.invite-link-text .schema { color: var(--brass); }
+.invite-link-text .path { color: var(--brass-light); }
+
+.invite-link-copy {
+  padding: 14px 22px;
+  background: var(--brass);
+  color: var(--ink);
+  border: none;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.invite-link-copy:hover { background: var(--brass-light); }
+
+.invite-actions {
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+
+.invite-btn {
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  border: 1px solid var(--paper-shadow);
+  background: transparent;
+  color: var(--paper);
+}
+
+.invite-btn:hover {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.invite-btn .icon-sm { font-size: 12px; }
+
+/* Terms of the deal (right) */
+.terms-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.terms-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.terms-label::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.terms-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 20px;
+  font-variation-settings: "opsz" 72;
+}
+
+.terms-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.terms-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.terms-row:last-of-type { border-bottom: none; padding-bottom: 16px; }
+
+.terms-key {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--ink-dim);
+  font-variation-settings: "opsz" 72;
+}
+
+.terms-val {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.terms-val strong {
+  color: var(--oxblood);
+  font-size: 15px;
+}
+
+.terms-slider {
+  margin-top: 8px;
+  padding: 16px;
+  background: rgba(166, 124, 46, 0.06);
+  border: 1px solid rgba(166, 124, 46, 0.3);
+}
+
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.slider-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.slider-value {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--oxblood);
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.slider-value em { font-style: italic; }
+
+.slider-rail {
+  height: 6px;
+  background: rgba(26, 19, 12, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass), var(--oxblood));
+  width: 67%;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: 67%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  border: 2px solid var(--oxblood);
+  border-radius: 50%;
+  cursor: grab;
+}
+
+.slider-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+}
+
+.slider-legend strong { color: var(--ink); font-weight: 500; }
+
+/* ============ METRICS ROW ============ */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  margin-bottom: 36px;
+}
+
+.metric-cell {
+  padding: 20px 22px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+
+.metric-cell:last-child { border-right: none; }
+
+.metric-cell.featured {
+  background: rgba(166, 124, 46, 0.06);
+}
+
+.metric-cell.featured::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--brass);
+}
+
+.metric-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+
+.metric-val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 32px;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.metric-val .currency { font-size: 16px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+.metric-val em { font-style: italic; color: var(--oxblood); }
+
+.metric-delta {
+  font-family: var(--mono);
+  font-size: 10px;
+  margin-top: 6px;
+  color: var(--absinthe);
+  font-weight: 500;
+}
+
+.metric-delta.warn { color: var(--brass-deep); }
+.metric-delta.down { color: var(--oxblood); }
+
+/* ============ SECTION HEADER ============ */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 40px 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-head-left { display: flex; align-items: baseline; gap: 16px; }
+
+.section-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--oxblood);
+  font-variation-settings: "opsz" 144;
+}
+
+.section-title-sm {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+}
+
+.section-title-sm em { font-style: italic; color: var(--oxblood); }
+
+.section-sub-sm {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+  padding-bottom: 6px;
+}
+
+/* ============ BROTHERS TABLE ============ */
+.brothers-table {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  margin-bottom: 40px;
+}
+
+.brother-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+  gap: 24px;
+  padding: 22px 26px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.brother-row:last-child { border-bottom: none; }
+
+.brother-row:hover { background: rgba(26, 19, 12, 0.02); }
+
+/* Brother identity */
+.brother-identity { display: flex; align-items: center; gap: 14px; }
+
+.brother-avatar {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--rule-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  font-style: italic;
+  flex: none;
+  position: relative;
+}
+
+.brother-avatar.tier-outlaw { background: linear-gradient(135deg, #d4be91, #a67c2e); color: var(--ink); }
+.brother-avatar.tier-marshal { background: linear-gradient(135deg, #c9b994, #8f7556); color: var(--paper); }
+.brother-avatar.tier-deputy { background: linear-gradient(135deg, #e8dcc0, #c9b994); color: var(--ink-dim); }
+.brother-avatar.tier-warn { background: linear-gradient(135deg, #75624c, #4d3d2e); color: var(--paper); opacity: 0.85; }
+
+.brother-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
+}
+
+.brother-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tier-badge {
+  padding: 2px 7px;
+  border: 1px solid;
+  font-weight: 500;
+}
+
+.tier-badge.outlaw { color: var(--oxblood); border-color: var(--oxblood); background: rgba(118, 37, 37, 0.06); }
+.tier-badge.marshal { color: var(--brass-deep); border-color: var(--brass); background: rgba(166, 124, 46, 0.08); }
+.tier-badge.deputy { color: var(--ink-dim); border-color: var(--rule-strong); }
+
+/* Quality score (stars) */
+.quality-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quality-stars {
+  display: flex;
+  gap: 2px;
+  color: var(--brass);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.quality-stars .empty { color: var(--rule-strong); }
+.quality-stars .half {
+  position: relative;
+  color: var(--rule-strong);
+}
+
+.quality-stars .half::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: var(--brass);
+}
+
+.quality-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.quality-label strong { color: var(--ink); font-weight: 500; }
+.quality-label .good { color: var(--absinthe); font-weight: 500; }
+.quality-label .warn { color: var(--brass-deep); font-weight: 500; }
+.quality-label .bad { color: var(--oxblood); font-weight: 500; }
+
+/* Earnings block */
+.earnings-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.earnings-main {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.earnings-main .currency { font-size: 13px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+.earnings-main em { font-style: italic; color: var(--oxblood); }
+
+.earnings-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.earnings-label strong { color: var(--ink); font-weight: 500; }
+
+/* Projection block (next payday from this brother) */
+.projection-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.projection-pending {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--brass-deep);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.projection-pending .currency { font-size: 12px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+
+.projection-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.projection-label .lock-mini {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.projection-label strong { color: var(--ink); font-weight: 500; }
+
+/* Actions */
+.brother-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 15px;
+}
+
+.icon-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.icon-btn.featured {
+  background: var(--oxblood);
+  color: var(--paper);
+  border-color: var(--oxblood);
+}
+.icon-btn.featured:hover { background: var(--oxblood-deep); border-color: var(--oxblood-deep); }
+
+/* Released state */
+.brother-row.released { opacity: 0.7; background: rgba(26, 19, 12, 0.04); }
+
+.brother-row.released .brother-name { color: var(--ink-dim); }
+
+.released-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--ink);
+  color: var(--paper);
+  margin-left: 6px;
+}
+
+/* ============ LIBERATION SECTION ============ */
+.liberation-panel {
+  border: 1px solid var(--rule-strong);
+  background:
+    linear-gradient(135deg, rgba(166, 124, 46, 0.06) 0%, rgba(118, 37, 37, 0.06) 100%),
+    rgba(255, 252, 244, 0.5);
+  padding: 32px 36px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.liberation-panel::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(118, 37, 37, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.liberation-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+
+.liberation-icon {
+  width: 72px;
+  height: 72px;
+  flex: none;
+}
+
+.liberation-title-block { min-width: 0; }
+
+.liberation-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.liberation-label::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.liberation-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  margin-bottom: 8px;
+}
+
+.liberation-title em { font-style: italic; color: var(--oxblood); font-weight: 500; }
+
+.liberation-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--ink-dim);
+  max-width: 66ch;
+  line-height: 1.5;
+}
+
+.liberation-sub strong { font-style: normal; font-weight: 500; color: var(--ink); }
+.liberation-sub em { color: var(--oxblood); }
+
+/* Pending request card inside liberation */
+.request-card {
+  border: 1px solid var(--oxblood);
+  background: var(--paper);
+  padding: 22px 24px;
+  position: relative;
+}
+
+.request-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-dim);
+  gap: 18px;
+}
+
+.request-from {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.request-avatar {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--rule-strong);
+  background: linear-gradient(135deg, #d4be91, #a67c2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 17px;
+  font-style: italic;
+  color: var(--ink);
+  flex: none;
+}
+
+.request-from-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.request-from-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+}
+
+.request-status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  padding: 5px 10px;
+  border: 1px solid var(--oxblood);
+  background: rgba(118, 37, 37, 0.06);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.request-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--oxblood);
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.request-proposal {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+.request-proposal strong {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.request-proposal em { color: var(--oxblood); }
+
+/* Deal comparison (before / after) */
+.deal-compare {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--rule-dim);
+  border-bottom: 1px solid var(--rule-dim);
+  margin-bottom: 20px;
+}
+
+.deal-side { padding: 0 4px; }
+
+.deal-side-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.deal-side-value {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 2px;
+  font-variation-settings: "opsz" 72;
+}
+
+.deal-side-value em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.deal-side-detail {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+
+.deal-side-detail strong {
+  color: var(--ink);
+  font-weight: 500;
+  font-style: normal;
+}
+
+.deal-arrow {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 28px;
+  color: var(--brass);
+}
+
+/* Accept/reject actions */
+.request-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.request-btn {
+  padding: 12px 18px;
+  font-family: var(--ui);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  border: 1px solid;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.request-btn.accept { background: var(--oxblood); color: var(--paper); border-color: var(--oxblood); }
+.request-btn.accept:hover { background: var(--oxblood-deep); border-color: var(--oxblood-deep); }
+
+.request-btn.counter { background: transparent; color: var(--ink); border-color: var(--ink); }
+.request-btn.counter:hover { background: var(--ink); color: var(--paper); }
+
+.request-btn.reject { background: transparent; color: var(--ink-dim); border-color: var(--rule-strong); }
+.request-btn.reject:hover { border-color: var(--ink); color: var(--ink); }
+
+.request-expires {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-left: auto;
+}
+
+.request-expires strong { color: var(--oxblood); font-weight: 500; }
+
+/* ============ PROJECTIONS CHART ============ */
+.projections-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 28px 30px;
+  margin-bottom: 36px;
+}
+
+.projections-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 22px;
+}
+
+.projections-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
+  margin-bottom: 3px;
+}
+
+.projections-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.projections-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.projections-total {
+  text-align: right;
+}
+
+.projections-total-val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  justify-content: flex-end;
+}
+
+.projections-total-val .currency { font-size: 15px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+.projections-total-val em { font-style: italic; color: var(--oxblood); }
+
+.projections-total-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+/* Timeline bars */
+.projection-timeline { position: relative; }
+
+.timeline-months {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.timeline-month {
+  padding: 0 6px;
+  border-right: 1px solid var(--rule-dim);
+  position: relative;
+}
+
+.timeline-month:last-child { border-right: none; }
+
+.timeline-month.current {
+  background: rgba(118, 37, 37, 0.04);
+}
+
+.month-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 4px 6px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 12px;
+}
+
+.month-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.month-name em {
+  color: var(--oxblood);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.month-total {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.month-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 4px 12px;
+  min-height: 140px;
+  justify-content: flex-end;
+}
+
+.month-bar {
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--paper);
+  transition: all 0.25s var(--ease);
+  position: relative;
+}
+
+.month-bar:hover { filter: brightness(1.15); cursor: pointer; }
+
+.month-bar.stakelight { background: linear-gradient(90deg, #a67c2e, #c9a961); }
+.month-bar.fairspin { background: linear-gradient(90deg, #8f7556, #c9b994); color: var(--ink); }
+.month-bar.vaulted { background: linear-gradient(90deg, #4a5c3a, #6b8257); }
+.month-bar.bytecraft { background: linear-gradient(90deg, #4d3d2e, #75624c); }
+.month-bar.cobalt { background: linear-gradient(90deg, #3d5a6b, #587689); }
+
+.month-bar .bar-src {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  opacity: 0.95;
+}
+
+.month-bar .bar-val {
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.month-bar.pending { opacity: 0.6; }
+
+.month-bar.ghost {
+  background: repeating-linear-gradient(45deg, rgba(26, 19, 12, 0.08), rgba(26, 19, 12, 0.08) 4px, rgba(26, 19, 12, 0.04) 4px, rgba(26, 19, 12, 0.04) 8px);
+  color: var(--ink-dim);
+  border: 1px dashed var(--rule-strong);
+}
+
+/* Legend for projections */
+.proj-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-items {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--display);
+  font-size: 12px;
+  color: var(--ink-dim);
+  font-style: italic;
+  font-variation-settings: "opsz" 72;
+}
+
+.legend-items .item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-items .swatch {
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+
+.legend-items .swatch.pending { opacity: 0.6; border: 1px dashed var(--rule-strong); background: transparent; }
+
+.legend-items .swatch.solid { background: var(--oxblood); }
+
+.proj-hint {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Drake whisper */
+.drake-whisper {
+  display: flex;
+  gap: 14px;
+  padding: 18px 22px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 3px solid var(--oxblood);
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+.whisper-mark { width: 38px; height: 38px; flex: none; }
+
+.whisper-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.whisper-text strong { font-weight: 500; font-style: normal; color: var(--ink); }
+.whisper-text em { color: var(--oxblood); }
+
+.whisper-name {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  font-style: normal;
+  margin-top: 8px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1200px) {
+  .invite-panel { grid-template-columns: 1fr; }
+  .metrics-row { grid-template-columns: 1fr 1fr; }
+  .metric-cell { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .metric-cell:nth-child(2n) { border-right: none; }
+  .metric-cell:nth-last-child(-n+2) { border-bottom: none; }
+  .brother-row { grid-template-columns: 1.4fr 1fr 1fr auto; }
+  .brother-row .projection-block { display: none; }
+  .timeline-months { overflow-x: auto; grid-auto-columns: 150px; grid-auto-flow: column; grid-template-columns: none; }
+}
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static; height: auto;
+    flex-direction: row; padding: 12px 20px;
+    border-right: none; border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  .sidebar-brand { border-bottom: none; padding: 0 16px 0 0; border-right: 1px solid var(--rule); }
+  .sidebar-nav, .sidebar-user { display: none; }
+  .topbar, .content { padding-left: 20px; padding-right: 20px; }
+  .page-header { grid-template-columns: 1fr; gap: 16px; }
+  .page-title { font-size: 42px; }
+  .metrics-row { grid-template-columns: 1fr; }
+  .metric-cell { border-right: none; }
+  .brother-row { grid-template-columns: 1fr; gap: 12px; }
+  .deal-compare { grid-template-columns: 1fr; gap: 10px; }
+  .deal-arrow { transform: rotate(90deg); text-align: center; }
+  .liberation-header { grid-template-columns: 1fr; }
+  .request-head { flex-direction: column; gap: 12px; }
+  .request-actions { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">La Hermandad</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· El Gremio ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          El Ledger
+        </a>
+        <a href="drakesbounty-chart.html" class="nav-item">
+          <span class="icon">⤫</span>
+          La Carta Náutica
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="drakesbounty-billboard-editor.html" class="nav-item">
+          <span class="icon">▦</span>
+          El Billboard
+        </a>
+        <a href="drakesbounty-compass.html" class="nav-item">
+          <span class="icon">✢</span>
+          La Brújula
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          El Arsenal
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Comunidad ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          La Posse
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="icon">⚔</span>
+          La Hermandad
+          <span class="nav-badge new">1</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          El Almanaque
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          Los Telegramas
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Dinero ·</div>
+        <a href="drakesbounty-payday.html" class="nav-item">
+          <span class="icon">$</span>
+          El Pagadero
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Libro de Cuentas
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Referencia ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          El Código
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">E</div>
+      <div class="user-info">
+        <div class="user-name">elena.kicks</div>
+        <div class="user-rank">Marshal</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio IX</span>
+        <span class="page-title-topbar">La Hermandad</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">Histórico</button>
+        <button class="topbar-btn primary">+ Invitar hermano</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">La <em>Hermandad</em></h1>
+          <p class="page-subtitle">
+            Los creadores que has traído al gremio. Por cada uno, te llevas una parte de sus ganancias mientras esté bajo tu ala. <em>Trae bueno, gana bien.</em> Trae malo y tu Hermandad te lo reflejará.
+          </p>
+        </div>
+      </div>
+
+      <!-- Drake whisper -->
+      <div class="drake-whisper">
+        <svg class="whisper-mark" viewBox="0 0 38 38">
+          <circle cx="19" cy="19" r="17.5" fill="none" stroke="#762525" stroke-width="1"/>
+          <circle cx="19" cy="19" r="14" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+          <text x="19" y="25" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="20" font-weight="500" fill="#762525">D</text>
+        </svg>
+        <div class="whisper-text">
+          Tu Hermandad está generando <strong>€1.284</strong> este ciclo — casi el <em>11% de tus propias ganancias</em>. <strong>slotsgrandma</strong> te acaba de enviar una propuesta de <em>liberación</em> · mira abajo.
+          <span class="whisper-name">— Drake · consejero del tratado</span>
+        </div>
+      </div>
+
+      <!-- ============ INVITE PANEL ============ -->
+      <div class="invite-panel">
+
+        <!-- Main invite card -->
+        <div class="invite-card">
+          <div class="invite-label">§ Tu sello de reclutador</div>
+          <h2 class="invite-title">Trae a otros <em>forajidos</em> al gremio.</h2>
+          <p class="invite-desc">
+            Comparte tu sello con cualquier creador que conozcas. Cuando firme el Código bajo tu nombre, un porcentaje de todo lo que gane en Drake's Bounty <strong>pasa a tu cofre</strong>, alineado al calendario de pago de sus operadores.
+          </p>
+
+          <div class="invite-link-box">
+            <div class="invite-link-text">
+              <span class="schema">drake.bo/</span><span class="path">hermandad/</span><span style="color: var(--paper);">elena-kicks</span>
+            </div>
+            <button class="invite-link-copy">Copiar sello</button>
+          </div>
+
+          <div class="invite-actions">
+            <a href="#" class="invite-btn">
+              <span class="icon-sm">✉</span>
+              Invitar por email
+            </a>
+            <a href="#" class="invite-btn">
+              <span class="icon-sm">↗</span>
+              Compartir en X
+            </a>
+            <a href="#" class="invite-btn">
+              <span class="icon-sm">✧</span>
+              Mensaje de presentación
+            </a>
+          </div>
+        </div>
+
+        <!-- Terms config -->
+        <div class="terms-card">
+          <div class="terms-label">§ Tu oferta estándar</div>
+          <h3 class="terms-title">Los <em>términos</em></h3>
+
+          <div class="terms-row">
+            <span class="terms-key">Tu comisión</span>
+            <span class="terms-val"><strong>10%</strong> de por vida</span>
+          </div>
+          <div class="terms-row">
+            <span class="terms-key">Duración</span>
+            <span class="terms-val">Mientras esté en Drake's</span>
+          </div>
+          <div class="terms-row">
+            <span class="terms-key">Cobro</span>
+            <span class="terms-val">Al pagar su operador</span>
+          </div>
+          <div class="terms-row">
+            <span class="terms-key">Liberación</span>
+            <span class="terms-val">Negociable</span>
+          </div>
+
+          <div class="terms-slider">
+            <div class="slider-head">
+              <span class="slider-label">Cuánto pides</span>
+              <span class="slider-value">10<em>%</em></span>
+            </div>
+            <div class="slider-rail">
+              <div class="slider-fill"></div>
+              <div class="slider-thumb"></div>
+            </div>
+            <div class="slider-legend">
+              <span>3%</span>
+              <span><strong>Ajustable hasta 15%</strong></span>
+              <span>15%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ METRICS ROW ============ -->
+      <div class="metrics-row">
+        <div class="metric-cell featured">
+          <div class="metric-lbl">§ 01 · En la Hermandad</div>
+          <div class="metric-val">7</div>
+          <div class="metric-delta">▲ 2 este trimestre</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-lbl">§ 02 · Ganado histórico</div>
+          <div class="metric-val"><span class="currency">€</span>8<em>.420</em></div>
+          <div class="metric-delta">▲ 18% vs Q1</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-lbl">§ 03 · Generando este ciclo</div>
+          <div class="metric-val"><span class="currency">€</span>1<em>.284</em></div>
+          <div class="metric-delta">Proyectado</div>
+        </div>
+        <div class="metric-cell">
+          <div class="metric-lbl">§ 04 · Calidad media</div>
+          <div class="metric-val">4<em>,2</em><span style="font-size: 14px; color: var(--ink-dim); margin-left: 4px;">/5</span></div>
+          <div class="metric-delta warn">Una oveja negra</div>
+        </div>
+      </div>
+
+      <!-- ============ BROTHERS LIST ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 02</span>
+          <h2 class="section-title-sm">Tus <em>hermanos</em></h2>
+        </div>
+        <span class="section-sub-sm">Creadores bajo tu sello · trazabilidad completa</span>
+      </div>
+
+      <div class="brothers-table">
+
+        <!-- Brother 1: strong performer -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-outlaw">R</div>
+            <div>
+              <div class="brother-name">reelrider.tv</div>
+              <div class="brother-meta">
+                <span>Twitch · slots</span>
+                <span class="tier-badge outlaw">Outlaw</span>
+                <span>· Desde Feb</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ ★ ★
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="good">Excelente</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>3<em>.820</em></div>
+            <div class="earnings-label">Tu ganado · <strong>histórico</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending"><span class="currency">€</span>584</div>
+            <div class="projection-label">
+              <svg class="lock-mini" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.8" fill="none"/><rect x="1.5" y="5" width="7" height="4" fill="currentColor"/></svg>
+              Entran el <strong>20 abr</strong>
+            </div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver detalle">→</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 2: marshal, consistent -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-marshal">N</div>
+            <div>
+              <div class="brother-name">nachoslots</div>
+              <div class="brother-meta">
+                <span>Kick · crypto casino</span>
+                <span class="tier-badge marshal">Marshal</span>
+                <span>· Desde Mar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ ★ <span class="empty">★</span>
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="good">Buena</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>1<em>.920</em></div>
+            <div class="earnings-label">Tu ganado · <strong>histórico</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending"><span class="currency">€</span>268</div>
+            <div class="projection-label">
+              <svg class="lock-mini" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.8" fill="none"/><rect x="1.5" y="5" width="7" height="4" fill="currentColor"/></svg>
+              Entran el <strong>22 abr</strong>
+            </div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver detalle">→</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 3: slotsgrandma - pending liberation (the narrative focus) -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-outlaw">G</div>
+            <div>
+              <div class="brother-name">slotsgrandma <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; color: var(--oxblood); background: rgba(118, 37, 37, 0.1); padding: 2px 7px; margin-left: 6px; text-transform: uppercase; font-weight: 500;">· Propuesta</span></div>
+              <div class="brother-meta">
+                <span>Twitch · slots variety</span>
+                <span class="tier-badge outlaw">Outlaw</span>
+                <span>· Desde Ene</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ ★ ★
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="good">Excelente</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>1<em>.640</em></div>
+            <div class="earnings-label">Tu ganado · <strong>histórico</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending"><span class="currency">€</span>314</div>
+            <div class="projection-label">
+              <svg class="lock-mini" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.8" fill="none"/><rect x="1.5" y="5" width="7" height="4" fill="currentColor"/></svg>
+              Entran el <strong>25 abr</strong>
+            </div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn featured" title="Revisar propuesta">⚖</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 4: middle performer -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-marshal">L</div>
+            <div>
+              <div class="brother-name">luisDeMadrid</div>
+              <div class="brother-meta">
+                <span>Telegram · señales crypto</span>
+                <span class="tier-badge marshal">Marshal</span>
+                <span>· Desde Mar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ <span class="half">★</span> <span class="empty">★</span>
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="warn">Aceptable</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>620</div>
+            <div class="earnings-label">Tu ganado · <strong>histórico</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending"><span class="currency">€</span>84</div>
+            <div class="projection-label">
+              <svg class="lock-mini" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.8" fill="none"/><rect x="1.5" y="5" width="7" height="4" fill="currentColor"/></svg>
+              Entran el <strong>28 abr</strong>
+            </div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver detalle">→</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 5: deputy new -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-deputy">M</div>
+            <div>
+              <div class="brother-name">mariaspinz</div>
+              <div class="brother-meta">
+                <span>X · lifestyle + casino</span>
+                <span class="tier-badge deputy">Deputy</span>
+                <span>· Desde Abr</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ ★ <span class="empty">★</span>
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="good">Prometedora</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>210</div>
+            <div class="earnings-label">Tu ganado · <strong>2 semanas</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending"><span class="currency">€</span>34</div>
+            <div class="projection-label">
+              <svg class="lock-mini" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.8" fill="none"/><rect x="1.5" y="5" width="7" height="4" fill="currentColor"/></svg>
+              Entran el <strong>20 abr</strong>
+            </div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver detalle">→</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 6: bad quality (the oveja negra) -->
+        <div class="brother-row">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-warn">P</div>
+            <div>
+              <div class="brother-name">pacodelapuebla</div>
+              <div class="brother-meta">
+                <span>Telegram · spam</span>
+                <span class="tier-badge deputy" style="color: var(--oxblood); border-color: var(--oxblood);">Deputy · flag</span>
+                <span>· Desde Mar</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ <span class="half">★</span> <span class="empty">★</span> <span class="empty">★</span> <span class="empty">★</span>
+            </div>
+            <div class="quality-label">
+              Calidad · <span class="bad">Pobre · revisa</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main"><span class="currency">€</span>48</div>
+            <div class="earnings-label">Tu ganado · <strong>2 meses</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending" style="color: var(--ink-faint);"><span class="currency">€</span>0</div>
+            <div class="projection-label">Sin tráfico útil</div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver detalle">→</button>
+            <button class="icon-btn" title="Mensaje">✉</button>
+          </div>
+        </div>
+
+        <!-- Brother 7: released (historical) -->
+        <div class="brother-row released">
+          <div class="brother-identity">
+            <div class="brother-avatar tier-marshal">J</div>
+            <div>
+              <div class="brother-name">joelcasinopro <span class="released-tag">· Liberado</span></div>
+              <div class="brother-meta">
+                <span>Kick · slots</span>
+                <span class="tier-badge marshal">Marshal</span>
+                <span>· Liberado en Feb</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quality-block">
+            <div class="quality-stars">
+              ★ ★ ★ ★ ★
+            </div>
+            <div class="quality-label">
+              Fue · <span class="good">Excelente</span>
+            </div>
+          </div>
+
+          <div class="earnings-block">
+            <div class="earnings-main" style="color: var(--ink-dim);"><span class="currency">€</span>202</div>
+            <div class="earnings-label">Tu ganado · <strong>6 meses de renta</strong></div>
+          </div>
+
+          <div class="projection-block">
+            <div class="projection-pending" style="color: var(--ink-faint);">—</div>
+            <div class="projection-label">Cerrado · 15 feb</div>
+          </div>
+
+          <div class="brother-actions">
+            <button class="icon-btn" title="Ver contrato liberación">≡</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============ LIBERATION PANEL ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 03</span>
+          <h2 class="section-title-sm">Carta de <em>Liberación</em></h2>
+        </div>
+        <span class="section-sub-sm">Un hermano quiere comprar su libertad</span>
+      </div>
+
+      <div class="liberation-panel">
+
+        <div class="liberation-header">
+          <!-- Scroll / liberation icon -->
+          <svg class="liberation-icon" viewBox="0 0 72 72">
+            <defs>
+              <linearGradient id="scrollGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#E8DCC0"/>
+                <stop offset="100%" stop-color="#C9B994"/>
+              </linearGradient>
+            </defs>
+            <!-- Shadow -->
+            <ellipse cx="36" cy="64" rx="28" ry="2.5" fill="#1A130C" opacity="0.25"/>
+            <!-- Top roll -->
+            <ellipse cx="36" cy="16" rx="24" ry="3" fill="#A67C2E" stroke="#4F1818" stroke-width="0.6"/>
+            <ellipse cx="36" cy="15" rx="24" ry="2" fill="#C9A961"/>
+            <!-- Scroll body -->
+            <path d="M 12 16 L 12 54 Q 12 58 18 58 L 54 58 Q 60 58 60 54 L 60 16 Z"
+                  fill="url(#scrollGrad)" stroke="#4D3D2E" stroke-width="0.8"/>
+            <!-- Text lines on scroll -->
+            <line x1="18" y1="24" x2="54" y2="24" stroke="#4D3D2E" stroke-width="0.5" opacity="0.6"/>
+            <line x1="18" y1="29" x2="50" y2="29" stroke="#4D3D2E" stroke-width="0.5" opacity="0.6"/>
+            <line x1="18" y1="34" x2="54" y2="34" stroke="#4D3D2E" stroke-width="0.5" opacity="0.6"/>
+            <line x1="18" y1="39" x2="46" y2="39" stroke="#4D3D2E" stroke-width="0.5" opacity="0.6"/>
+            <!-- Wax seal -->
+            <circle cx="50" cy="52" r="7" fill="#762525" stroke="#4F1818" stroke-width="0.6"/>
+            <text x="50" y="55" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="8" font-weight="600" fill="#E8DCC0">D</text>
+            <!-- Bottom roll -->
+            <ellipse cx="36" cy="58" rx="24" ry="2.5" fill="#A67C2E" stroke="#4F1818" stroke-width="0.6"/>
+            <!-- Stars -->
+            <path d="M 16 10 L 17 12 L 19 12 L 17.5 13.5 L 18 15.5 L 16 14 L 14 15.5 L 14.5 13.5 L 13 12 L 15 12 Z" fill="#A67C2E" opacity="0.8"/>
+            <path d="M 56 10 L 57 12 L 59 12 L 57.5 13.5 L 58 15.5 L 56 14 L 54 15.5 L 54.5 13.5 L 53 12 L 55 12 Z" fill="#A67C2E" opacity="0.8"/>
+          </svg>
+
+          <div class="liberation-title-block">
+            <div class="liberation-label">§ Propuesta pendiente</div>
+            <h3 class="liberation-title">Un hermano quiere <em>comprar su libertad</em>.</h3>
+            <p class="liberation-sub">
+              Un miembro de tu Hermandad puede proponer una <strong>salida negociada</strong>: aceptas cerrar el contrato indefinido a cambio de una <em>mayor tajada durante un plazo corto</em>. Tú decides — acepta, contraproponle, o deja que las cosas sigan como están.
+            </p>
+          </div>
+        </div>
+
+        <!-- Pending request -->
+        <div class="request-card">
+          <div class="request-head">
+            <div class="request-from">
+              <div class="request-avatar">G</div>
+              <div>
+                <div class="request-from-name">slotsgrandma</div>
+                <div class="request-from-meta">Outlaw · miembro desde enero</div>
+              </div>
+            </div>
+            <div class="request-status">
+              Esperando tu sello
+            </div>
+          </div>
+
+          <p class="request-proposal">
+            slotsgrandma ofrece pasar del actual <strong>10% de por vida</strong> a un <em>15% durante 6 meses</em>, tras lo cual queda <strong>totalmente liberada</strong>. En ese plazo tu retribución máxima proyectada subiría <em>aproximadamente un 47%</em> respecto a lo que ganarías sin liberarla.
+          </p>
+
+          <div class="deal-compare">
+            <div class="deal-side">
+              <div class="deal-side-label">Hoy · acuerdo estándar</div>
+              <div class="deal-side-value">10% · <em>por vida</em></div>
+              <div class="deal-side-detail">
+                Proyección 6 meses: <strong>€1.850</strong><br>
+                Proyección 24 meses: <strong>€5.420</strong>
+              </div>
+            </div>
+            <div class="deal-arrow">→</div>
+            <div class="deal-side">
+              <div class="deal-side-label">Propuesta · liberación</div>
+              <div class="deal-side-value">15% · <em>6 meses</em></div>
+              <div class="deal-side-detail">
+                Proyección 6 meses: <strong>€2.720</strong><br>
+                Después: <strong>€0</strong> — queda liberada
+              </div>
+            </div>
+          </div>
+
+          <div class="request-actions">
+            <button class="request-btn accept">
+              Aceptar y sellar
+              <span style="font-family: var(--display); font-style: italic; font-size: 14px;">→</span>
+            </button>
+            <button class="request-btn counter">
+              Contraproponer
+            </button>
+            <button class="request-btn reject">
+              Rechazar
+            </button>
+            <div class="request-expires">
+              Expira en · <strong>4 días 12 h</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PROJECTIONS ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 04</span>
+          <h2 class="section-title-sm">Tu <em>proyección</em> de la Hermandad</h2>
+        </div>
+        <span class="section-sub-sm">Ligado al calendario de pago de cada operador</span>
+      </div>
+
+      <div class="projections-card">
+        <div class="projections-head">
+          <div>
+            <h3 class="projections-title">Cobros <em>proyectados</em> · próximos 6 meses</h3>
+            <p class="projections-sub">Basado en tendencias actuales de tus hermanos y fechas de pago de sus operadores.</p>
+          </div>
+          <div class="projections-total">
+            <div class="projections-total-val"><span class="currency">€</span>9<em>.820</em></div>
+            <div class="projections-total-lbl">Total proyectado · 6 meses</div>
+          </div>
+        </div>
+
+        <div class="projection-timeline">
+          <div class="timeline-months">
+
+            <!-- Abril (current) -->
+            <div class="timeline-month current">
+              <div class="month-header">
+                <span class="month-name">Abr <em>·</em></span>
+                <span class="month-total">€1.284</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight" style="width: 95%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€584</span>
+                </div>
+                <div class="month-bar vaulted" style="width: 70%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€314</span>
+                </div>
+                <div class="month-bar fairspin" style="width: 60%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€268</span>
+                </div>
+                <div class="month-bar cobalt" style="width: 35%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€84</span>
+                </div>
+                <div class="month-bar bytecraft" style="width: 20%;">
+                  <span class="bar-src">mariaspinz</span>
+                  <span class="bar-val">€34</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mayo -->
+            <div class="timeline-month">
+              <div class="month-header">
+                <span class="month-name">May</span>
+                <span class="month-total">€1.520</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight pending" style="width: 100%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€680</span>
+                </div>
+                <div class="month-bar vaulted pending" style="width: 62%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€340</span>
+                </div>
+                <div class="month-bar fairspin pending" style="width: 56%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€294</span>
+                </div>
+                <div class="month-bar cobalt pending" style="width: 38%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€124</span>
+                </div>
+                <div class="month-bar bytecraft pending" style="width: 22%;">
+                  <span class="bar-src">mariaspinz</span>
+                  <span class="bar-val">€82</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Junio -->
+            <div class="timeline-month">
+              <div class="month-header">
+                <span class="month-name">Jun</span>
+                <span class="month-total">€1.720</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight pending" style="width: 100%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€740</span>
+                </div>
+                <div class="month-bar vaulted pending" style="width: 65%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€380</span>
+                </div>
+                <div class="month-bar fairspin pending" style="width: 58%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€320</span>
+                </div>
+                <div class="month-bar cobalt pending" style="width: 42%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€168</span>
+                </div>
+                <div class="month-bar bytecraft pending" style="width: 24%;">
+                  <span class="bar-src">mariaspinz</span>
+                  <span class="bar-val">€112</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Julio -->
+            <div class="timeline-month">
+              <div class="month-header">
+                <span class="month-name">Jul</span>
+                <span class="month-total">€1.810</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight pending" style="width: 100%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€820</span>
+                </div>
+                <div class="month-bar vaulted pending" style="width: 58%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€390</span>
+                </div>
+                <div class="month-bar fairspin pending" style="width: 52%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€340</span>
+                </div>
+                <div class="month-bar cobalt pending" style="width: 40%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€168</span>
+                </div>
+                <div class="month-bar bytecraft pending" style="width: 22%;">
+                  <span class="bar-src">mariaspinz</span>
+                  <span class="bar-val">€92</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Agosto -->
+            <div class="timeline-month">
+              <div class="month-header">
+                <span class="month-name">Ago</span>
+                <span class="month-total">€1.680</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight pending" style="width: 100%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€780</span>
+                </div>
+                <div class="month-bar vaulted pending" style="width: 55%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€360</span>
+                </div>
+                <div class="month-bar fairspin pending" style="width: 50%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€310</span>
+                </div>
+                <div class="month-bar cobalt pending" style="width: 38%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€142</span>
+                </div>
+                <div class="month-bar bytecraft ghost" style="width: 20%;">
+                  <span class="bar-src">+ nuevos</span>
+                  <span class="bar-val">€88</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Septiembre -->
+            <div class="timeline-month">
+              <div class="month-header">
+                <span class="month-name">Sep</span>
+                <span class="month-total">€1.810</span>
+              </div>
+              <div class="month-bars">
+                <div class="month-bar stakelight pending" style="width: 100%;">
+                  <span class="bar-src">reelrider</span>
+                  <span class="bar-val">€820</span>
+                </div>
+                <div class="month-bar vaulted pending" style="width: 52%;">
+                  <span class="bar-src">slotsgrandma</span>
+                  <span class="bar-val">€380</span>
+                </div>
+                <div class="month-bar fairspin pending" style="width: 50%;">
+                  <span class="bar-src">nachoslots</span>
+                  <span class="bar-val">€320</span>
+                </div>
+                <div class="month-bar cobalt pending" style="width: 40%;">
+                  <span class="bar-src">luisDeMadrid</span>
+                  <span class="bar-val">€160</span>
+                </div>
+                <div class="month-bar bytecraft ghost" style="width: 22%;">
+                  <span class="bar-src">+ nuevos</span>
+                  <span class="bar-val">€130</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="proj-legend">
+          <div class="legend-items">
+            <span class="item">
+              <span class="swatch solid"></span>
+              Confirmado este ciclo
+            </span>
+            <span class="item">
+              <span class="swatch solid" style="opacity: 0.6;"></span>
+              Proyectado (tendencia)
+            </span>
+            <span class="item">
+              <span class="swatch pending"></span>
+              Hermanos futuros
+            </span>
+          </div>
+          <div class="proj-hint">Cada barra es un hermano · ligado al calendario de su operador</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

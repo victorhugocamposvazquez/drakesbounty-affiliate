@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Billboard · Editor — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+/* ============ LAYOUT ============ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* ============ SIDEBAR (same as Ledger) ============ */
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+
+.nav-group { margin-bottom: 24px; }
+
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover {
+  color: var(--ink);
+  background: rgba(26, 19, 12, 0.04);
+}
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood);
+  color: var(--paper);
+}
+
+.nav-badge.new {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user-rank::before { content: "★"; color: var(--brass); }
+
+/* ============ MAIN ============ */
+.main { padding: 0; min-width: 0; }
+
+/* Top bar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-url {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-dim);
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-url .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--absinthe);
+}
+
+.topbar-url strong {
+  color: var(--oxblood);
+  font-weight: 500;
+}
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.topbar-btn.primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.topbar-btn.primary:hover {
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+}
+
+/* ============ EDITOR LAYOUT ============ */
+.editor {
+  display: grid;
+  grid-template-columns: 360px 1fr 320px;
+  height: calc(100vh - 140px);
+  min-height: 600px;
+}
+
+/* Left: controls panel */
+.controls {
+  border-right: 1px solid var(--rule);
+  overflow-y: auto;
+  padding: 24px 24px 32px;
+  background: rgba(26, 19, 12, 0.02);
+}
+
+/* Center: preview */
+.preview-pane {
+  display: flex;
+  flex-direction: column;
+  background:
+    repeating-linear-gradient(45deg, rgba(26, 19, 12, 0.015) 0px, rgba(26, 19, 12, 0.015) 1px, transparent 1px, transparent 12px),
+    var(--paper-warm);
+  border-right: 1px solid var(--rule);
+  overflow: hidden;
+}
+
+/* Right: AI/inspector panel */
+.inspector {
+  overflow-y: auto;
+  padding: 24px 24px 32px;
+  background: rgba(26, 19, 12, 0.02);
+}
+
+/* ============ PAGE HEADER IN EDITOR ============ */
+.editor-header {
+  padding: 22px 32px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(26, 19, 12, 0.03);
+}
+
+.editor-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.editor-title em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.editor-title .separator {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+}
+
+.editor-title-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--absinthe);
+  background: rgba(74, 92, 58, 0.08);
+  border: 1px solid rgba(74, 92, 58, 0.3);
+}
+
+.live-indicator .pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--absinthe);
+  position: relative;
+}
+
+.live-indicator .pulse::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--absinthe);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+/* ============ CONTROLS PANEL ============ */
+.control-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.control-section:last-child { border-bottom: none; }
+
+.control-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.control-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-label::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.control-action {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.3s var(--ease);
+}
+
+.control-action:hover { color: var(--oxblood); }
+
+.control-field {
+  margin-bottom: 14px;
+}
+
+.control-field-lbl {
+  display: block;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--ink-dim);
+  margin-bottom: 6px;
+}
+
+.control-field input[type="text"],
+.control-field textarea {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  color: var(--ink);
+  padding: 10px 12px;
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 400;
+  transition: border-color 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.control-field textarea {
+  resize: vertical;
+  min-height: 60px;
+  font-family: var(--ui);
+  font-size: 13px;
+}
+
+.control-field input[type="text"]:focus,
+.control-field textarea:focus {
+  outline: none;
+  border-color: var(--oxblood);
+}
+
+/* Theme picker */
+.theme-picker {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.theme-option {
+  padding: 10px;
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.25s var(--ease);
+  background: var(--paper);
+}
+
+.theme-option:hover { border-color: var(--oxblood); }
+
+.theme-option.active {
+  border-color: var(--oxblood);
+  border-width: 2px;
+  padding: 9px;
+  background: rgba(118, 37, 37, 0.04);
+}
+
+.theme-swatch {
+  height: 36px;
+  border: 1px solid var(--rule);
+}
+
+.theme-swatch.retrowave {
+  background: linear-gradient(135deg, #1a0b2e 0%, #7a1a5e 50%, #ff006e 100%);
+  position: relative;
+  overflow: hidden;
+}
+.theme-swatch.retrowave::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(0, 255, 255, 0.2) 3px, rgba(0, 255, 255, 0.2) 4px);
+}
+
+.theme-swatch.gremio {
+  background:
+    radial-gradient(ellipse at 30% 20%, #EFE4C9 0%, transparent 50%),
+    #D0BF97;
+  border-color: #4D3D2E;
+}
+
+.theme-swatch.minimal {
+  background: #FAFAFA;
+  border: 1px solid #000;
+  position: relative;
+}
+.theme-swatch.minimal::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: #000;
+}
+
+.theme-swatch.crypto {
+  background: linear-gradient(135deg, #0a0e27 0%, #1e3a8a 50%, #06b6d4 100%);
+}
+
+.theme-name {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-align: center;
+}
+
+.theme-option.active .theme-name {
+  color: var(--oxblood);
+  font-weight: 600;
+}
+
+/* Color picker row */
+.color-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.color-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px 6px 6px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease);
+}
+
+.color-input:hover { border-color: var(--oxblood); }
+
+.color-swatch {
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--rule);
+  flex: none;
+}
+
+.color-input-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.color-input-lbl {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 1px;
+}
+
+.color-input-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+}
+
+/* Campaign list */
+.campaign-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campaign-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  cursor: grab;
+  transition: all 0.2s var(--ease);
+  position: relative;
+}
+
+.campaign-item:hover {
+  border-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.03);
+}
+
+.campaign-item.featured {
+  border-color: var(--brass);
+  background: rgba(166, 124, 46, 0.06);
+}
+
+.campaign-item.featured::before {
+  content: "★";
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 10px;
+  color: var(--brass);
+}
+
+.campaign-drag {
+  color: var(--ink-faint);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1;
+  cursor: grab;
+  user-select: none;
+}
+
+.campaign-logo {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--rule);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  flex: none;
+}
+
+.campaign-body { min-width: 0; }
+
+.campaign-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.campaign-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.campaign-toggle {
+  width: 32px;
+  height: 18px;
+  background: var(--rule-strong);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s var(--ease);
+  flex: none;
+}
+
+.campaign-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  transition: transform 0.25s var(--ease);
+}
+
+.campaign-toggle.on { background: var(--oxblood); }
+.campaign-toggle.on::after { transform: translateX(14px); }
+
+/* Add campaign btn */
+.add-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px dashed var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.add-btn:hover {
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.03);
+}
+
+/* ============ PREVIEW ============ */
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: rgba(26, 19, 12, 0.06);
+  border-bottom: 1px solid var(--rule);
+}
+
+.device-switcher {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+}
+
+.device-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+}
+
+.device-btn:last-child { border-right: none; }
+
+.device-btn:hover { background: rgba(26, 19, 12, 0.04); color: var(--ink); }
+
+.device-btn.active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.preview-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex;
+  gap: 14px;
+}
+
+.preview-meta strong { color: var(--oxblood); font-weight: 500; }
+
+.preview-frame-wrap {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.preview-frame {
+  width: 100%;
+  max-width: 880px;
+  background: #0a0512;
+  border: 1px solid var(--rule-strong);
+  overflow: hidden;
+  transition: max-width 0.35s var(--ease);
+  box-shadow: 0 20px 60px rgba(26, 19, 12, 0.2);
+}
+
+.preview-frame.mobile { max-width: 380px; }
+
+.preview-browser-bar {
+  background: #14081f;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.browser-dots {
+  display: flex;
+  gap: 5px;
+}
+
+.browser-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #444;
+}
+
+.browser-url {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+}
+
+/* ============ RETROWAVE PREVIEW CONTENT ============ */
+.retro-page {
+  background:
+    radial-gradient(ellipse at top, #2a0a47 0%, transparent 60%),
+    radial-gradient(ellipse at bottom, #ff006e33 0%, transparent 60%),
+    linear-gradient(180deg, #0a0512 0%, #1a0b2e 50%, #0a0512 100%);
+  color: #f0e4ff;
+  font-family: 'Work Sans', sans-serif;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid floor */
+.retro-page::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background-image:
+    linear-gradient(to right, rgba(0, 255, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 0, 110, 0.2) 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(400px) rotateX(60deg);
+  transform-origin: center top;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Scanlines */
+.retro-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 3px);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.retro-content { position: relative; z-index: 2; padding: 32px 28px; }
+
+.retro-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 0, 110, 0.3);
+  margin-bottom: 32px;
+}
+
+.retro-brand {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 22px;
+  color: #ff006e;
+  text-shadow: 0 0 12px rgba(255, 0, 110, 0.6);
+  letter-spacing: -0.01em;
+}
+
+.retro-nav-links {
+  display: flex;
+  gap: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #00ffff;
+}
+
+.retro-hero {
+  text-align: center;
+  padding: 20px 0 36px;
+}
+
+.retro-hero-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #00ffff;
+  padding: 5px 12px;
+  border: 1px solid #00ffff;
+  margin-bottom: 20px;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.retro-hero-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 1.02;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+  text-shadow:
+    2px 2px 0 #ff006e,
+    4px 4px 0 #00ffff,
+    0 0 28px rgba(255, 0, 110, 0.4);
+}
+
+.retro-hero-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, #ff006e, #8338ec, #00ffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+}
+
+.retro-hero-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: #b8a5d6;
+  max-width: 44ch;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+.retro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.retro-card {
+  background: rgba(20, 8, 40, 0.7);
+  border: 1px solid rgba(255, 0, 110, 0.4);
+  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.retro-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ff006e, transparent);
+}
+
+.retro-card.featured {
+  border-color: #00ffff;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.25);
+}
+
+.retro-card.featured::before {
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+}
+
+.retro-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.retro-op-logo {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #ff006e, #8338ec);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
+.retro-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #00ffff;
+  padding: 2px 6px;
+  border: 1px solid rgba(0, 255, 255, 0.5);
+}
+
+.retro-card-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.retro-card-desc {
+  font-family: 'Work Sans', sans-serif;
+  font-size: 11px;
+  color: #a893c2;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.retro-card-cta {
+  display: block;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, #ff006e, #8338ec);
+  color: #fff;
+  border: none;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.retro-card.featured .retro-card-cta {
+  background: linear-gradient(90deg, #00ffff, #8338ec);
+  color: #0a0512;
+}
+
+/* ============ INSPECTOR (RIGHT) ============ */
+.inspector-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+
+.inspector-icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+
+.inspector-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  font-style: italic;
+  font-variation-settings: "opsz" 72;
+}
+
+.inspector-subtitle {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-top: 2px;
+}
+
+/* AI prompt */
+.ai-prompt {
+  margin-bottom: 24px;
+}
+
+.ai-prompt-textarea {
+  width: 100%;
+  background: rgba(26, 19, 12, 0.04);
+  border: 1px solid var(--rule-strong);
+  padding: 14px 14px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink);
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.3s var(--ease);
+}
+
+.ai-prompt-textarea:focus {
+  outline: none;
+  border-color: var(--oxblood);
+}
+
+.ai-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ai-btn {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-btn:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.ai-btn.secondary {
+  background: transparent;
+  color: var(--ink);
+  flex: 0 0 auto;
+  padding: 10px 12px;
+}
+
+.ai-btn.secondary:hover { background: var(--ink); color: var(--paper); }
+
+/* AI presets */
+.ai-presets {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.ai-preset-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+
+.preset-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.preset-chip {
+  padding: 5px 10px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-dim);
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.preset-chip:hover {
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.04);
+}
+
+/* AI suggestions */
+.ai-suggestions {
+  margin-bottom: 24px;
+}
+
+.suggestion-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  position: relative;
+  transition: all 0.25s var(--ease);
+  cursor: pointer;
+}
+
+.suggestion-card:hover {
+  border-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.03);
+}
+
+.suggestion-card::before {
+  content: "↗";
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--display);
+  color: var(--oxblood);
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.suggestion-type {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 6px;
+}
+
+.suggestion-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink);
+  padding-right: 16px;
+}
+
+/* Live stats inspector */
+.stats-block {
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-cell {
+  padding: 12px 14px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 2px solid var(--oxblood);
+}
+
+.stat-val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+}
+
+.stat-val em {
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 14px;
+}
+
+.stat-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+.stat-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  margin-top: 4px;
+  color: var(--absinthe);
+}
+
+/* Drake whisper small */
+.drake-tip {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(118, 37, 37, 0.05);
+  border-left: 3px solid var(--oxblood);
+  margin-top: 18px;
+}
+
+.drake-tip-icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+
+.drake-tip-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.drake-tip-text strong { color: var(--ink); font-weight: 500; font-style: normal; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1280px) {
+  .inspector { display: none; }
+  .editor { grid-template-columns: 320px 1fr; }
+}
+
+@media (max-width: 960px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .editor { grid-template-columns: 1fr; height: auto; }
+  .controls { border-right: none; border-bottom: 1px solid var(--rule); max-height: 400px; }
+  .preview-frame-wrap { padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">The Billboard</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· The Guild ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          The Ledger
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⤫</span>
+          The Map Room
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="icon">▦</span>
+          The Billboard
+          <span class="nav-badge new">NEW</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          The Arsenal
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Community ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          The Posse
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          The Almanac
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          The Wires
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Money ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">$</span>
+          The Payday
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Settlement Book
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Reference ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          The Code
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">R</div>
+      <div class="user-info">
+        <div class="user-name">reelrider.tv</div>
+        <div class="user-rank">Outlaw</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio V · Editor</span>
+        <span class="page-title-topbar">The Billboard</span>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-url">
+          <span class="dot"></span>
+          <span>Live at</span>
+          <strong>reelrider.drakesbounty.com</strong>
+        </div>
+        <a href="drakesbounty-billboard-public.html" target="_blank" class="topbar-btn">
+          ↗ Open public
+        </a>
+        <button class="topbar-btn primary">Publish changes</button>
+      </div>
+    </div>
+
+    <!-- Editor header -->
+    <div class="editor-header">
+      <div>
+        <div class="editor-title">
+          <em>"Slots night"</em>
+          <span class="separator">—</span>
+          Billboard № 01
+        </div>
+        <div class="editor-title-meta">Last edited · 14 minutes ago · 3 active campaigns</div>
+      </div>
+      <div class="editor-actions">
+        <div class="live-indicator">
+          <span class="pulse"></span>
+          Live
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ EDITOR ============ -->
+    <div class="editor">
+
+      <!-- LEFT: Controls -->
+      <section class="controls">
+
+        <!-- Identity -->
+        <div class="control-section">
+          <div class="control-section-head">
+            <span class="control-label">§ 01 · Identity</span>
+          </div>
+          <div class="control-field">
+            <label class="control-field-lbl">Billboard title</label>
+            <input type="text" value='"Slots night" — the only drops worth your time'>
+          </div>
+          <div class="control-field">
+            <label class="control-field-lbl">Tagline</label>
+            <textarea>Every casino I'd actually sit at. Handpicked, tested, still paying.</textarea>
+          </div>
+          <div class="control-field">
+            <label class="control-field-lbl">Public URL</label>
+            <input type="text" value="reelrider.drakesbounty.com" style="font-family: var(--mono); font-size: 12px; color: var(--oxblood);">
+          </div>
+        </div>
+
+        <!-- Theme -->
+        <div class="control-section">
+          <div class="control-section-head">
+            <span class="control-label">§ 02 · Theme</span>
+            <a href="#" class="control-action">See all →</a>
+          </div>
+          <div class="theme-picker">
+            <div class="theme-option active">
+              <div class="theme-swatch retrowave"></div>
+              <div class="theme-name">Retrowave</div>
+            </div>
+            <div class="theme-option">
+              <div class="theme-swatch gremio"></div>
+              <div class="theme-name">Gremio</div>
+            </div>
+            <div class="theme-option">
+              <div class="theme-swatch crypto"></div>
+              <div class="theme-name">Crypto</div>
+            </div>
+            <div class="theme-option">
+              <div class="theme-swatch minimal"></div>
+              <div class="theme-name">Minimal</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colors -->
+        <div class="control-section">
+          <div class="control-section-head">
+            <span class="control-label">§ 03 · Colors</span>
+          </div>
+          <div class="color-row">
+            <div class="color-input">
+              <div class="color-swatch" style="background: #ff006e;"></div>
+              <div class="color-input-meta">
+                <span class="color-input-lbl">Primary</span>
+                <span class="color-input-val">#FF006E</span>
+              </div>
+            </div>
+            <div class="color-input">
+              <div class="color-swatch" style="background: #00ffff;"></div>
+              <div class="color-input-meta">
+                <span class="color-input-lbl">Accent</span>
+                <span class="color-input-val">#00FFFF</span>
+              </div>
+            </div>
+            <div class="color-input">
+              <div class="color-swatch" style="background: #1a0b2e;"></div>
+              <div class="color-input-meta">
+                <span class="color-input-lbl">Background</span>
+                <span class="color-input-val">#1A0B2E</span>
+              </div>
+            </div>
+            <div class="color-input">
+              <div class="color-swatch" style="background: #f0e4ff;"></div>
+              <div class="color-input-meta">
+                <span class="color-input-lbl">Text</span>
+                <span class="color-input-val">#F0E4FF</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campaigns -->
+        <div class="control-section">
+          <div class="control-section-head">
+            <span class="control-label">§ 04 · Campaigns</span>
+            <a href="#" class="control-action">From Bounties →</a>
+          </div>
+          <ul class="campaign-list">
+            <li class="campaign-item featured">
+              <span class="campaign-drag">⋮⋮</span>
+              <div class="campaign-logo">S</div>
+              <div class="campaign-body">
+                <div class="campaign-name">Stakelight · Easter Rush</div>
+                <div class="campaign-meta">AAA · Featured</div>
+              </div>
+              <div class="campaign-toggle on"></div>
+            </li>
+            <li class="campaign-item">
+              <span class="campaign-drag">⋮⋮</span>
+              <div class="campaign-logo">F</div>
+              <div class="campaign-body">
+                <div class="campaign-name">Fairspin · Welcome Pack</div>
+                <div class="campaign-meta">AAA · €500 + 200 spins</div>
+              </div>
+              <div class="campaign-toggle on"></div>
+            </li>
+            <li class="campaign-item">
+              <span class="campaign-drag">⋮⋮</span>
+              <div class="campaign-logo">V</div>
+              <div class="campaign-body">
+                <div class="campaign-name">Vaulted · Crypto Edge</div>
+                <div class="campaign-meta">AA · 150% match</div>
+              </div>
+              <div class="campaign-toggle on"></div>
+            </li>
+            <li class="campaign-item">
+              <span class="campaign-drag">⋮⋮</span>
+              <div class="campaign-logo">H</div>
+              <div class="campaign-body">
+                <div class="campaign-name">Highwater · No-KYC table</div>
+                <div class="campaign-meta">A · Hidden</div>
+              </div>
+              <div class="campaign-toggle"></div>
+            </li>
+          </ul>
+          <button class="add-btn">+ Add another bounty</button>
+        </div>
+
+        <!-- SEO / Social -->
+        <div class="control-section">
+          <div class="control-section-head">
+            <span class="control-label">§ 05 · Share card</span>
+          </div>
+          <div class="control-field">
+            <label class="control-field-lbl">Title when shared</label>
+            <input type="text" value="Slots night — reelrider's picks">
+          </div>
+          <div class="control-field">
+            <label class="control-field-lbl">Description</label>
+            <textarea>Handpicked casino drops from reelrider.tv — the only ones still paying this week.</textarea>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- CENTER: Preview -->
+      <section class="preview-pane">
+
+        <div class="preview-toolbar">
+          <div class="device-switcher">
+            <button class="device-btn active">◻ Desktop</button>
+            <button class="device-btn">▯ Tablet</button>
+            <button class="device-btn">▮ Mobile</button>
+          </div>
+          <div class="preview-meta">
+            <span>Theme: <strong>Retrowave</strong></span>
+            <span>·</span>
+            <span>Campaigns: <strong>3 live</strong></span>
+          </div>
+        </div>
+
+        <div class="preview-frame-wrap">
+          <div class="preview-frame">
+            <div class="preview-browser-bar">
+              <div class="browser-dots">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="browser-url">reelrider.drakesbounty.com</div>
+            </div>
+
+            <!-- Embedded retrowave preview -->
+            <div class="retro-page">
+              <div class="retro-content">
+
+                <nav class="retro-nav">
+                  <div class="retro-brand">reelrider.tv</div>
+                  <div class="retro-nav-links">
+                    <span>TWITCH</span>
+                    <span>X</span>
+                    <span>DISCORD</span>
+                  </div>
+                </nav>
+
+                <div class="retro-hero">
+                  <div class="retro-hero-tag">★ SLOTS NIGHT · DROPS ON ★</div>
+                  <h1 class="retro-hero-title">
+                    The only drops<br>
+                    <em>worth your time.</em>
+                  </h1>
+                  <p class="retro-hero-sub">
+                    Every casino I'd actually sit at. Handpicked, tested, still paying this week.
+                  </p>
+                </div>
+
+                <div class="retro-grid">
+
+                  <div class="retro-card featured">
+                    <div class="retro-card-head">
+                      <div class="retro-op-logo">S</div>
+                      <span class="retro-badge">★ TOP PICK</span>
+                    </div>
+                    <div class="retro-card-title">Stakelight · Easter Rush</div>
+                    <div class="retro-card-desc">
+                      €1,000 match + 300 spins. Crypto deposits doubled this week only.
+                    </div>
+                    <a href="#" class="retro-card-cta">Claim bonus →</a>
+                  </div>
+
+                  <div class="retro-card">
+                    <div class="retro-card-head">
+                      <div class="retro-op-logo">F</div>
+                      <span class="retro-badge">AAA</span>
+                    </div>
+                    <div class="retro-card-title">Fairspin · Welcome Pack</div>
+                    <div class="retro-card-desc">
+                      €500 + 200 free spins. Instant withdrawals, no fuss.
+                    </div>
+                    <a href="#" class="retro-card-cta">Take it →</a>
+                  </div>
+
+                  <div class="retro-card" style="grid-column: 1 / -1;">
+                    <div class="retro-card-head">
+                      <div class="retro-op-logo">V</div>
+                      <span class="retro-badge">CRYPTO</span>
+                    </div>
+                    <div class="retro-card-title">Vaulted · Crypto Edge — 150% match up to 2 BTC</div>
+                    <div class="retro-card-desc">
+                      For when you want the high-stakes tables. Exchange + casino in one wallet.
+                    </div>
+                    <a href="#" class="retro-card-cta">Deposit crypto →</a>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT: Inspector / AI -->
+      <aside class="inspector">
+
+        <div class="inspector-head">
+          <svg class="inspector-icon" viewBox="0 0 36 36">
+            <circle cx="18" cy="18" r="16" fill="none" stroke="#762525" stroke-width="1"/>
+            <circle cx="18" cy="18" r="13" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+            <text x="18" y="24" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="18" font-weight="500" fill="#762525">D</text>
+          </svg>
+          <div>
+            <div class="inspector-title">Drake's Assist</div>
+            <div class="inspector-subtitle">AI · Copy &amp; Design</div>
+          </div>
+        </div>
+
+        <!-- AI prompt -->
+        <div class="ai-prompt">
+          <textarea class="ai-prompt-textarea" placeholder="Tell Drake what you need...">Rewrite the hero with more edge — my audience is 25-35, Twitch slots, wants honesty not hype.</textarea>
+          <div class="ai-actions">
+            <button class="ai-btn">✦ Generate</button>
+            <button class="ai-btn secondary">↺</button>
+          </div>
+        </div>
+
+        <!-- Presets -->
+        <div class="ai-presets">
+          <div class="ai-preset-lbl">· Try ·</div>
+          <div class="preset-chip-group">
+            <span class="preset-chip">Punch up hero</span>
+            <span class="preset-chip">Shorten copy</span>
+            <span class="preset-chip">Add urgency</span>
+            <span class="preset-chip">Rewrite for Telegram</span>
+            <span class="preset-chip">Suggest color palette</span>
+            <span class="preset-chip">Make it funnier</span>
+          </div>
+        </div>
+
+        <!-- Suggestions -->
+        <div class="ai-suggestions">
+          <div class="ai-preset-lbl">· Drake's suggestions ·</div>
+
+          <div class="suggestion-card">
+            <div class="suggestion-type">Copy · Hero</div>
+            <div class="suggestion-text">"Casinos I'd actually play at. No others."</div>
+          </div>
+
+          <div class="suggestion-card">
+            <div class="suggestion-type">Layout</div>
+            <div class="suggestion-text">Move Stakelight into featured row — 2.4× conversion vs others.</div>
+          </div>
+
+          <div class="suggestion-card">
+            <div class="suggestion-type">Campaign</div>
+            <div class="suggestion-text">Highwater converts poorly for your audience. Hide it.</div>
+          </div>
+        </div>
+
+        <!-- Live stats -->
+        <div class="stats-block">
+          <div class="ai-preset-lbl" style="margin-bottom: 12px;">· Last 7 days ·</div>
+          <div class="stats-grid">
+            <div class="stat-cell">
+              <div class="stat-val">4,218</div>
+              <div class="stat-lbl">Visits</div>
+              <div class="stat-delta">▲ 18%</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-val">682</div>
+              <div class="stat-lbl">Registrations</div>
+              <div class="stat-delta">▲ 24%</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-val">16<em>.2%</em></div>
+              <div class="stat-lbl">Conversion</div>
+              <div class="stat-delta">▲ 3pp</div>
+            </div>
+            <div class="stat-cell">
+              <div class="stat-val">€2<em>.14</em></div>
+              <div class="stat-lbl">EPC</div>
+              <div class="stat-delta">▲ 0.42</div>
+            </div>
+          </div>
+
+          <!-- Drake tip -->
+          <div class="drake-tip">
+            <svg class="drake-tip-icon" viewBox="0 0 28 28">
+              <circle cx="14" cy="14" r="12" fill="none" stroke="#762525" stroke-width="1"/>
+              <text x="14" y="19" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="14" font-weight="500" fill="#762525">D</text>
+            </svg>
+            <div class="drake-tip-text">
+              <strong>Thursday 8-11pm</strong> brings 38% of your Billboard traffic. Post to X about it before then.
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

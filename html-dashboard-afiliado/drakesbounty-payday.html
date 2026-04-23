@@ -1,0 +1,2291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Pagadero — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+/* ============ LAYOUT ============ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar (same pattern as other pages) */
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+.nav-group { margin-bottom: 24px; }
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover { color: var(--ink); background: rgba(26, 19, 12, 0.04); }
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood);
+  color: var(--paper);
+}
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+}
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user-rank::before { content: "★"; color: var(--brass); }
+
+/* ============ MAIN ============ */
+.main { padding: 0; min-width: 0; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 16px; }
+
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.topbar-btn.primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.topbar-btn.primary:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.content {
+  padding: 28px 32px 48px;
+  max-width: 1500px;
+}
+
+/* Page header */
+.page-header {
+  margin-bottom: 36px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  margin-bottom: 10px;
+}
+
+.page-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.page-subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--ink-dim);
+  max-width: 72ch;
+  line-height: 1.5;
+}
+
+.page-subtitle em { color: var(--ink); }
+
+/* ============ TREASURE HERO ============ */
+.treasure-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+/* Chest card (left) */
+.chest-card {
+  border: 1px solid var(--ink);
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(166, 124, 46, 0.12) 0%, transparent 60%),
+    linear-gradient(135deg, #241810 0%, #1A130C 100%);
+  color: var(--paper);
+  padding: 36px 38px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chest-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(166, 124, 46, 0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.chest-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brass), transparent);
+}
+
+.chest-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.chest-label::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--brass);
+}
+
+.chest-top-row {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.chest-icon {
+  width: 100px;
+  height: 100px;
+  flex: none;
+}
+
+.chest-amount-block { flex: 1; }
+
+.chest-amount {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 0.95;
+  color: var(--paper);
+  letter-spacing: -0.025em;
+  margin-bottom: 6px;
+  font-variation-settings: "opsz" 144;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.chest-amount .currency {
+  font-size: 28px;
+  color: var(--brass);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.chest-amount em {
+  font-style: italic;
+  color: var(--brass-light);
+}
+
+.chest-amount-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--paper-shadow);
+}
+
+.chest-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.chest-btn {
+  padding: 14px 24px;
+  font-family: var(--ui);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.chest-btn.primary {
+  background: var(--brass);
+  color: var(--ink);
+  border-color: var(--brass);
+}
+
+.chest-btn.primary:hover {
+  background: var(--brass-light);
+  border-color: var(--brass-light);
+}
+
+.chest-btn.secondary {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--paper-shadow);
+}
+
+.chest-btn.secondary:hover {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+.chest-btn .arrow {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+}
+
+/* States indicator (right) */
+.states-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.states-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.states-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.states-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 24px;
+  font-variation-settings: "opsz" 72;
+}
+
+.states-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.states-flow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.state-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  position: relative;
+}
+
+.state-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: calc(100% - 14px);
+  width: 2px;
+  height: 14px;
+  background: linear-gradient(to bottom, var(--oxblood), rgba(118, 37, 37, 0.3));
+  z-index: 0;
+}
+
+.state-marker {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 14px;
+  background: var(--paper);
+  border: 1px solid;
+  flex: none;
+  z-index: 1;
+  position: relative;
+}
+
+.state-marker.transit { color: var(--brass-deep); border-color: var(--brass); }
+.state-marker.landed { color: var(--oxblood); border-color: var(--oxblood); }
+.state-marker.chest { color: var(--paper); border-color: var(--ink); background: var(--ink); }
+.state-marker.withdrawn { color: var(--absinthe); border-color: var(--absinthe-light); }
+
+.state-body { min-width: 0; }
+
+.state-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  margin-bottom: 2px;
+  font-variation-settings: "opsz" 72;
+}
+
+.state-name em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--oxblood);
+}
+
+.state-desc {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.4;
+}
+
+.state-amount {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+  text-align: right;
+  line-height: 1;
+}
+
+.state-amount .currency {
+  font-size: 13px;
+  color: var(--ink-dim);
+  font-style: italic;
+  font-weight: 300;
+  margin-right: 2px;
+}
+
+.state-amount-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+  text-align: right;
+}
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 40px 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-head-left { display: flex; align-items: baseline; gap: 16px; }
+
+.section-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--oxblood);
+  font-variation-settings: "opsz" 144;
+}
+
+.section-title-sm {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+}
+
+.section-title-sm em { font-style: italic; color: var(--oxblood); }
+
+.section-sub-sm {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+  padding-bottom: 6px;
+}
+
+/* ============ OPERATORS & PAYMENTS TABLE ============ */
+.operators-table {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  margin-bottom: 40px;
+}
+
+.op-row {
+  display: grid;
+  grid-template-columns: auto 1.6fr 1.4fr 1fr auto;
+  gap: 24px;
+  padding: 22px 26px;
+  align-items: center;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.op-row:last-child { border-bottom: none; }
+
+.op-row.claimable { background: rgba(118, 37, 37, 0.04); }
+.op-row.ready { background: rgba(74, 92, 58, 0.04); }
+
+/* Operator identity */
+.op-identity { display: flex; align-items: center; gap: 14px; }
+
+.op-logo {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+  flex: none;
+  position: relative;
+}
+
+.op-logo.stakelight { background: linear-gradient(135deg, #d4be91, #a67c2e); color: var(--ink); }
+.op-logo.fairspin { background: linear-gradient(135deg, #c9b994, #8f7556); color: var(--paper); }
+.op-logo.vaulted { background: linear-gradient(135deg, #6b8257, #4a5c3a); color: var(--paper); }
+.op-logo.bytecraft { background: linear-gradient(135deg, #75624c, #4d3d2e); color: var(--paper); }
+.op-logo.cobalt { background: linear-gradient(135deg, #587689, #3d5a6b); color: var(--paper); }
+
+.op-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
+}
+
+.op-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+  display: flex;
+  gap: 10px;
+}
+
+.op-meta .rating-aaa { color: var(--absinthe); font-weight: 500; }
+.op-meta .rating-aa { color: var(--brass-deep); font-weight: 500; }
+.op-meta .rating-bb { color: var(--oxblood); font-weight: 500; }
+
+/* Amount block */
+.op-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.op-amount-big {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 72;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.op-amount-big .currency {
+  font-size: 16px;
+  color: var(--ink-dim);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.op-amount-big em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.op-amount-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Mini trend chart */
+.op-trend-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.op-trend-svg {
+  width: 100%;
+  height: 44px;
+  overflow: visible;
+}
+
+.op-trend-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.op-trend-header .delta-up { color: var(--absinthe); font-weight: 500; }
+.op-trend-header .delta-down { color: var(--oxblood); font-weight: 500; }
+
+/* Payday status (the lock/unlock) */
+.op-payday {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.op-payday-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.op-payday-status.locked { color: var(--brass-deep); }
+.op-payday-status.ready { color: var(--absinthe); }
+.op-payday-status.claimable { color: var(--oxblood); }
+
+.lock-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.op-payday-date {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.op-payday-date strong { color: var(--ink); font-weight: 500; }
+
+/* Countdown bar */
+.countdown-bar {
+  margin-top: 6px;
+  height: 4px;
+  background: rgba(26, 19, 12, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.countdown-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass-deep), var(--brass));
+  transition: width 1s var(--ease);
+}
+
+.countdown-fill.ready { background: linear-gradient(90deg, var(--absinthe), var(--absinthe-light)); }
+
+/* Action button */
+.op-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 120px;
+}
+
+.claim-btn {
+  padding: 10px 16px;
+  font-family: var(--ui);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.claim-btn:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.claim-btn:disabled {
+  background: transparent;
+  color: var(--ink-faint);
+  border-color: var(--rule-strong);
+  cursor: not-allowed;
+}
+
+.claim-btn.featured {
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+  box-shadow: 0 0 0 2px rgba(118, 37, 37, 0.15);
+}
+
+.claim-btn.featured:hover { background: var(--oxblood-deep); border-color: var(--oxblood-deep); }
+
+.auto-hint {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--absinthe);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.auto-hint::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--absinthe);
+  box-shadow: 0 0 5px rgba(74, 92, 58, 0.5);
+}
+
+/* ============ 2-COLUMN GRID FOR BOTTOM ============ */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+/* ============ AUTO-CLAIM SETTINGS ============ */
+.autoclaim-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 26px 28px;
+}
+
+.autoclaim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.autoclaim-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  font-variation-settings: "opsz" 72;
+}
+
+.autoclaim-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.autoclaim-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+  max-width: 50ch;
+}
+
+.autoclaim-toggle {
+  width: 44px;
+  height: 24px;
+  background: var(--absinthe);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s var(--ease);
+  flex: none;
+  margin-top: 4px;
+}
+
+.autoclaim-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 22px;
+  width: 20px;
+  height: 20px;
+  background: var(--paper);
+  transition: transform 0.3s var(--ease);
+}
+
+.autoclaim-toggle.off { background: var(--rule-strong); }
+.autoclaim-toggle.off::after { transform: translateX(-20px); }
+
+.autoclaim-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rule-setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.rule-setting:last-child { border-bottom: none; }
+
+.rule-setting-label {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+  line-height: 1.3;
+}
+
+.rule-setting-hint {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.rule-setting-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rule-setting-control select,
+.rule-setting-control input {
+  background: transparent;
+  border: 1px solid var(--rule-strong);
+  padding: 7px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  transition: border-color 0.3s var(--ease);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.rule-setting-control select:focus,
+.rule-setting-control input:focus {
+  outline: none;
+  border-color: var(--oxblood);
+}
+
+.mini-toggle {
+  width: 32px;
+  height: 18px;
+  background: var(--absinthe);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s var(--ease);
+  flex: none;
+}
+
+.mini-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 16px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  transition: transform 0.25s var(--ease);
+}
+
+.mini-toggle.off { background: var(--rule-strong); }
+.mini-toggle.off::after { transform: translateX(-14px); }
+
+/* ============ WITHDRAWAL METHODS ============ */
+.methods-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 26px 28px;
+}
+
+.methods-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.methods-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  font-variation-settings: "opsz" 72;
+}
+
+.methods-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.methods-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+  max-width: 50ch;
+}
+
+.add-method-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+
+.add-method-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.methods-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.method-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  align-items: center;
+  transition: all 0.25s var(--ease);
+}
+
+.method-item.default {
+  border-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.04);
+}
+
+.method-item:hover { border-color: var(--ink); }
+
+.method-icon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  background: rgba(26, 19, 12, 0.04);
+}
+
+.method-icon.paypal { color: #003087; background: rgba(0, 48, 135, 0.06); border-color: rgba(0, 48, 135, 0.25); }
+.method-icon.usdt { color: #009393; background: rgba(0, 147, 147, 0.06); border-color: rgba(0, 147, 147, 0.25); }
+.method-icon.btc { color: #f7931a; background: rgba(247, 147, 26, 0.06); border-color: rgba(247, 147, 26, 0.3); }
+.method-icon.sepa { color: var(--ink); background: rgba(26, 19, 12, 0.06); }
+
+.method-info { min-width: 0; }
+
+.method-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.2;
+  font-variation-settings: "opsz" 72;
+}
+
+.method-addr {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+  letter-spacing: 0.02em;
+}
+
+.method-fee {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.method-fee strong { color: var(--ink); font-weight: 500; }
+
+.method-badge {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  background: var(--oxblood);
+  color: var(--paper);
+  font-weight: 500;
+}
+
+.method-set-default {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-decoration: none;
+  padding: 6px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+}
+
+.method-set-default:hover { color: var(--oxblood); }
+
+/* ============ HISTORY / TIMELINE ============ */
+.history-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 26px 28px;
+}
+
+.history-list {
+  list-style: none;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto auto;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule-dim);
+  align-items: center;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  min-width: 70px;
+}
+
+.history-date strong { color: var(--ink); font-weight: 500; }
+
+.history-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  min-width: 120px;
+}
+
+.type-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.type-dot.claim { background: var(--oxblood); }
+.type-dot.withdraw { background: var(--absinthe); }
+.type-dot.pay { background: var(--brass); }
+
+.history-desc {
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.history-desc em { font-style: italic; color: var(--oxblood); }
+.history-desc strong { font-weight: 500; }
+
+.history-amount {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+  text-align: right;
+  font-variation-settings: "opsz" 72;
+  min-width: 100px;
+}
+
+.history-amount.neg { color: var(--ink-dim); }
+.history-amount .currency {
+  font-size: 11px;
+  color: var(--ink-dim);
+  font-style: italic;
+  font-weight: 300;
+  margin-right: 2px;
+}
+
+.history-txid {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: color 0.25s var(--ease);
+  min-width: 80px;
+  text-align: right;
+}
+
+.history-txid:hover { color: var(--oxblood); }
+
+.history-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+  margin-left: 8px;
+}
+
+.history-badge.auto {
+  color: var(--absinthe);
+  border-color: var(--absinthe-light);
+  background: rgba(74, 92, 58, 0.08);
+}
+
+/* Drake whisper */
+.drake-whisper {
+  display: flex;
+  gap: 14px;
+  padding: 18px 22px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 3px solid var(--oxblood);
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+.whisper-mark { width: 38px; height: 38px; flex: none; }
+
+.whisper-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.whisper-text strong { font-weight: 500; font-style: normal; color: var(--ink); }
+.whisper-text em { color: var(--oxblood); }
+
+.whisper-name {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  font-style: normal;
+  margin-top: 8px;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1100px) {
+  .treasure-hero { grid-template-columns: 1fr; }
+  .bottom-grid { grid-template-columns: 1fr; }
+  .op-row {
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+  }
+  .op-trend-wrap, .op-payday { grid-column: 1 / -1; }
+  .op-action { grid-column: 1 / -1; align-items: stretch; }
+}
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    padding: 12px 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  .sidebar-brand { border-bottom: none; padding: 0 16px 0 0; border-right: 1px solid var(--rule); }
+  .sidebar-nav, .sidebar-user { display: none; }
+  .topbar, .content { padding-left: 20px; padding-right: 20px; }
+  .page-title { font-size: 42px; }
+  .chest-card { padding: 24px 22px; }
+  .chest-amount { font-size: 48px; }
+  .chest-top-row { flex-direction: column; gap: 16px; }
+  .chest-icon { width: 72px; height: 72px; align-self: flex-start; }
+  .chest-actions { flex-direction: column; }
+  .chest-btn { justify-content: center; }
+  .history-item { grid-template-columns: 1fr; gap: 6px; }
+  .history-amount, .history-txid, .history-type { text-align: left; min-width: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">El Pagadero</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· El Gremio ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          El Ledger
+        </a>
+        <a href="drakesbounty-chart.html" class="nav-item">
+          <span class="icon">⤫</span>
+          La Carta Náutica
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="drakesbounty-billboard-editor.html" class="nav-item">
+          <span class="icon">▦</span>
+          El Billboard
+        </a>
+        <a href="drakesbounty-compass.html" class="nav-item">
+          <span class="icon">✢</span>
+          La Brújula
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          El Arsenal
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Comunidad ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          La Posse
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          El Almanaque
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          Los Telegramas
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Dinero ·</div>
+        <a href="#" class="nav-item active">
+          <span class="icon">$</span>
+          El Pagadero
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Libro de Cuentas
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Referencia ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          El Código
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">E</div>
+      <div class="user-info">
+        <div class="user-name">elena.kicks</div>
+        <div class="user-rank">Marshal</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio VIII</span>
+        <span class="page-title-topbar">El Pagadero</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">Histórico</button>
+        <button class="topbar-btn">Exportar CSV</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <h1 class="page-title">El <em>Pagadero</em></h1>
+        <p class="page-subtitle">
+          Todo tu dinero, dónde está y cuándo podrás moverlo. Cuatro estados: <em>en tránsito</em> desde el operador, <em>desembarcado</em> y listo para reclamar, <em>en tu cofre</em>, o <em>en tierra firme</em> — fuera de la plataforma.
+        </p>
+      </div>
+
+      <!-- Drake whisper -->
+      <div class="drake-whisper">
+        <svg class="whisper-mark" viewBox="0 0 38 38">
+          <circle cx="19" cy="19" r="17.5" fill="none" stroke="#762525" stroke-width="1"/>
+          <circle cx="19" cy="19" r="14" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+          <text x="19" y="25" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="20" font-weight="500" fill="#762525">D</text>
+        </svg>
+        <div class="whisper-text">
+          Tienes <strong>€5.840</strong> listos para reclamar de <em>Fairspin</em> y <em>Vaulted</em> — ya pagaron. <strong>€8.920</strong> siguen navegando desde los demás, llegan entre el 20 y el 25 de este mes. Si activas el <em>auto-reclamo</em>, Drake recoge el oro en cuanto toque puerto.
+          <span class="whisper-name">— Drake · guardián del Pagadero</span>
+        </div>
+      </div>
+
+      <!-- ============ TREASURE HERO: CHEST + STATES ============ -->
+      <div class="treasure-hero">
+
+        <!-- THE CHEST -->
+        <div class="chest-card">
+          <div class="chest-label">§ Tu Cofre Personal</div>
+
+          <div class="chest-top-row">
+            <!-- Treasure chest SVG -->
+            <svg class="chest-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="chestWood" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8F6B3C"/>
+                  <stop offset="50%" stop-color="#6B4D28"/>
+                  <stop offset="100%" stop-color="#3E2A15"/>
+                </linearGradient>
+                <linearGradient id="chestWoodTop" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#A67C2E"/>
+                  <stop offset="100%" stop-color="#6B4D28"/>
+                </linearGradient>
+                <radialGradient id="goldShine" cx="50%" cy="30%">
+                  <stop offset="0%" stop-color="#FFF3C9"/>
+                  <stop offset="60%" stop-color="#C9A961"/>
+                  <stop offset="100%" stop-color="#8F7556"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Chest lid (top part) -->
+              <path d="M 12 42 Q 12 28 25 26 L 75 26 Q 88 28 88 42 L 88 48 L 12 48 Z"
+                    fill="url(#chestWoodTop)" stroke="#1A130C" stroke-width="1"/>
+
+              <!-- Lid hatching for wood grain -->
+              <path d="M 20 32 Q 40 30 60 32 M 20 38 Q 40 36 80 38 M 25 44 Q 50 42 75 44"
+                    fill="none" stroke="rgba(26, 19, 12, 0.4)" stroke-width="0.4"/>
+
+              <!-- Main chest body -->
+              <rect x="12" y="48" width="76" height="38" fill="url(#chestWood)" stroke="#1A130C" stroke-width="1"/>
+
+              <!-- Body hatching -->
+              <path d="M 16 56 Q 50 54 84 56 M 16 64 Q 50 62 84 64 M 16 72 Q 50 70 84 72 M 16 80 Q 50 78 84 80"
+                    fill="none" stroke="rgba(26, 19, 12, 0.35)" stroke-width="0.4"/>
+
+              <!-- Metal bands (3 horizontal straps) -->
+              <rect x="10" y="44" width="80" height="3" fill="#A67C2E" stroke="#1A130C" stroke-width="0.4"/>
+              <rect x="10" y="62" width="80" height="3" fill="#A67C2E" stroke="#1A130C" stroke-width="0.4"/>
+              <rect x="10" y="78" width="80" height="3" fill="#A67C2E" stroke="#1A130C" stroke-width="0.4"/>
+
+              <!-- Vertical corner bands -->
+              <rect x="10" y="42" width="4" height="44" fill="#8F7556" stroke="#1A130C" stroke-width="0.4"/>
+              <rect x="86" y="42" width="4" height="44" fill="#8F7556" stroke="#1A130C" stroke-width="0.4"/>
+
+              <!-- Lock plate -->
+              <rect x="44" y="46" width="12" height="18" fill="#C9A961" stroke="#1A130C" stroke-width="0.6"/>
+              <circle cx="50" cy="55" r="2.5" fill="#4F1818" stroke="#1A130C" stroke-width="0.4"/>
+              <!-- Lock bolts -->
+              <circle cx="46" cy="48.5" r="0.8" fill="#1A130C"/>
+              <circle cx="54" cy="48.5" r="0.8" fill="#1A130C"/>
+              <circle cx="46" cy="61.5" r="0.8" fill="#1A130C"/>
+              <circle cx="54" cy="61.5" r="0.8" fill="#1A130C"/>
+
+              <!-- Keyhole -->
+              <circle cx="50" cy="54" r="1" fill="#1A130C"/>
+              <rect x="49.5" y="54" width="1" height="3" fill="#1A130C"/>
+
+              <!-- Gold coins spilling on top (partial view) -->
+              <g>
+                <circle cx="30" cy="44" r="3.5" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.95"/>
+                <text x="30" y="46" text-anchor="middle" font-family="Fraunces" font-size="4" font-weight="700" fill="#4F1818">D</text>
+
+                <circle cx="38" cy="42" r="3" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.85"/>
+                <circle cx="70" cy="43" r="3.5" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.9"/>
+                <text x="70" y="45" text-anchor="middle" font-family="Fraunces" font-size="4" font-weight="700" fill="#4F1818">$</text>
+
+                <circle cx="64" cy="41" r="2.5" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.8"/>
+                <circle cx="22" cy="42" r="2.8" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.85"/>
+                <circle cx="78" cy="42" r="2.5" fill="url(#goldShine)" stroke="#1A130C" stroke-width="0.5" opacity="0.75"/>
+              </g>
+
+              <!-- Chest shadow -->
+              <ellipse cx="50" cy="90" rx="42" ry="3" fill="#1A130C" opacity="0.4"/>
+
+              <!-- Sparkle effect -->
+              <g opacity="0.8">
+                <path d="M 82 28 L 83 31 L 86 32 L 83 33 L 82 36 L 81 33 L 78 32 L 81 31 Z" fill="#FFF3C9"/>
+                <path d="M 18 30 L 18.5 31.5 L 20 32 L 18.5 32.5 L 18 34 L 17.5 32.5 L 16 32 L 17.5 31.5 Z" fill="#FFF3C9"/>
+              </g>
+            </svg>
+
+            <div class="chest-amount-block">
+              <div class="chest-amount"><span class="currency">€</span>12<em>.468</em><span style="color: var(--brass); font-size: 28px; font-style: italic; font-weight: 300;">,32</span></div>
+              <div class="chest-amount-sub">Tesoro disponible en tu cofre. Retira cuando quieras a cualquiera de tus métodos.</div>
+            </div>
+          </div>
+
+          <div class="chest-actions">
+            <button class="chest-btn primary">
+              Retirar a PayPal
+              <span class="arrow">→</span>
+            </button>
+            <button class="chest-btn secondary">
+              Cambiar método
+            </button>
+          </div>
+        </div>
+
+        <!-- STATES OF MONEY -->
+        <div class="states-card">
+          <div class="states-label">§ Flujo del Oro</div>
+          <h3 class="states-title">Los <em>cuatro estados</em> de tu dinero</h3>
+
+          <div class="states-flow">
+            <div class="state-row">
+              <div class="state-marker transit">I.</div>
+              <div class="state-body">
+                <div class="state-name">En <em>tránsito</em></div>
+                <div class="state-desc">Devengado. El operador aún no ha pagado.</div>
+              </div>
+              <div>
+                <div class="state-amount"><span class="currency">€</span>8.920</div>
+                <div class="state-amount-sub">6 operadores</div>
+              </div>
+            </div>
+
+            <div class="state-row">
+              <div class="state-marker landed">II.</div>
+              <div class="state-body">
+                <div class="state-name"><em>Desembarcado</em></div>
+                <div class="state-desc">Pagado. Listo para reclamar al cofre.</div>
+              </div>
+              <div>
+                <div class="state-amount"><span class="currency">€</span>5.840</div>
+                <div class="state-amount-sub">2 operadores</div>
+              </div>
+            </div>
+
+            <div class="state-row">
+              <div class="state-marker chest">III.</div>
+              <div class="state-body">
+                <div class="state-name">En el <em>cofre</em></div>
+                <div class="state-desc">En tu wallet Drake's Bounty. Ya es tuyo.</div>
+              </div>
+              <div>
+                <div class="state-amount"><span class="currency">€</span>12.468</div>
+                <div class="state-amount-sub">Disponible</div>
+              </div>
+            </div>
+
+            <div class="state-row">
+              <div class="state-marker withdrawn">IV.</div>
+              <div class="state-body">
+                <div class="state-name">En <em>tierra firme</em></div>
+                <div class="state-desc">Retirado este mes a tus métodos externos.</div>
+              </div>
+              <div>
+                <div class="state-amount"><span class="currency">€</span>6.250</div>
+                <div class="state-amount-sub">Abril · 3 retiros</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ OPERATORS PENDING ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 01</span>
+          <h2 class="section-title-sm">Operadores — <em>oro en camino</em></h2>
+        </div>
+        <span class="section-sub-sm">Lo que cada operador te debe este ciclo</span>
+      </div>
+
+      <div class="operators-table">
+
+        <!-- READY TO CLAIM -->
+        <div class="op-row claimable">
+          <div class="op-identity">
+            <div class="op-logo fairspin">F</div>
+            <div>
+              <div class="op-name">Fairspin</div>
+              <div class="op-meta">
+                <span>Casino · Crypto</span>
+                <span>·</span>
+                <span class="rating-aaa">AAA · 94</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="op-amount">
+            <div class="op-amount-big"><span class="currency">€</span>3<em>.260</em></div>
+            <div class="op-amount-label">Ciclo · 01 abril — 12 abril</div>
+          </div>
+
+          <div class="op-trend-wrap">
+            <div class="op-trend-header">
+              <span>Últimos 12 días</span>
+              <span class="delta-up">▲ 8%</span>
+            </div>
+            <svg class="op-trend-svg" viewBox="0 0 200 44" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="trendUp1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#762525" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#762525" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M 0,36 L 16,32 L 32,28 L 48,30 L 64,24 L 80,20 L 96,22 L 112,16 L 128,18 L 144,12 L 160,14 L 176,8 L 192,6 L 200,4 L 200,44 L 0,44 Z"
+                    fill="url(#trendUp1)"/>
+              <path d="M 0,36 L 16,32 L 32,28 L 48,30 L 64,24 L 80,20 L 96,22 L 112,16 L 128,18 L 144,12 L 160,14 L 176,8 L 192,6 L 200,4"
+                    fill="none" stroke="#762525" stroke-width="1.5"/>
+              <circle cx="200" cy="4" r="3" fill="#E8DCC0" stroke="#762525" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="op-payday">
+            <div class="op-payday-status claimable">
+              <svg class="lock-icon" viewBox="0 0 18 18">
+                <path d="M 4 8 L 4 6 Q 4 2 9 2 Q 14 2 14 6 L 14 8" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                <rect x="3" y="8" width="12" height="8" fill="currentColor" opacity="0.9"/>
+                <circle cx="9" cy="12" r="1.2" fill="#E8DCC0"/>
+              </svg>
+              Pagado · Listo
+            </div>
+            <div class="op-payday-date">Llegó el <strong>12 abr</strong></div>
+            <div class="countdown-bar">
+              <div class="countdown-fill ready" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <div class="op-action">
+            <button class="claim-btn featured">
+              Reclamar →
+            </button>
+            <div class="auto-hint">Auto-claim on</div>
+          </div>
+        </div>
+
+        <!-- Second ready -->
+        <div class="op-row claimable">
+          <div class="op-identity">
+            <div class="op-logo vaulted">V</div>
+            <div>
+              <div class="op-name">Vaulted</div>
+              <div class="op-meta">
+                <span>Exchange · Crypto</span>
+                <span>·</span>
+                <span class="rating-aa">AA · 89</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="op-amount">
+            <div class="op-amount-big"><span class="currency">€</span>2<em>.580</em></div>
+            <div class="op-amount-label">Ciclo · 05 abril — 15 abril</div>
+          </div>
+
+          <div class="op-trend-wrap">
+            <div class="op-trend-header">
+              <span>Últimos 10 días</span>
+              <span class="delta-up">▲ 14%</span>
+            </div>
+            <svg class="op-trend-svg" viewBox="0 0 200 44" preserveAspectRatio="none">
+              <path d="M 0,32 L 20,30 L 40,26 L 60,28 L 80,22 L 100,18 L 120,14 L 140,12 L 160,10 L 180,8 L 200,6 L 200,44 L 0,44 Z"
+                    fill="url(#trendUp1)"/>
+              <path d="M 0,32 L 20,30 L 40,26 L 60,28 L 80,22 L 100,18 L 120,14 L 140,12 L 160,10 L 180,8 L 200,6"
+                    fill="none" stroke="#762525" stroke-width="1.5"/>
+              <circle cx="200" cy="6" r="3" fill="#E8DCC0" stroke="#762525" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="op-payday">
+            <div class="op-payday-status claimable">
+              <svg class="lock-icon" viewBox="0 0 18 18">
+                <path d="M 4 8 L 4 6 Q 4 2 9 2 Q 14 2 14 6 L 14 8" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+                <rect x="3" y="8" width="12" height="8" fill="currentColor" opacity="0.9"/>
+                <circle cx="9" cy="12" r="1.2" fill="#E8DCC0"/>
+              </svg>
+              Pagado · Listo
+            </div>
+            <div class="op-payday-date">Llegó el <strong>15 abr</strong></div>
+            <div class="countdown-bar">
+              <div class="countdown-fill ready" style="width: 100%;"></div>
+            </div>
+          </div>
+
+          <div class="op-action">
+            <button class="claim-btn featured">
+              Reclamar →
+            </button>
+            <div class="auto-hint">Auto-claim on</div>
+          </div>
+        </div>
+
+        <!-- LOCKED - Stakelight example -->
+        <div class="op-row">
+          <div class="op-identity">
+            <div class="op-logo stakelight">S</div>
+            <div>
+              <div class="op-name">Stakelight</div>
+              <div class="op-meta">
+                <span>Casino · Crypto</span>
+                <span>·</span>
+                <span class="rating-aaa">AAA · 97</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="op-amount">
+            <div class="op-amount-big"><span class="currency">€</span>5<em>.140</em></div>
+            <div class="op-amount-label">Ciclo · 01 abril — en curso</div>
+          </div>
+
+          <div class="op-trend-wrap">
+            <div class="op-trend-header">
+              <span>Últimos 15 días</span>
+              <span class="delta-down">▼ 22%</span>
+            </div>
+            <svg class="op-trend-svg" viewBox="0 0 200 44" preserveAspectRatio="none">
+              <!-- Strong start, then decline (the example from user's prompt) -->
+              <path d="M 0,32 L 12,22 L 24,10 L 36,8 L 48,10 L 60,14 L 72,18 L 84,22 L 96,24 L 108,26 L 120,28 L 132,30 L 144,30 L 156,32 L 168,34 L 180,34 L 192,36 L 200,36 L 200,44 L 0,44 Z"
+                    fill="url(#trendUp1)"/>
+              <path d="M 0,32 L 12,22 L 24,10 L 36,8 L 48,10 L 60,14 L 72,18 L 84,22 L 96,24 L 108,26 L 120,28 L 132,30 L 144,30 L 156,32 L 168,34 L 180,34 L 192,36 L 200,36"
+                    fill="none" stroke="#762525" stroke-width="1.5"/>
+              <circle cx="200" cy="36" r="3" fill="#E8DCC0" stroke="#762525" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="op-payday">
+            <div class="op-payday-status locked">
+              <svg class="lock-icon" viewBox="0 0 18 18">
+                <rect x="4" y="4" width="10" height="6" rx="5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                <rect x="3" y="8" width="12" height="8" fill="currentColor"/>
+                <circle cx="9" cy="12" r="1.2" fill="#E8DCC0"/>
+              </svg>
+              Bloqueado
+            </div>
+            <div class="op-payday-date">Paga el <strong>20 abr</strong> · en 5 días</div>
+            <div class="countdown-bar">
+              <div class="countdown-fill" style="width: 75%;"></div>
+            </div>
+          </div>
+
+          <div class="op-action">
+            <button class="claim-btn" disabled>
+              Bloqueado
+            </button>
+            <div class="auto-hint">Auto-claim on</div>
+          </div>
+        </div>
+
+        <!-- LOCKED - Bytecraft -->
+        <div class="op-row">
+          <div class="op-identity">
+            <div class="op-logo bytecraft">B</div>
+            <div>
+              <div class="op-name">Bytecraft</div>
+              <div class="op-meta">
+                <span>Trading · CFD</span>
+                <span>·</span>
+                <span class="rating-aa">AA · 88</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="op-amount">
+            <div class="op-amount-big"><span class="currency">€</span>1<em>.780</em></div>
+            <div class="op-amount-label">Ciclo · 01 abril — en curso</div>
+          </div>
+
+          <div class="op-trend-wrap">
+            <div class="op-trend-header">
+              <span>Últimos 15 días</span>
+              <span class="delta-up">▲ 4%</span>
+            </div>
+            <svg class="op-trend-svg" viewBox="0 0 200 44" preserveAspectRatio="none">
+              <path d="M 0,30 L 20,28 L 40,26 L 60,28 L 80,24 L 100,26 L 120,22 L 140,24 L 160,20 L 180,22 L 200,18 L 200,44 L 0,44 Z"
+                    fill="url(#trendUp1)"/>
+              <path d="M 0,30 L 20,28 L 40,26 L 60,28 L 80,24 L 100,26 L 120,22 L 140,24 L 160,20 L 180,22 L 200,18"
+                    fill="none" stroke="#762525" stroke-width="1.5"/>
+              <circle cx="200" cy="18" r="3" fill="#E8DCC0" stroke="#762525" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="op-payday">
+            <div class="op-payday-status locked">
+              <svg class="lock-icon" viewBox="0 0 18 18">
+                <rect x="4" y="4" width="10" height="6" rx="5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                <rect x="3" y="8" width="12" height="8" fill="currentColor"/>
+                <circle cx="9" cy="12" r="1.2" fill="#E8DCC0"/>
+              </svg>
+              Bloqueado
+            </div>
+            <div class="op-payday-date">Paga el <strong>25 abr</strong> · en 10 días</div>
+            <div class="countdown-bar">
+              <div class="countdown-fill" style="width: 50%;"></div>
+            </div>
+          </div>
+
+          <div class="op-action">
+            <button class="claim-btn" disabled>
+              Bloqueado
+            </button>
+            <div class="auto-hint">Auto-claim on</div>
+          </div>
+        </div>
+
+        <!-- LOCKED - Cobalt -->
+        <div class="op-row">
+          <div class="op-identity">
+            <div class="op-logo cobalt">C</div>
+            <div>
+              <div class="op-name">Cobalt Trade</div>
+              <div class="op-meta">
+                <span>Exchange · Crypto</span>
+                <span>·</span>
+                <span class="rating-aa">AA · 89</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="op-amount">
+            <div class="op-amount-big"><span class="currency">€</span>1<em>.180</em></div>
+            <div class="op-amount-label">Ciclo · 01 abril — en curso</div>
+          </div>
+
+          <div class="op-trend-wrap">
+            <div class="op-trend-header">
+              <span>Últimos 15 días</span>
+              <span class="delta-up">▲ 19%</span>
+            </div>
+            <svg class="op-trend-svg" viewBox="0 0 200 44" preserveAspectRatio="none">
+              <path d="M 0,38 L 20,36 L 40,32 L 60,28 L 80,30 L 100,24 L 120,20 L 140,18 L 160,14 L 180,10 L 200,8 L 200,44 L 0,44 Z"
+                    fill="url(#trendUp1)"/>
+              <path d="M 0,38 L 20,36 L 40,32 L 60,28 L 80,30 L 100,24 L 120,20 L 140,18 L 160,14 L 180,10 L 200,8"
+                    fill="none" stroke="#762525" stroke-width="1.5"/>
+              <circle cx="200" cy="8" r="3" fill="#E8DCC0" stroke="#762525" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="op-payday">
+            <div class="op-payday-status locked">
+              <svg class="lock-icon" viewBox="0 0 18 18">
+                <rect x="4" y="4" width="10" height="6" rx="5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                <rect x="3" y="8" width="12" height="8" fill="currentColor"/>
+                <circle cx="9" cy="12" r="1.2" fill="#E8DCC0"/>
+              </svg>
+              Bloqueado
+            </div>
+            <div class="op-payday-date">Paga el <strong>22 abr</strong> · en 7 días</div>
+            <div class="countdown-bar">
+              <div class="countdown-fill" style="width: 65%;"></div>
+            </div>
+          </div>
+
+          <div class="op-action">
+            <button class="claim-btn" disabled>
+              Bloqueado
+            </button>
+            <div class="auto-hint">Auto-claim on</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============ AUTO-CLAIM + METHODS ============ -->
+      <div class="bottom-grid">
+
+        <!-- Auto-claim -->
+        <div class="autoclaim-card">
+          <div class="autoclaim-header">
+            <div>
+              <h3 class="autoclaim-title">Reclamo <em>automático</em></h3>
+              <p class="autoclaim-sub">Drake mueve el oro de los operadores a tu cofre en cuanto pagan. Tú no levantas un dedo.</p>
+            </div>
+            <div class="autoclaim-toggle"></div>
+          </div>
+
+          <div class="autoclaim-rules">
+
+            <div class="rule-setting">
+              <div>
+                <div class="rule-setting-label">Reclamar en cuanto el operador pague</div>
+                <div class="rule-setting-hint">Drake recoge el pago al instante · recomendado</div>
+              </div>
+              <div class="rule-setting-control">
+                <div class="mini-toggle"></div>
+              </div>
+            </div>
+
+            <div class="rule-setting">
+              <div>
+                <div class="rule-setting-label">Reclamar solo desde AAA/AA</div>
+                <div class="rule-setting-hint">Si un operador baja de rating en el Standards Index, pausar</div>
+              </div>
+              <div class="rule-setting-control">
+                <div class="mini-toggle"></div>
+              </div>
+            </div>
+
+            <div class="rule-setting">
+              <div>
+                <div class="rule-setting-label">Umbral mínimo por reclamo</div>
+                <div class="rule-setting-hint">Acumular si es menos, para ahorrar en fees</div>
+              </div>
+              <div class="rule-setting-control">
+                <input type="text" value="€ 50" style="width: 80px; text-align: center;">
+              </div>
+            </div>
+
+            <div class="rule-setting">
+              <div>
+                <div class="rule-setting-label">Retiro automático al banco</div>
+                <div class="rule-setting-hint">Mover el cofre a tu PayPal cuando alcance el umbral</div>
+              </div>
+              <div class="rule-setting-control">
+                <select>
+                  <option>Al llegar a €1.000</option>
+                  <option>Al llegar a €2.500</option>
+                  <option>Al llegar a €5.000</option>
+                  <option>Semanalmente</option>
+                  <option>Nunca (manual)</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Methods -->
+        <div class="methods-card">
+          <div class="methods-header">
+            <div>
+              <h3 class="methods-title"><em>Métodos</em> de retirada</h3>
+              <p class="methods-sub">Elige cómo sale el oro de tu cofre a tierra firme.</p>
+            </div>
+            <button class="add-method-btn">+ Añadir</button>
+          </div>
+
+          <ul class="methods-list">
+
+            <li class="method-item default">
+              <div class="method-icon paypal">Pp</div>
+              <div class="method-info">
+                <div class="method-name">PayPal</div>
+                <div class="method-addr">e******@gmail.com</div>
+              </div>
+              <div class="method-fee">
+                Fee · <strong>0,5%</strong>
+                <div style="color: var(--absinthe); margin-top: 2px;">Instantáneo</div>
+              </div>
+              <span class="method-badge">Por defecto</span>
+            </li>
+
+            <li class="method-item">
+              <div class="method-icon usdt">₮</div>
+              <div class="method-info">
+                <div class="method-name">USDT · TRC-20</div>
+                <div class="method-addr">TQrZ...9f4M</div>
+              </div>
+              <div class="method-fee">
+                Fee · <strong>$1,00</strong>
+                <div style="color: var(--absinthe); margin-top: 2px;">~5 min</div>
+              </div>
+              <button class="method-set-default">Hacer default</button>
+            </li>
+
+            <li class="method-item">
+              <div class="method-icon btc">₿</div>
+              <div class="method-info">
+                <div class="method-name">Bitcoin · Mainnet</div>
+                <div class="method-addr">bc1q...8xh7</div>
+              </div>
+              <div class="method-fee">
+                Fee · <strong>red</strong>
+                <div style="color: var(--ink-faint); margin-top: 2px;">~20 min</div>
+              </div>
+              <button class="method-set-default">Hacer default</button>
+            </li>
+
+            <li class="method-item">
+              <div class="method-icon sepa">EU</div>
+              <div class="method-info">
+                <div class="method-name">SEPA · ES</div>
+                <div class="method-addr">ES** **** **** **** 4281</div>
+              </div>
+              <div class="method-fee">
+                Fee · <strong>€0,50</strong>
+                <div style="color: var(--ink-faint); margin-top: 2px;">1-2 días</div>
+              </div>
+              <button class="method-set-default">Hacer default</button>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- ============ MOVEMENT HISTORY ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 02</span>
+          <h2 class="section-title-sm">El <em>rastro</em> del oro</h2>
+        </div>
+        <span class="section-sub-sm">Cada movimiento, trazable · últimos 30 días</span>
+      </div>
+
+      <div class="history-card">
+        <ul class="history-list">
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>16 abr</strong><br>09:42
+            </div>
+            <div class="history-type">
+              <span class="type-dot claim"></span>
+              Reclamo
+            </div>
+            <div class="history-desc">
+              Oro reclamado de <em>Vaulted</em> al cofre <span class="history-badge auto">· auto</span>
+            </div>
+            <div class="history-amount">
+              <span class="currency">+€</span>2.580<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-7F8A3</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>14 abr</strong><br>16:18
+            </div>
+            <div class="history-type">
+              <span class="type-dot withdraw"></span>
+              Retiro
+            </div>
+            <div class="history-desc">
+              Del cofre a <em>PayPal</em> · e******@gmail.com
+            </div>
+            <div class="history-amount neg">
+              <span class="currency">−€</span>3.000<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-3K2N8</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>12 abr</strong><br>11:04
+            </div>
+            <div class="history-type">
+              <span class="type-dot claim"></span>
+              Reclamo
+            </div>
+            <div class="history-desc">
+              Oro reclamado de <em>Fairspin</em> al cofre <span class="history-badge auto">· auto</span>
+            </div>
+            <div class="history-amount">
+              <span class="currency">+€</span>3.260<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-9P1M6</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>08 abr</strong><br>21:33
+            </div>
+            <div class="history-type">
+              <span class="type-dot withdraw"></span>
+              Retiro
+            </div>
+            <div class="history-desc">
+              Del cofre a <em>USDT · TRC-20</em> · TQrZ...9f4M
+            </div>
+            <div class="history-amount neg">
+              <span class="currency">−$</span>1.500<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-4T6R1</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>05 abr</strong><br>08:52
+            </div>
+            <div class="history-type">
+              <span class="type-dot claim"></span>
+              Reclamo
+            </div>
+            <div class="history-desc">
+              Oro reclamado de <em>Stakelight</em> al cofre (ciclo marzo) <span class="history-badge auto">· auto</span>
+            </div>
+            <div class="history-amount">
+              <span class="currency">+€</span>14.820<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-2G9L4</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>02 abr</strong><br>14:20
+            </div>
+            <div class="history-type">
+              <span class="type-dot withdraw"></span>
+              Retiro
+            </div>
+            <div class="history-desc">
+              Del cofre a <em>SEPA</em> · ES** **** **** **** 4281
+            </div>
+            <div class="history-amount neg">
+              <span class="currency">−€</span>1.750<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-8H5C2</a>
+          </li>
+
+          <li class="history-item">
+            <div class="history-date">
+              <strong>01 abr</strong><br>12:00
+            </div>
+            <div class="history-type">
+              <span class="type-dot pay"></span>
+              Pago operador
+            </div>
+            <div class="history-desc">
+              <em>Fairspin</em> pagó al cofre (ciclo marzo)
+            </div>
+            <div class="history-amount">
+              <span class="currency">+€</span>9.640<em>,00</em>
+            </div>
+            <a href="#" class="history-txid">DB-1A7B3</a>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

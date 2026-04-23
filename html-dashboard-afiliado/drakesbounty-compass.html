@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Brújula — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+/* ============ LAYOUT ============ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* ============ SIDEBAR ============ */
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+.nav-group { margin-bottom: 24px; }
+
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover {
+  color: var(--ink);
+  background: rgba(26, 19, 12, 0.04);
+}
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood);
+  color: var(--paper);
+}
+
+.nav-badge.new {
+  background: var(--brass);
+  color: var(--ink);
+}
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user-rank::before { content: "★"; color: var(--brass); }
+
+/* ============ MAIN ============ */
+.main { padding: 0; min-width: 0; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 16px; }
+
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.topbar-btn.primary {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.topbar-btn.primary:hover {
+  background: var(--oxblood);
+  border-color: var(--oxblood);
+}
+
+/* ============ CONTENT ============ */
+.content {
+  padding: 32px 40px 64px;
+  max-width: 1400px;
+}
+
+/* Page header */
+.page-header {
+  margin-bottom: 32px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  margin-bottom: 8px;
+}
+
+.page-title em {
+  font-style: italic;
+  color: var(--oxblood);
+  font-weight: 400;
+}
+
+.page-subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--ink-dim);
+  max-width: 64ch;
+  line-height: 1.5;
+}
+
+.page-subtitle em { color: var(--ink); }
+
+.autopilot {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  border: 1px solid var(--absinthe-light);
+  background: rgba(74, 92, 58, 0.08);
+}
+
+.autopilot-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.autopilot-status {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--absinthe);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autopilot-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--absinthe);
+  box-shadow: 0 0 8px rgba(74, 92, 58, 0.5);
+}
+
+.autopilot-toggle {
+  width: 36px;
+  height: 20px;
+  background: var(--absinthe);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s var(--ease);
+}
+
+.autopilot-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 18px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  transition: transform 0.25s var(--ease);
+}
+
+/* Drake whisper */
+.drake-whisper {
+  display: flex;
+  gap: 14px;
+  padding: 18px 22px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 3px solid var(--oxblood);
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+.whisper-mark {
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+
+.whisper-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.whisper-text strong {
+  font-weight: 500;
+  font-style: normal;
+  color: var(--ink);
+}
+
+.whisper-text em { color: var(--oxblood); }
+
+.whisper-name {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  font-style: normal;
+  margin-top: 8px;
+}
+
+/* ============ LINK SECTION ============ */
+.link-block {
+  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 28px;
+}
+
+.link-box {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 24px 26px;
+}
+
+.link-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.link-label::before {
+  content: "";
+  width: 20px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.link-url {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.link-url::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--oxblood);
+}
+
+.link-url-text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--paper);
+  flex: 1;
+  letter-spacing: 0.02em;
+}
+
+.link-url-text .schema { color: var(--brass); }
+.link-url-text .path { color: var(--brass-light); }
+
+.link-url-copy {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: transparent;
+  border: 1px solid var(--paper-shadow);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+
+.link-url-copy:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.link-hint {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.45;
+}
+
+.link-hint strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+.link-stats {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 24px 26px;
+}
+
+.link-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.link-stat {
+  padding: 12px 14px;
+  background: rgba(26, 19, 12, 0.03);
+  border-left: 2px solid var(--oxblood);
+}
+
+.link-stat-val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+}
+
+.link-stat-val em {
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 16px;
+}
+
+.link-stat-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 6px;
+}
+
+/* ============ DASHBOARD GRID ============ */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 28px;
+}
+
+/* Section headers */
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 40px 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-header:first-of-type { margin-top: 0; }
+
+.section-head-left {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.section-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--oxblood);
+  font-variation-settings: "opsz" 144;
+}
+
+.section-title-sm {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+}
+
+.section-title-sm em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.section-sub-sm {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+  padding-bottom: 6px;
+}
+
+/* ============ COMPASS VISUAL ============ */
+.compass-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 32px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.compass-card::after {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(166, 124, 46, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.compass-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72, "SOFT" 25;
+}
+
+.compass-title em {
+  font-style: italic;
+  color: var(--oxblood);
+  font-weight: 400;
+}
+
+.compass-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--ink-dim);
+  margin-bottom: 24px;
+}
+
+.compass-svg-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 20px;
+}
+
+.compass-svg {
+  width: 320px;
+  height: 320px;
+}
+
+.compass-caption {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 8px;
+}
+
+.compass-caption strong {
+  color: var(--oxblood);
+  font-weight: 500;
+}
+
+/* ============ RULES ENGINE ============ */
+.rules-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 24px 26px;
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule-dim);
+  align-items: center;
+}
+
+.rule:last-of-type { border-bottom: none; }
+
+.rule-num {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 26px;
+  color: var(--oxblood);
+  min-width: 34px;
+  line-height: 1;
+  font-variation-settings: "opsz" 144;
+}
+
+.rule-body { min-width: 0; }
+
+.rule-condition {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+  font-variation-settings: "opsz" 72;
+}
+
+.rule-condition .tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  background: rgba(26, 19, 12, 0.06);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  margin: 0 3px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.rule-condition .tag.geo { background: rgba(118, 37, 37, 0.06); border-color: var(--oxblood); color: var(--oxblood); }
+.rule-condition .tag.device { background: rgba(166, 124, 46, 0.08); border-color: var(--brass); color: var(--brass-deep); }
+.rule-condition .tag.source { background: rgba(74, 92, 58, 0.08); border-color: var(--absinthe-light); color: var(--absinthe); }
+
+.rule-condition .arrow-then {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--oxblood);
+  margin: 0 8px;
+  font-size: 15px;
+}
+
+.rule-condition strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.rule-meta {
+  display: flex;
+  gap: 14px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.rule-meta span { display: inline-flex; align-items: center; gap: 4px; }
+.rule-meta strong { color: var(--ink); font-weight: 500; }
+.rule-meta .perf-good { color: var(--absinthe); font-weight: 500; }
+
+.rule-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.rule-toggle {
+  width: 32px;
+  height: 18px;
+  background: var(--oxblood);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s var(--ease);
+}
+
+.rule-toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 16px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
+  transition: transform 0.25s var(--ease);
+}
+
+.rule-toggle.off { background: var(--rule-strong); }
+.rule-toggle.off::after { transform: translateX(-14px); }
+
+.rule-edit {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s var(--ease);
+}
+.rule-edit:hover { color: var(--oxblood); }
+
+/* Fallback rule */
+.rule-fallback {
+  margin-top: 12px;
+  padding: 16px 18px;
+  background: rgba(26, 19, 12, 0.04);
+  border: 1px dashed var(--rule-strong);
+}
+
+.rule-fallback-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.rule-fallback-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+
+.rule-fallback-text strong {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.add-rule-btn {
+  width: 100%;
+  padding: 14px;
+  border: 1px dashed var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  margin-top: 16px;
+}
+
+.add-rule-btn:hover {
+  border-color: var(--oxblood);
+  color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.03);
+}
+
+/* ============ FLOW VIEW (route sankey-ish) ============ */
+.flow-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 28px 30px;
+  margin-bottom: 28px;
+}
+
+.flow-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.flow-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
+}
+
+.flow-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.flow-sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-dim);
+  margin-top: 4px;
+}
+
+.flow-period {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* The sankey flow */
+.flow-diagram {
+  position: relative;
+  min-height: 340px;
+  margin: 12px 0;
+}
+
+/* ============ COMPARISON TABLE ============ */
+.comparison {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 28px 30px;
+}
+
+.compare-lead {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--ink-dim);
+  line-height: 1.55;
+  max-width: 64ch;
+  margin-bottom: 24px;
+}
+
+.compare-lead strong { font-weight: 500; color: var(--ink); }
+.compare-lead em { color: var(--oxblood); font-style: italic; }
+
+.compare-bars {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.compare-bars:last-child { border-bottom: none; }
+
+.compare-scenario {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.compare-scenario .sub {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 3px;
+}
+
+.bar-wrap {
+  height: 24px;
+  background: rgba(26, 19, 12, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--oxblood);
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  position: relative;
+  transition: width 1.2s var(--ease);
+}
+
+.bar-fill.baseline { background: var(--ink-faint); opacity: 0.6; }
+.bar-fill.compass { background: linear-gradient(90deg, var(--oxblood), var(--brass)); }
+
+.bar-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--paper);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.compare-value {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  text-align: right;
+  min-width: 110px;
+  font-variation-settings: "opsz" 72;
+}
+
+.compare-value em {
+  font-style: italic;
+  color: var(--absinthe);
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* ============ EXPERIMENTS ============ */
+.experiments {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 28px 30px;
+}
+
+.exp-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule-dim);
+  align-items: center;
+}
+
+.exp-item:last-of-type { border-bottom: none; }
+
+.exp-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 4px;
+  font-variation-settings: "opsz" 72;
+}
+
+.exp-title em {
+  font-style: italic;
+  color: var(--oxblood);
+}
+
+.exp-desc {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.45;
+}
+
+.exp-desc strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+.exp-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 140px;
+}
+
+.exp-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid;
+}
+
+.exp-badge.running { background: rgba(74, 92, 58, 0.08); color: var(--absinthe); border-color: var(--absinthe-light); }
+.exp-badge.complete { background: rgba(166, 124, 46, 0.08); color: var(--brass-deep); border-color: var(--brass); }
+
+.exp-progress {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.exp-progress strong { color: var(--oxblood); font-weight: 500; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1100px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .link-block { grid-template-columns: 1fr; }
+  .compass-svg { width: 280px; height: 280px; }
+}
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    padding: 12px 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  .sidebar-brand { border-bottom: none; padding: 0 16px 0 0; border-right: 1px solid var(--rule); }
+  .sidebar-nav, .sidebar-user { display: none; }
+  .topbar { padding: 14px 20px; }
+  .content { padding: 24px 20px 48px; }
+  .page-header { grid-template-columns: 1fr; gap: 16px; }
+  .page-title { font-size: 42px; }
+  .rule { grid-template-columns: 1fr; gap: 10px; }
+  .rule-actions { flex-direction: row; }
+  .compare-bars { grid-template-columns: 1fr; gap: 10px; }
+  .compare-value { text-align: left; }
+  .exp-item { grid-template-columns: 1fr; gap: 12px; }
+  .exp-status { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">La Brújula</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· El Gremio ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          El Ledger
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⤫</span>
+          La Sala de Mapas
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="drakesbounty-billboard-editor.html" class="nav-item">
+          <span class="icon">▦</span>
+          El Billboard
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="icon">✢</span>
+          La Brújula
+          <span class="nav-badge new">NEW</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          El Arsenal
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Comunidad ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          La Posse
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          El Almanaque
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          Los Telegramas
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Dinero ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">$</span>
+          El Pagadero
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Libro de Cuentas
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Referencia ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          El Código
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">E</div>
+      <div class="user-info">
+        <div class="user-name">elena.kicks</div>
+        <div class="user-rank">Marshal</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio VI</span>
+        <span class="page-title-topbar">La Brújula</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">Histórico</button>
+        <button class="topbar-btn primary">+ Nueva regla</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">La <em>Brújula</em></h1>
+          <p class="page-subtitle">
+            Un solo link para todos tus canales. La Brújula decide a qué operador enviar cada click según quién es, desde dónde viene, y qué convierte mejor en tu audiencia. <em>Un click, el mejor destino.</em>
+          </p>
+        </div>
+        <div class="autopilot">
+          <div>
+            <div class="autopilot-label">Modo</div>
+            <div class="autopilot-status">Piloto automático</div>
+          </div>
+          <div class="autopilot-toggle"></div>
+        </div>
+      </div>
+
+      <!-- Drake whisper -->
+      <div class="drake-whisper">
+        <svg class="whisper-mark" viewBox="0 0 38 38">
+          <circle cx="19" cy="19" r="17.5" fill="none" stroke="#762525" stroke-width="1"/>
+          <circle cx="19" cy="19" r="14" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+          <text x="19" y="25" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="20" font-weight="500" fill="#762525">D</text>
+        </svg>
+        <div class="whisper-text">
+          La Brújula está moviendo tu tráfico español <strong>desktop</strong> a <em>Stakelight</em> en vez de <em>Fairspin</em> — paga un <strong>24% mejor</strong> por ese perfil esta semana. En los últimos 7 días te he generado <strong>+€1.840</strong> extra sin que cambies nada en tu contenido.
+          <span class="whisper-name">— Drake · optimización en vivo</span>
+        </div>
+      </div>
+
+      <!-- ============ LINK UNIVERSAL ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 01</span>
+          <h2 class="section-title-sm">El <em>link universal</em></h2>
+        </div>
+        <span class="section-sub-sm">Un solo enlace para bio, posts, Telegram y stream</span>
+      </div>
+
+      <div class="link-block">
+        <div class="link-box">
+          <div class="link-label">Tu Brújula</div>
+
+          <div class="link-url">
+            <div class="link-url-text">
+              <span class="schema">https://</span>drake<span class="path">.bo/</span><span style="color: white;">elena</span>
+            </div>
+            <button class="link-url-copy">Copiar</button>
+          </div>
+
+          <p class="link-hint">
+            Este es el único link que necesitas. <strong>Pégalo en tu bio, en tus streams, en tus posts</strong> — La Brújula se encarga de mandar a cada visitante al operador que mejor le encaja. Si quieres links específicos por canal o campaña, puedes generar variantes trackeables abajo.
+          </p>
+        </div>
+
+        <div class="link-stats">
+          <div class="link-label">Últimos 7 días</div>
+          <div class="link-stats-grid">
+            <div class="link-stat">
+              <div class="link-stat-val">14.820</div>
+              <div class="link-stat-lbl">Clicks enrutados</div>
+            </div>
+            <div class="link-stat">
+              <div class="link-stat-val">98<em>,4%</em></div>
+              <div class="link-stat-lbl">Enrutados con regla</div>
+            </div>
+            <div class="link-stat">
+              <div class="link-stat-val">€2<em>,14</em></div>
+              <div class="link-stat-lbl">EPC medio</div>
+            </div>
+            <div class="link-stat">
+              <div class="link-stat-val">6</div>
+              <div class="link-stat-lbl">Operadores activos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SECTION 02: LA BRÚJULA VISUAL + REGLAS ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 02</span>
+          <h2 class="section-title-sm">La rosa de los <em>vientos</em></h2>
+        </div>
+        <span class="section-sub-sm">Cómo se distribuye tu tráfico ahora mismo</span>
+      </div>
+
+      <div class="grid-2">
+
+        <!-- COMPASS VISUAL -->
+        <div class="compass-card">
+          <h3 class="compass-title">Rumbos <em>actuales</em></h3>
+          <p class="compass-sub">Porcentaje de clicks que La Brújula envía a cada operador en las últimas 24h.</p>
+
+          <div class="compass-svg-wrap">
+            <svg class="compass-svg" viewBox="0 0 320 320">
+              <defs>
+                <radialGradient id="compassBg" cx="50%" cy="50%">
+                  <stop offset="0%" stop-color="#E8DCC0" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#C9B994" stop-opacity="0.6"/>
+                </radialGradient>
+                <filter id="compassShadow">
+                  <feGaussianBlur stdDeviation="1.5"/>
+                </filter>
+              </defs>
+
+              <!-- Outer ring -->
+              <circle cx="160" cy="160" r="148" fill="url(#compassBg)" stroke="#4D3D2E" stroke-width="1"/>
+              <circle cx="160" cy="160" r="148" fill="none" stroke="#4D3D2E" stroke-width="0.4" opacity="0.5"/>
+              <circle cx="160" cy="160" r="136" fill="none" stroke="#4D3D2E" stroke-width="0.8"/>
+              <circle cx="160" cy="160" r="118" fill="none" stroke="#4D3D2E" stroke-width="0.4" opacity="0.5"/>
+
+              <!-- Compass degree ticks -->
+              <g stroke="#4D3D2E" stroke-width="0.6" opacity="0.4">
+                <line x1="160" y1="22" x2="160" y2="32"/>
+                <line x1="160" y1="288" x2="160" y2="298"/>
+                <line x1="22" y1="160" x2="32" y2="160"/>
+                <line x1="288" y1="160" x2="298" y2="160"/>
+              </g>
+
+              <!-- Cardinal labels -->
+              <text x="160" y="18" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="12" font-weight="500" fill="#762525">N</text>
+              <text x="160" y="310" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="12" font-weight="500" fill="#4D3D2E">S</text>
+              <text x="12" y="164" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="12" font-weight="500" fill="#4D3D2E">O</text>
+              <text x="308" y="164" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="12" font-weight="500" fill="#4D3D2E">E</text>
+
+              <!-- Diagonal ticks -->
+              <g stroke="#4D3D2E" stroke-width="0.4" opacity="0.3">
+                <line x1="58" y1="58" x2="65" y2="65"/>
+                <line x1="262" y1="58" x2="255" y2="65"/>
+                <line x1="58" y1="262" x2="65" y2="255"/>
+                <line x1="262" y1="262" x2="255" y2="255"/>
+              </g>
+
+              <!-- Data segments as radial bars -->
+              <!-- Stakelight: 38% (largest, north-ish) -->
+              <path d="M 160 160 L 160 40 A 120 120 0 0 1 236 78 Z"
+                    fill="#762525" opacity="0.85" stroke="#4F1818" stroke-width="0.5"/>
+
+              <!-- Fairspin: 22% -->
+              <path d="M 160 160 L 236 78 A 120 120 0 0 1 278 160 Z"
+                    fill="#A67C2E" opacity="0.85" stroke="#7A5920" stroke-width="0.5"/>
+
+              <!-- Vaulted: 16% -->
+              <path d="M 160 160 L 278 160 A 120 120 0 0 1 243 245 Z"
+                    fill="#4A5C3A" opacity="0.85" stroke="#2F3E25" stroke-width="0.5"/>
+
+              <!-- Bytecraft: 12% -->
+              <path d="M 160 160 L 243 245 A 120 120 0 0 1 170 279 Z"
+                    fill="#4D3D2E" opacity="0.85" stroke="#2B2018" stroke-width="0.5"/>
+
+              <!-- Cobalt Trade: 8% -->
+              <path d="M 160 160 L 170 279 A 120 120 0 0 1 78 220 Z"
+                    fill="#6B8257" opacity="0.75" stroke="#4A5C3A" stroke-width="0.5"/>
+
+              <!-- Mustang Bets: 4% -->
+              <path d="M 160 160 L 78 220 A 120 120 0 0 1 40 148 Z"
+                    fill="#C9A961" opacity="0.75" stroke="#A67C2E" stroke-width="0.5"/>
+
+              <!-- Unassigned (fallback): 2% sliver -->
+              <path d="M 160 160 L 40 148 A 120 120 0 0 1 160 40 Z"
+                    fill="#E8DCC0" opacity="0.4" stroke="#4D3D2E" stroke-width="0.4" stroke-dasharray="2 2"/>
+
+              <!-- Center compass rose -->
+              <circle cx="160" cy="160" r="40" fill="#E8DCC0" stroke="#4D3D2E" stroke-width="1" filter="url(#compassShadow)"/>
+              <circle cx="160" cy="160" r="40" fill="none" stroke="#4D3D2E" stroke-width="0.6" opacity="0.5"/>
+
+              <!-- Compass needle (N-S) -->
+              <path d="M 160 128 L 166 160 L 160 192 L 154 160 Z" fill="#762525" stroke="#4F1818" stroke-width="0.5"/>
+              <path d="M 160 128 L 166 160 L 154 160 Z" fill="#8F2F2F"/>
+
+              <!-- Center pin -->
+              <circle cx="160" cy="160" r="4" fill="#1A130C"/>
+              <circle cx="160" cy="160" r="2" fill="#A67C2E"/>
+
+              <!-- Labels around segments with lines -->
+              <g font-family="JetBrains Mono" font-size="9" letter-spacing="1" fill="#1A130C">
+                <!-- Stakelight -->
+                <line x1="200" y1="70" x2="230" y2="50" stroke="#762525" stroke-width="0.8"/>
+                <text x="235" y="48" font-weight="600" fill="#762525">STAKELIGHT</text>
+                <text x="235" y="60" opacity="0.7">38%</text>
+
+                <!-- Fairspin -->
+                <line x1="250" y1="130" x2="288" y2="115" stroke="#A67C2E" stroke-width="0.8"/>
+                <text x="293" y="113" font-weight="600" fill="#7A5920">FAIRSPIN</text>
+                <text x="293" y="125" opacity="0.7">22%</text>
+
+                <!-- Vaulted -->
+                <line x1="240" y1="200" x2="280" y2="220" stroke="#4A5C3A" stroke-width="0.8"/>
+                <text x="285" y="218" font-weight="600" fill="#4A5C3A">VAULTED</text>
+                <text x="285" y="230" opacity="0.7">16%</text>
+
+                <!-- Bytecraft -->
+                <line x1="195" y1="240" x2="210" y2="275" stroke="#4D3D2E" stroke-width="0.8"/>
+                <text x="215" y="278" font-weight="600" fill="#4D3D2E">BYTECRAFT</text>
+                <text x="215" y="290" opacity="0.7">12%</text>
+
+                <!-- Cobalt Trade -->
+                <line x1="115" y1="240" x2="70" y2="275" stroke="#6B8257" stroke-width="0.8"/>
+                <text x="16" y="278" font-weight="600" fill="#4A5C3A">COBALT</text>
+                <text x="16" y="290" opacity="0.7">8%</text>
+
+                <!-- Mustang Bets -->
+                <line x1="85" y1="165" x2="40" y2="125" stroke="#A67C2E" stroke-width="0.8"/>
+                <text x="6" y="115" font-weight="600" fill="#7A5920">MUSTANG</text>
+                <text x="6" y="127" opacity="0.7">4%</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="compass-caption">
+            <strong>14.820 clicks</strong> enrutados · últimas 24 horas
+          </div>
+        </div>
+
+        <!-- RULES ENGINE -->
+        <div class="rules-card">
+          <h3 class="compass-title" style="margin-bottom: 4px;">Tus <em>reglas</em></h3>
+          <p class="compass-sub" style="margin-bottom: 20px;">El orden importa. La primera regla que coincida se aplica.</p>
+
+          <div class="rule">
+            <span class="rule-num">I.</span>
+            <div class="rule-body">
+              <div class="rule-condition">
+                Si el visitante es de <span class="tag geo">España</span> y llega desde <span class="tag source">Twitch</span>
+                <span class="arrow-then">→</span>
+                <strong>Stakelight</strong>
+              </div>
+              <div class="rule-meta">
+                <span><strong>8.240</strong> clicks</span>
+                <span>·</span>
+                <span>EPC <strong class="perf-good">€2,84</strong></span>
+                <span>·</span>
+                <span>Conv. <strong>18%</strong></span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <div class="rule-toggle"></div>
+              <button class="rule-edit">Editar</button>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span class="rule-num">II.</span>
+            <div class="rule-body">
+              <div class="rule-condition">
+                Si el visitante es de <span class="tag geo">LATAM</span> y está en <span class="tag device">móvil</span>
+                <span class="arrow-then">→</span>
+                <strong>Fairspin</strong>
+              </div>
+              <div class="rule-meta">
+                <span><strong>3.120</strong> clicks</span>
+                <span>·</span>
+                <span>EPC <strong class="perf-good">€1,94</strong></span>
+                <span>·</span>
+                <span>Conv. <strong>14%</strong></span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <div class="rule-toggle"></div>
+              <button class="rule-edit">Editar</button>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span class="rule-num">III.</span>
+            <div class="rule-body">
+              <div class="rule-condition">
+                Si el visitante llega desde <span class="tag source">Telegram</span> y paga en <span class="tag device">crypto</span>
+                <span class="arrow-then">→</span>
+                <strong>Vaulted</strong>
+              </div>
+              <div class="rule-meta">
+                <span><strong>1.840</strong> clicks</span>
+                <span>·</span>
+                <span>EPC <strong class="perf-good">€3,42</strong></span>
+                <span>·</span>
+                <span>Conv. <strong>22%</strong></span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <div class="rule-toggle"></div>
+              <button class="rule-edit">Editar</button>
+            </div>
+          </div>
+
+          <div class="rule">
+            <span class="rule-num">IV.</span>
+            <div class="rule-body">
+              <div class="rule-condition">
+                Si el visitante busca <span class="tag source">trading</span> o <span class="tag source">análisis</span>
+                <span class="arrow-then">→</span>
+                <strong>Bytecraft</strong>
+              </div>
+              <div class="rule-meta">
+                <span><strong>1.210</strong> clicks</span>
+                <span>·</span>
+                <span>EPC <strong class="perf-good">€1,72</strong></span>
+                <span>·</span>
+                <span>Conv. <strong>9%</strong></span>
+              </div>
+            </div>
+            <div class="rule-actions">
+              <div class="rule-toggle off"></div>
+              <button class="rule-edit">Editar</button>
+            </div>
+          </div>
+
+          <div class="rule-fallback">
+            <div class="rule-fallback-label">Regla por defecto</div>
+            <div class="rule-fallback-text">
+              Si no aplica ninguna regla anterior <span class="arrow-then" style="color:#4D3D2E;">→</span> <strong>Fairspin</strong> (AAA · el más fiable del stack)
+            </div>
+          </div>
+
+          <button class="add-rule-btn">+ Añadir regla nueva</button>
+        </div>
+
+      </div>
+
+      <!-- ============ SECTION 03: COMPARATIVA PILOTO AUTOMÁTICO ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 03</span>
+          <h2 class="section-title-sm">Lo que <em>te ahorra</em></h2>
+        </div>
+        <span class="section-sub-sm">Últimos 30 días</span>
+      </div>
+
+      <div class="comparison">
+        <p class="compare-lead">
+          Mismo tráfico, tres escenarios. Así es como <em>La Brújula te hace ganar más sin cambiar lo que haces</em>. Los números son reales, calculados sobre tus <strong>14.820 clicks</strong> del último mes.
+        </p>
+
+        <div class="compare-bars">
+          <div class="compare-scenario">
+            Sin enrutamiento
+            <span class="sub">Un operador, siempre el mismo</span>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-fill baseline" style="width: 58%;">
+              <span class="bar-label">baseline</span>
+            </div>
+          </div>
+          <div class="compare-value">
+            €24.140
+            <em>base</em>
+          </div>
+        </div>
+
+        <div class="compare-bars">
+          <div class="compare-scenario">
+            Reglas manuales
+            <span class="sub">Tú defines a dónde va cada tráfico</span>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-fill" style="width: 74%;">
+              <span class="bar-label">+19%</span>
+            </div>
+          </div>
+          <div class="compare-value">
+            €28.730
+            <em>+€4.590</em>
+          </div>
+        </div>
+
+        <div class="compare-bars">
+          <div class="compare-scenario">
+            <strong>Piloto automático</strong>
+            <span class="sub">Drake optimiza en vivo por ti</span>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-fill compass" style="width: 100%;">
+              <span class="bar-label">+32% vs baseline</span>
+            </div>
+          </div>
+          <div class="compare-value">
+            €31.860
+            <em>+€7.720</em>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SECTION 04: EXPERIMENTOS ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 04</span>
+          <h2 class="section-title-sm">Pruebas en <em>marcha</em></h2>
+        </div>
+        <span class="section-sub-sm">A/B tests que Drake está corriendo por ti</span>
+      </div>
+
+      <div class="experiments">
+
+        <div class="exp-item">
+          <div>
+            <div class="exp-title"><em>Tráfico español desktop</em> — Stakelight vs Fairspin</div>
+            <p class="exp-desc">
+              Comparando conversión real sobre tus visitantes españoles desde navegador de escritorio. <strong>Stakelight lleva +24% de EPC</strong> — pero aún falta muestra para cerrar la decisión.
+            </p>
+          </div>
+          <div class="exp-status">
+            <span class="exp-badge running">· En curso</span>
+            <span class="exp-progress"><strong>74%</strong> de confianza</span>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div>
+            <div class="exp-title"><em>Crypto-nativos Telegram</em> — Vaulted vs Cobalt Trade</div>
+            <p class="exp-desc">
+              Probando si tu audiencia de Telegram crypto convierte mejor en el exchange tradicional o en el nuevo. <strong>Vaulted lidera por un margen estrecho</strong>, pero Cobalt sube rápido.
+            </p>
+          </div>
+          <div class="exp-status">
+            <span class="exp-badge running">· En curso</span>
+            <span class="exp-progress"><strong>52%</strong> de confianza</span>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div>
+            <div class="exp-title"><em>LATAM móvil</em> — Fairspin ganó contra Stakelight</div>
+            <p class="exp-desc">
+              Test cerrado. <strong>Fairspin convierte +38% mejor</strong> en tu audiencia LATAM desde móvil. La Brújula ya aplicó el cambio en tus reglas automáticamente.
+            </p>
+          </div>
+          <div class="exp-status">
+            <span class="exp-badge complete">✓ Aplicado</span>
+            <span class="exp-progress"><strong>96%</strong> de confianza</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tratos Privados — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+.app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex; flex-direction: column;
+  position: sticky; top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500; font-size: 13px;
+  letter-spacing: 0.38em; text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+.nav-group { margin-bottom: 24px; }
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400; font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover { color: var(--ink); background: rgba(26, 19, 12, 0.04); }
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic; font-size: 14px;
+  text-align: center;
+}
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood); color: var(--paper);
+}
+.nav-badge.new { background: var(--brass); color: var(--ink); }
+.nav-badge.outlaw { background: var(--brass); color: var(--ink); }
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex; align-items: center; gap: 12px;
+}
+
+.user-avatar {
+  width: 38px; height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: linear-gradient(135deg, #d4be91, #a67c2e);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display);
+  font-style: italic; font-weight: 500; font-size: 18px;
+  color: var(--ink);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name { font-family: var(--display); font-weight: 500; font-size: 14px; color: var(--ink); }
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--oxblood);
+  display: flex; align-items: center; gap: 5px;
+  font-weight: 500;
+}
+.user-rank::before { content: "★"; color: var(--oxblood); }
+
+.main { padding: 0; min-width: 0; }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 16px; }
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--oxblood);
+}
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500; font-size: 20px;
+  color: var(--ink); font-style: italic;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.topbar-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.topbar-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.topbar-btn.primary:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.content { padding: 28px 32px 48px; max-width: 1500px; }
+
+.page-header {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 32px; align-items: end;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 56px; line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  margin-bottom: 10px;
+}
+
+.page-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.page-subtitle {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 16px;
+  color: var(--ink-dim);
+  max-width: 72ch;
+  line-height: 1.5;
+}
+
+.page-subtitle em { color: var(--ink); }
+
+.tier-unlock {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(118, 37, 37, 0.06);
+  border: 1px solid var(--oxblood);
+}
+
+.tier-unlock-icon {
+  width: 24px; height: 24px;
+  flex: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--oxblood);
+  font-family: var(--display);
+  font-style: italic; font-weight: 700;
+  font-size: 16px;
+}
+
+.tier-unlock-text {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.tier-unlock-text strong { color: var(--ink); font-weight: 600; }
+
+.unlock-panel {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 28px;
+  margin-bottom: 40px;
+}
+
+.treaty-card {
+  border: 1px solid var(--ink);
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(166, 124, 46, 0.14) 0%, transparent 60%),
+    linear-gradient(135deg, #241810 0%, #1A130C 100%);
+  color: var(--paper);
+  padding: 36px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.treaty-card::before {
+  content: "";
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, rgba(166, 124, 46, 0.22) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.treaty-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brass), transparent);
+}
+
+.treaty-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 12px;
+  position: relative;
+}
+
+.treaty-label::before {
+  content: "";
+  width: 24px; height: 1px;
+  background: var(--brass);
+}
+
+.treaty-top {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.treaty-icon { width: 120px; height: 120px; flex: none; }
+
+.treaty-text-block { flex: 1; }
+
+.treaty-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.05;
+  color: var(--paper);
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  margin-bottom: 14px;
+}
+
+.treaty-title em { font-style: italic; color: var(--brass-light); font-weight: 500; }
+
+.treaty-body {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 16px;
+  color: var(--paper-shadow);
+  line-height: 1.55;
+  max-width: 54ch;
+  margin-bottom: 22px;
+}
+
+.treaty-body strong {
+  color: var(--brass-light);
+  font-weight: 500;
+  font-style: normal;
+}
+
+.treaty-actions { display: flex; gap: 12px; }
+
+.treaty-btn {
+  padding: 14px 22px;
+  font-family: var(--ui);
+  font-weight: 500; font-size: 11px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.treaty-btn.primary { background: var(--brass); color: var(--ink); border-color: var(--brass); }
+.treaty-btn.primary:hover { background: var(--brass-light); border-color: var(--brass-light); }
+
+.treaty-btn.secondary {
+  background: transparent;
+  color: var(--paper);
+  border-color: var(--paper-shadow);
+}
+.treaty-btn.secondary:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+
+.treaty-btn .arrow { font-family: var(--display); font-style: italic; font-size: 16px; }
+
+.quickstats {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 24px 26px;
+  display: flex; flex-direction: column;
+}
+
+.quickstats-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.quickstats-label::before { content: ""; width: 18px; height: 1px; background: var(--oxblood); }
+
+.quickstats-title {
+  font-family: var(--display);
+  font-weight: 500; font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 20px;
+  font-variation-settings: "opsz" 72;
+}
+
+.quickstats-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.qs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  flex: 1;
+}
+
+.qs-cell {
+  padding: 14px 16px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 2px solid var(--brass);
+}
+
+.qs-cell.featured {
+  border-left-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.05);
+}
+
+.qs-val {
+  font-family: var(--display);
+  font-weight: 500; font-size: 22px;
+  color: var(--ink);
+  line-height: 1;
+  font-variation-settings: "opsz" 72;
+  display: flex; align-items: baseline; gap: 3px;
+  margin-bottom: 6px;
+}
+
+.qs-val .currency { font-size: 13px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+.qs-val em { font-style: italic; color: var(--oxblood); }
+
+.qs-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.qs-lbl strong { color: var(--ink); font-weight: 500; }
+
+.section-header {
+  display: flex;
+  align-items: baseline; justify-content: space-between;
+  margin: 40px 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.section-head-left { display: flex; align-items: baseline; gap: 16px; }
+
+.section-num {
+  font-family: var(--display);
+  font-style: italic; font-weight: 400;
+  font-size: 24px;
+  color: var(--oxblood);
+  font-variation-settings: "opsz" 144;
+}
+
+.section-title-sm {
+  font-family: var(--display);
+  font-weight: 400; font-size: 32px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+}
+
+.section-title-sm em { font-style: italic; color: var(--oxblood); }
+
+.section-sub-sm {
+  font-family: var(--display);
+  font-style: italic; font-size: 14px;
+  color: var(--ink-dim);
+  padding-bottom: 6px;
+}
+
+.treaties-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-bottom: 40px;
+}
+
+.treaty-deal {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.65);
+  padding: 24px 26px;
+  position: relative;
+  transition: border-color 0.3s var(--ease);
+}
+
+.treaty-deal:hover { border-color: var(--ink); }
+.treaty-deal.integrated { border-left: 3px solid var(--absinthe-light); }
+.treaty-deal.manual { border-left: 3px solid var(--brass); }
+.treaty-deal.pending { border-left: 3px solid var(--oxblood); background: rgba(118, 37, 37, 0.03); }
+
+.deal-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.deal-op-logo {
+  width: 48px; height: 48px;
+  border: 1px solid var(--rule-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display);
+  font-weight: 600; font-size: 20px;
+  color: var(--paper);
+  flex: none;
+}
+
+.deal-op-logo.pokerking { background: linear-gradient(135deg, #4a5c3a, #2f3e25); }
+.deal-op-logo.spinsage { background: linear-gradient(135deg, #762525, #4f1818); }
+.deal-op-logo.vexfx { background: linear-gradient(135deg, #3d5a6b, #2a3f4a); }
+.deal-op-logo.goldenplay { background: linear-gradient(135deg, #a67c2e, #7a5920); color: var(--ink); }
+
+.deal-op-meta { min-width: 0; }
+
+.deal-op-name {
+  font-family: var(--display);
+  font-weight: 500; font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 72;
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+
+.deal-op-name .private-mark {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 2px 7px;
+  background: rgba(166, 124, 46, 0.14);
+  color: var(--brass-deep);
+  font-weight: 500;
+}
+
+.deal-op-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  display: flex; gap: 10px; align-items: center;
+}
+
+.deal-status-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1px solid;
+  font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+
+.deal-status-chip.integrated {
+  color: var(--absinthe);
+  border-color: var(--absinthe-light);
+  background: rgba(74, 92, 58, 0.06);
+}
+
+.deal-status-chip.integrated::before {
+  content: ""; width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--absinthe);
+  box-shadow: 0 0 6px rgba(74, 92, 58, 0.5);
+}
+
+.deal-status-chip.manual {
+  color: var(--brass-deep);
+  border-color: var(--brass);
+  background: rgba(166, 124, 46, 0.06);
+}
+
+.deal-status-chip.pending {
+  color: var(--oxblood);
+  border-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.05);
+}
+
+.deal-status-chip.pending::before {
+  content: ""; width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--oxblood);
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.deal-terms {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  padding: 14px 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.term { display: flex; flex-direction: column; gap: 3px; }
+
+.term-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.term-val {
+  font-family: var(--display);
+  font-weight: 500; font-size: 16px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+  line-height: 1.2;
+}
+
+.term-val em { font-style: italic; color: var(--oxblood); }
+
+.term-val .small {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.deal-earnings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.deal-earn-cell {
+  padding: 12px 14px;
+  background: rgba(26, 19, 12, 0.03);
+}
+
+.deal-earn-val {
+  font-family: var(--display);
+  font-weight: 500; font-size: 20px;
+  color: var(--ink);
+  line-height: 1;
+  display: flex; align-items: baseline; gap: 3px;
+  font-variation-settings: "opsz" 72;
+}
+
+.deal-earn-val .currency { font-size: 12px; color: var(--ink-dim); font-style: italic; font-weight: 300; }
+.deal-earn-val em { font-style: italic; color: var(--oxblood); }
+
+.deal-earn-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+.deal-earn-lbl .pending {
+  color: var(--brass-deep);
+  font-weight: 500;
+}
+
+.deal-payday {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(166, 124, 46, 0.06);
+  border-left: 2px solid var(--brass);
+  margin-bottom: 14px;
+}
+
+.deal-payday-lbl {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-dim);
+  display: flex; align-items: center; gap: 8px;
+}
+
+.deal-payday-lbl .lock-ico { width: 12px; height: 12px; }
+
+.deal-payday-val {
+  font-family: var(--display);
+  font-style: italic; font-weight: 500; font-size: 14px;
+  color: var(--ink);
+}
+
+.deal-payday-val strong { color: var(--oxblood); font-style: normal; }
+
+.deal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deal-actions-left { display: flex; gap: 8px; }
+
+.deal-btn {
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+}
+
+.deal-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.deal-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.deal-btn.primary:hover { background: var(--oxblood); border-color: var(--oxblood); }
+
+.deal-btn.log { color: var(--oxblood); border-color: var(--oxblood); }
+.deal-btn.log:hover { background: var(--oxblood); color: var(--paper); }
+
+.fee-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.fee-badge strong { color: var(--ink); font-weight: 500; }
+
+.add-treaty-card {
+  border: 2px dashed var(--rule-strong);
+  background: transparent;
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 280px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  text-decoration: none;
+  color: inherit;
+}
+
+.add-treaty-card:hover {
+  border-color: var(--oxblood);
+  background: rgba(118, 37, 37, 0.03);
+}
+
+.add-treaty-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--oxblood);
+  font-family: var(--display);
+  font-weight: 300; font-size: 38px;
+  line-height: 1;
+}
+
+.add-treaty-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+  text-align: center;
+}
+
+.add-treaty-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.add-treaty-sub {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 13px;
+  color: var(--ink-faint);
+  text-align: center;
+  max-width: 30ch;
+}
+
+.form-preview {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.65);
+  padding: 32px 34px;
+  margin-bottom: 40px;
+}
+
+.form-preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 22px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--rule);
+  gap: 18px;
+}
+
+.form-preview-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 24px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+  margin-bottom: 4px;
+}
+
+.form-preview-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.form-preview-sub {
+  font-family: var(--display);
+  font-style: italic; font-size: 14px;
+  color: var(--ink-dim);
+  max-width: 64ch;
+  line-height: 1.4;
+}
+
+.form-step {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--oxblood);
+  padding: 5px 12px;
+  border: 1px solid var(--oxblood);
+  background: rgba(118, 37, 37, 0.05);
+  white-space: nowrap;
+}
+
+.form-steps {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 28px;
+}
+
+.form-column { display: flex; flex-direction: column; gap: 18px; }
+
+.form-column-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--oxblood);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.form-column-label .num {
+  font-family: var(--display);
+  font-style: italic; font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+}
+
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+
+.form-field-lbl {
+  font-family: var(--display);
+  font-style: italic; font-weight: 400;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  padding: 10px 12px;
+  font-family: var(--display);
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 400;
+  transition: border-color 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--oxblood);
+}
+
+.form-input.mono {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+}
+
+.radio-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.radio-pill {
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+}
+
+.radio-pill:hover { border-color: var(--ink); color: var(--ink); }
+
+.radio-pill.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.form-hint {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.4;
+}
+
+.form-hint em { color: var(--oxblood); font-style: italic; }
+.form-hint strong { color: var(--ink); font-weight: 500; }
+
+.integration-options { display: flex; flex-direction: column; gap: 10px; }
+
+.integration-option {
+  padding: 14px 16px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper);
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.integration-option:hover { border-color: var(--ink); }
+
+.integration-option.selected {
+  border-color: var(--absinthe);
+  background: rgba(74, 92, 58, 0.05);
+}
+
+.integration-radio {
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--rule-strong);
+  border-radius: 50%;
+  flex: none;
+  position: relative;
+  transition: border-color 0.25s var(--ease);
+}
+
+.integration-option.selected .integration-radio {
+  border-color: var(--absinthe);
+}
+
+.integration-option.selected .integration-radio::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px; height: 8px;
+  background: var(--absinthe);
+  border-radius: 50%;
+}
+
+.integration-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 72;
+}
+
+.integration-title em { font-style: italic; color: var(--absinthe); font-weight: 400; }
+
+.integration-sub {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.integration-fee {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.integration-fee strong { color: var(--ink); font-weight: 500; }
+.integration-fee.zero { color: var(--brass-deep); font-weight: 500; }
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-summary {
+  font-family: var(--display);
+  font-style: italic; font-size: 14px;
+  color: var(--ink-dim);
+  max-width: 60ch;
+  line-height: 1.4;
+}
+
+.form-summary strong { color: var(--ink); font-weight: 500; font-style: normal; }
+
+.form-actions { display: flex; gap: 10px; }
+
+.drake-whisper {
+  display: flex;
+  gap: 14px;
+  padding: 18px 22px;
+  background: rgba(26, 19, 12, 0.04);
+  border-left: 3px solid var(--oxblood);
+  margin-bottom: 32px;
+  align-items: center;
+}
+
+.whisper-mark { width: 38px; height: 38px; flex: none; }
+
+.whisper-text {
+  font-family: var(--display);
+  font-style: italic; font-weight: 300;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.whisper-text strong { font-weight: 500; font-style: normal; color: var(--ink); }
+.whisper-text em { color: var(--oxblood); }
+
+.whisper-name {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--oxblood);
+  font-style: normal;
+  margin-top: 8px;
+}
+
+@media (max-width: 1200px) {
+  .unlock-panel { grid-template-columns: 1fr; }
+  .treaties-grid { grid-template-columns: 1fr; }
+  .form-steps { grid-template-columns: 1fr; gap: 22px; }
+}
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static; height: auto;
+    flex-direction: row; padding: 12px 20px;
+    border-right: none; border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  .sidebar-brand { border-bottom: none; padding: 0 16px 0 0; border-right: 1px solid var(--rule); }
+  .sidebar-nav, .sidebar-user { display: none; }
+  .topbar, .content { padding-left: 20px; padding-right: 20px; }
+  .page-header { grid-template-columns: 1fr; gap: 16px; }
+  .page-title { font-size: 42px; }
+  .treaty-top { flex-direction: column; }
+  .treaty-icon { width: 80px; height: 80px; align-self: flex-start; }
+  .deal-terms { grid-template-columns: 1fr; gap: 10px; }
+  .deal-earnings { grid-template-columns: 1fr; }
+  .deal-actions { flex-direction: column; align-items: stretch; }
+  .deal-actions-left { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">Tratos Privados</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· El Gremio ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          El Ledger
+        </a>
+        <a href="drakesbounty-chart.html" class="nav-item">
+          <span class="icon">⤫</span>
+          La Carta Náutica
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="drakesbounty-billboard-editor.html" class="nav-item">
+          <span class="icon">▦</span>
+          El Billboard
+        </a>
+        <a href="drakesbounty-compass.html" class="nav-item">
+          <span class="icon">✢</span>
+          La Brújula
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          El Arsenal
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="icon">❦</span>
+          Tratos Privados
+          <span class="nav-badge outlaw">OUTLAW</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Comunidad ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          La Posse
+        </a>
+        <a href="drakesbounty-brotherhood.html" class="nav-item">
+          <span class="icon">⚔</span>
+          La Hermandad
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          El Almanaque
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          Los Telegramas
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Dinero ·</div>
+        <a href="drakesbounty-payday.html" class="nav-item">
+          <span class="icon">$</span>
+          El Pagadero
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Libro de Cuentas
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Referencia ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          El Código
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">E</div>
+      <div class="user-info">
+        <div class="user-name">elena.kicks</div>
+        <div class="user-rank">Outlaw</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio X</span>
+        <span class="page-title-topbar">Tratos Privados</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">Histórico</button>
+        <button class="topbar-btn primary">+ Nuevo trato</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Tratos <em>Privados</em></h1>
+          <p class="page-subtitle">
+            Tus acuerdos directos con operadores, gestionados bajo tu techo. Drake no negocia por ti — <em>solo te presta la infraestructura</em>. Aquí tus operadores, tus términos, tu ritmo.
+          </p>
+        </div>
+        <div class="tier-unlock">
+          <div class="tier-unlock-icon">★</div>
+          <div class="tier-unlock-text">
+            Desbloqueado como<br>
+            <strong>OUTLAW</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drake whisper -->
+      <div class="drake-whisper">
+        <svg class="whisper-mark" viewBox="0 0 38 38">
+          <circle cx="19" cy="19" r="17.5" fill="none" stroke="#762525" stroke-width="1"/>
+          <circle cx="19" cy="19" r="14" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+          <text x="19" y="25" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="20" font-weight="500" fill="#762525">D</text>
+        </svg>
+        <div class="whisper-text">
+          Llevas <strong>4 Tratos Privados</strong> generando <strong>€6.840</strong> este ciclo. <em>VexFX</em> tiene dos semanas de silencio en postback — mándale un tiro de aviso antes de que se olvide de pagar. El tracking sigue calculándose con tu propia data.
+          <span class="whisper-name">— Drake · notario del Gremio</span>
+        </div>
+      </div>
+
+      <!-- ============ UNLOCK PANEL ============ -->
+      <div class="unlock-panel">
+
+        <!-- Treaty hero -->
+        <div class="treaty-card">
+          <div class="treaty-label">§ Tu privilegio Outlaw</div>
+
+          <div class="treaty-top">
+            <svg class="treaty-icon" viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="tScroll" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E8DCC0"/>
+                  <stop offset="100%" stop-color="#C9B994"/>
+                </linearGradient>
+                <radialGradient id="tWax" cx="40%" cy="35%">
+                  <stop offset="0%" stop-color="#9a3838"/>
+                  <stop offset="70%" stop-color="#762525"/>
+                  <stop offset="100%" stop-color="#4f1818"/>
+                </radialGradient>
+              </defs>
+              <ellipse cx="60" cy="108" rx="44" ry="4" fill="#1A130C" opacity="0.3"/>
+              <ellipse cx="60" cy="22" rx="36" ry="4" fill="#A67C2E" stroke="#4F1818" stroke-width="0.8"/>
+              <ellipse cx="60" cy="21" rx="36" ry="3" fill="#C9A961"/>
+              <path d="M 22 22 L 22 92 Q 22 98 32 98 L 88 98 Q 98 98 98 92 L 98 22 Z"
+                    fill="url(#tScroll)" stroke="#4D3D2E" stroke-width="0.8"/>
+              <line x1="30" y1="34" x2="90" y2="34" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <line x1="30" y1="41" x2="82" y2="41" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <line x1="30" y1="48" x2="90" y2="48" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <line x1="30" y1="55" x2="76" y2="55" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <line x1="30" y1="62" x2="88" y2="62" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <line x1="30" y1="69" x2="72" y2="69" stroke="#4D3D2E" stroke-width="0.5" opacity="0.55"/>
+              <circle cx="80" cy="86" r="12" fill="url(#tWax)" stroke="#4F1818" stroke-width="0.8"/>
+              <circle cx="80" cy="86" r="9" fill="none" stroke="#E8DCC0" stroke-width="0.5" opacity="0.6"/>
+              <text x="80" y="90" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="13" font-weight="600" fill="#E8DCC0">D</text>
+              <ellipse cx="60" cy="98" rx="36" ry="4" fill="#A67C2E" stroke="#4F1818" stroke-width="0.8"/>
+              <path d="M 26 14 L 27.2 16.5 L 30 16.8 L 28 18.5 L 28.5 21.2 L 26 20 L 23.5 21.2 L 24 18.5 L 22 16.8 L 24.8 16.5 Z" fill="#A67C2E"/>
+              <path d="M 94 14 L 95.2 16.5 L 98 16.8 L 96 18.5 L 96.5 21.2 L 94 20 L 91.5 21.2 L 92 18.5 L 90 16.8 L 92.8 16.5 Z" fill="#A67C2E"/>
+            </svg>
+
+            <div class="treaty-text-block">
+              <h2 class="treaty-title">Trae tus propios <em>acuerdos</em>.</h2>
+              <p class="treaty-body">
+                Como Outlaw ya puedes gestionar operadores que negociaste por tu cuenta, con tus propios términos. <strong>Drake sigue siendo tu contable, tu tracker y tu cofre</strong> — pero el trato es tuyo y solo tuyo. La plataforma se lleva un fee pequeño solo cuando el operador paga a través del Pagadero.
+              </p>
+
+              <div class="treaty-actions">
+                <button class="treaty-btn primary">
+                  + Dar de alta un operador
+                  <span class="arrow">→</span>
+                </button>
+                <button class="treaty-btn secondary">
+                  Ver cómo funciona
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quickstats -->
+        <div class="quickstats">
+          <div class="quickstats-label">§ Tu negocio privado</div>
+          <h3 class="quickstats-title">Los <em>números</em></h3>
+
+          <div class="qs-grid">
+            <div class="qs-cell featured">
+              <div class="qs-val">4</div>
+              <div class="qs-lbl">Tratos <strong>activos</strong></div>
+            </div>
+            <div class="qs-cell">
+              <div class="qs-val"><span class="currency">€</span>6<em>.840</em></div>
+              <div class="qs-lbl">Ciclo actual</div>
+            </div>
+            <div class="qs-cell">
+              <div class="qs-val"><span class="currency">€</span>42<em>.180</em></div>
+              <div class="qs-lbl">Ganado histórico</div>
+            </div>
+            <div class="qs-cell">
+              <div class="qs-val">1<em>,5%</em></div>
+              <div class="qs-lbl">Fee Drake's</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TUS TRATOS ============ -->
+      <div class="section-header">
+        <div class="section-head-left">
+          <span class="section-num">§ 01</span>
+          <h2 class="section-title-sm">Tus <em>tratos</em> activos</h2>
+        </div>
+        <span class="section-sub-sm">Cada operador con tus términos negociados · 4 en vivo</span>
+      </div>
+
+      <div class="treaties-grid">
+
+        <!-- TREATY 1: PokerKing (integrated) -->
+        <div class="treaty-deal integrated">
+          <div class="deal-head">
+            <div class="deal-op-logo pokerking">PK</div>
+            <div class="deal-op-meta">
+              <div class="deal-op-name">
+                PokerKing
+                <span class="private-mark">Trato privado</span>
+              </div>
+              <div class="deal-op-sub">
+                <span>Poker · EU</span>
+                <span>·</span>
+                <span>Firmado Feb MMXXVI</span>
+              </div>
+            </div>
+            <div class="deal-status-chip integrated">
+              Integrado · live
+            </div>
+          </div>
+
+          <div class="deal-terms">
+            <div class="term">
+              <span class="term-lbl">Revshare</span>
+              <span class="term-val">35<em>%</em> <span class="small">de por vida</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">CPA</span>
+              <span class="term-val"><em>€</em>180 <span class="small">por FTD</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">Paga el</span>
+              <span class="term-val">día <em>15</em> <span class="small">mensual</span></span>
+            </div>
+          </div>
+
+          <div class="deal-earnings">
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">€</span>3<em>.240</em></div>
+              <div class="deal-earn-lbl">Este ciclo</div>
+            </div>
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">€</span>18<em>.420</em></div>
+              <div class="deal-earn-lbl">Ganado histórico</div>
+            </div>
+          </div>
+
+          <div class="deal-payday">
+            <div class="deal-payday-lbl">
+              <svg class="lock-ico" viewBox="0 0 12 12">
+                <rect x="3" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.9" fill="none"/>
+                <rect x="2" y="5" width="8" height="5" fill="currentColor"/>
+                <circle cx="6" cy="7.5" r="0.9" fill="#E8DCC0"/>
+              </svg>
+              Próximo pago
+            </div>
+            <div class="deal-payday-val">Llega el <strong>15 may</strong></div>
+          </div>
+
+          <div class="deal-actions">
+            <div class="deal-actions-left">
+              <button class="deal-btn">Detalle</button>
+              <button class="deal-btn">Editar términos</button>
+            </div>
+            <div class="fee-badge">Fee · <strong>1,5%</strong></div>
+          </div>
+        </div>
+
+        <!-- TREATY 2: SpinSage (integrated) -->
+        <div class="treaty-deal integrated">
+          <div class="deal-head">
+            <div class="deal-op-logo spinsage">Ss</div>
+            <div class="deal-op-meta">
+              <div class="deal-op-name">
+                SpinSage
+                <span class="private-mark">Trato privado</span>
+              </div>
+              <div class="deal-op-sub">
+                <span>Slots · EU/LATAM</span>
+                <span>·</span>
+                <span>Firmado Mar MMXXVI</span>
+              </div>
+            </div>
+            <div class="deal-status-chip integrated">
+              Integrado · live
+            </div>
+          </div>
+
+          <div class="deal-terms">
+            <div class="term">
+              <span class="term-lbl">Revshare</span>
+              <span class="term-val">40<em>%</em> <span class="small">primeros 6 meses</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">Bonus FTD</span>
+              <span class="term-val"><em>€</em>120 <span class="small">+ spins</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">Paga el</span>
+              <span class="term-val">día <em>10</em> <span class="small">mensual</span></span>
+            </div>
+          </div>
+
+          <div class="deal-earnings">
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">€</span>2<em>.180</em></div>
+              <div class="deal-earn-lbl">Este ciclo</div>
+            </div>
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">€</span>14<em>.360</em></div>
+              <div class="deal-earn-lbl">Ganado histórico</div>
+            </div>
+          </div>
+
+          <div class="deal-payday">
+            <div class="deal-payday-lbl">
+              <svg class="lock-ico" viewBox="0 0 12 12">
+                <path d="M 3 5 L 3 4 Q 3 2 6 2 Q 9 2 9 4 L 9 5" stroke="currentColor" stroke-width="0.9" fill="none"/>
+                <rect x="2" y="5" width="8" height="5" fill="currentColor"/>
+                <circle cx="6" cy="7.5" r="0.9" fill="#E8DCC0"/>
+              </svg>
+              Cobrado · Desbloqueado
+            </div>
+            <div class="deal-payday-val">Llegó el <strong>10 abr</strong></div>
+          </div>
+
+          <div class="deal-actions">
+            <div class="deal-actions-left">
+              <button class="deal-btn">Detalle</button>
+              <button class="deal-btn">Editar términos</button>
+            </div>
+            <div class="fee-badge">Fee · <strong>1,5%</strong></div>
+          </div>
+        </div>
+
+        <!-- TREATY 3: VexFX (pending attention) -->
+        <div class="treaty-deal pending">
+          <div class="deal-head">
+            <div class="deal-op-logo vexfx">Vx</div>
+            <div class="deal-op-meta">
+              <div class="deal-op-name">
+                VexFX Broker
+                <span class="private-mark">Trato privado</span>
+              </div>
+              <div class="deal-op-sub">
+                <span>Trading · Forex + CFD</span>
+                <span>·</span>
+                <span>Firmado Dic MMXXV</span>
+              </div>
+            </div>
+            <div class="deal-status-chip pending">
+              Postback silente
+            </div>
+          </div>
+
+          <div class="deal-terms">
+            <div class="term">
+              <span class="term-lbl">Revshare</span>
+              <span class="term-val">50<em>%</em> <span class="small">neto broker</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">CPA</span>
+              <span class="term-val"><em>$</em>400 <span class="small">KYC+depósito</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">Paga el</span>
+              <span class="term-val">día <em>5</em> <span class="small">mensual</span></span>
+            </div>
+          </div>
+
+          <div class="deal-earnings">
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">$</span>1<em>.420</em></div>
+              <div class="deal-earn-lbl"><span class="pending">Sin confirmar · 2 semanas</span></div>
+            </div>
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">$</span>7<em>.180</em></div>
+              <div class="deal-earn-lbl">Ganado histórico</div>
+            </div>
+          </div>
+
+          <div class="deal-payday">
+            <div class="deal-payday-lbl">
+              <svg class="lock-ico" viewBox="0 0 12 12">
+                <circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="0.9" fill="none"/>
+                <path d="M 6 3.5 L 6 6 L 8 7.5" stroke="currentColor" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              </svg>
+              Pago retrasado
+            </div>
+            <div class="deal-payday-val">Debía llegar <strong>5 abr</strong></div>
+          </div>
+
+          <div class="deal-actions">
+            <div class="deal-actions-left">
+              <button class="deal-btn log">Registrar pago</button>
+              <button class="deal-btn">Contactar</button>
+            </div>
+            <div class="fee-badge">Fee · <strong>1,5%</strong></div>
+          </div>
+        </div>
+
+        <!-- TREATY 4: GoldenPlay (manual) -->
+        <div class="treaty-deal manual">
+          <div class="deal-head">
+            <div class="deal-op-logo goldenplay">GP</div>
+            <div class="deal-op-meta">
+              <div class="deal-op-name">
+                GoldenPlay
+                <span class="private-mark">Trato privado</span>
+              </div>
+              <div class="deal-op-sub">
+                <span>Casino · LATAM</span>
+                <span>·</span>
+                <span>Firmado Ene MMXXVI</span>
+              </div>
+            </div>
+            <div class="deal-status-chip manual">
+              Manual · sin postback
+            </div>
+          </div>
+
+          <div class="deal-terms">
+            <div class="term">
+              <span class="term-lbl">Revshare</span>
+              <span class="term-val">30<em>%</em> <span class="small">de por vida</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">CPA</span>
+              <span class="term-val"><em>$</em>90 <span class="small">por FTD</span></span>
+            </div>
+            <div class="term">
+              <span class="term-lbl">Paga el</span>
+              <span class="term-val">día <em>1</em> <span class="small">mensual</span></span>
+            </div>
+          </div>
+
+          <div class="deal-earnings">
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">$</span>1<em>.420</em></div>
+              <div class="deal-earn-lbl">Reportado abril</div>
+            </div>
+            <div class="deal-earn-cell">
+              <div class="deal-earn-val"><span class="currency">$</span>2<em>.220</em></div>
+              <div class="deal-earn-lbl">Ganado histórico</div>
+            </div>
+          </div>
+
+          <div class="deal-payday">
+            <div class="deal-payday-lbl">
+              <svg class="lock-ico" viewBox="0 0 12 12">
+                <rect x="3" y="2" width="6" height="4" rx="3" stroke="currentColor" stroke-width="0.9" fill="none"/>
+                <rect x="2" y="5" width="8" height="5" fill="currentColor"/>
+                <circle cx="6" cy="7.5" r="0.9" fill="#E8DCC0"/>
+              </svg>
+              Próximo pago
+            </div>
+            <div class="deal-payday-val">Llega el <strong>1 may</strong></div>
+          </div>
+
+          <div class="deal-actions">
+            <div class="deal-actions-left">
+              <button class="deal-btn log">Registrar pago</button>
+              <button class="deal-btn">Proponer integrar</button>
+            </div>
+            <div class="fee-badge">Fee · <strong>0%</strong></div>
+          </div>
+        </div>
+
+        <!-- Add new treaty card -->
+        <a href="#new-treaty" class="add-treaty-card">
+          <div class="add-treaty-icon">+</div>
+          <div class="add-treaty-title">Firmar un <em>nuevo trato</em></div>
+          <div class="add-treaty-sub">
+            Da de alta un operador con el que ya tienes acuerdo propio
+          </div>
+        </a>
+
+      </div>
+
+      <!-- ============ NEW TREATY FORM ============ -->
+      <div class="section-header" id="new-treaty">
+        <div class="section-head-left">
+          <span class="section-num">§ 02</span>
+          <h2 class="section-title-sm">Firmar un <em>nuevo trato</em></h2>
+        </div>
+        <span class="section-sub-sm">Registra aquí un operador con tu acuerdo directo</span>
+      </div>
+
+      <div class="form-preview">
+
+        <div class="form-preview-head">
+          <div>
+            <h3 class="form-preview-title">Los <em>términos</em> del trato</h3>
+            <p class="form-preview-sub">
+              Drake no media este acuerdo — eres tú quien lo negoció. Solo necesitamos los parámetros para hacer el tracking, calendario de pagos y predicciones de tu Ledger.
+            </p>
+          </div>
+          <span class="form-step">Paso 1 / 3</span>
+        </div>
+
+        <div class="form-steps">
+
+          <!-- COLUMN I: OPERATOR IDENTITY -->
+          <div class="form-column">
+            <div class="form-column-label">
+              <span class="num">I.</span>
+              El operador
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Nombre del operador</label>
+              <input class="form-input" type="text" placeholder="Ej. PokerKing, SpinSage...">
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Vertical</label>
+              <select class="form-select">
+                <option>Casino</option>
+                <option>Slots</option>
+                <option>Sportsbook</option>
+                <option>Poker</option>
+                <option>Crypto exchange</option>
+                <option>Trading broker · Forex</option>
+                <option>Trading broker · CFD</option>
+                <option>Otro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Mercado objetivo</label>
+              <select class="form-select">
+                <option>EU</option>
+                <option>LATAM</option>
+                <option>EU + LATAM</option>
+                <option>Global</option>
+                <option>Otro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Sitio web del operador</label>
+              <input class="form-input mono" type="url" placeholder="https://">
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Contacto del gestor</label>
+              <input class="form-input mono" type="email" placeholder="afiliados@operador.com">
+            </div>
+          </div>
+
+          <!-- COLUMN II: TERMS -->
+          <div class="form-column">
+            <div class="form-column-label">
+              <span class="num">II.</span>
+              Los términos
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Modelo de comisión</label>
+              <div class="radio-group">
+                <div class="radio-pill">CPA</div>
+                <div class="radio-pill">Revshare</div>
+                <div class="radio-pill active">Híbrido</div>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Revshare (%)</label>
+              <input class="form-input mono" type="text" value="35%">
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">CPA por FTD</label>
+              <input class="form-input mono" type="text" value="€180">
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Duración del acuerdo</label>
+              <select class="form-select">
+                <option>De por vida</option>
+                <option>6 meses</option>
+                <option>12 meses</option>
+                <option>24 meses</option>
+                <option>Otro</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label class="form-field-lbl">Día de pago mensual</label>
+              <select class="form-select">
+                <option>Día 1</option>
+                <option>Día 5</option>
+                <option>Día 10</option>
+                <option selected>Día 15</option>
+                <option>Día 20</option>
+                <option>Día 25</option>
+                <option>Último día hábil</option>
+                <option>Personalizado</option>
+              </select>
+            </div>
+
+            <p class="form-hint">
+              El día <strong>15</strong> aparecerá como <em>fecha de desbloqueo</em> de este trato en tu <strong>Pagadero</strong>. Drake calcula proyecciones con esto.
+            </p>
+          </div>
+
+          <!-- COLUMN III: INTEGRATION -->
+          <div class="form-column">
+            <div class="form-column-label">
+              <span class="num">III.</span>
+              El tracking
+            </div>
+
+            <p class="form-hint">
+              Cómo conectar este trato a tu Ledger. <em>Cuanto más integrado, más herramientas te prestamos</em> — la Brújula, smart routing y Pagadero automático solo funcionan con tracking en vivo.
+            </p>
+
+            <div class="integration-options">
+              <div class="integration-option selected">
+                <div class="integration-radio"></div>
+                <div>
+                  <div class="integration-title"><em>Integración completa</em> — postback + Pagadero</div>
+                  <div class="integration-sub">
+                    Operador paga a Drake, Drake paga a ti. Todas las herramientas activas.
+                  </div>
+                </div>
+                <div class="integration-fee">
+                  Fee · <strong>1,5%</strong>
+                </div>
+              </div>
+
+              <div class="integration-option">
+                <div class="integration-radio"></div>
+                <div>
+                  <div class="integration-title">Tracking en vivo · pago directo</div>
+                  <div class="integration-sub">
+                    Recibimos postbacks del operador, pero él te paga directamente a tu cuenta.
+                  </div>
+                </div>
+                <div class="integration-fee">
+                  Fee · <strong>0,5%</strong>
+                </div>
+              </div>
+
+              <div class="integration-option">
+                <div class="integration-radio"></div>
+                <div>
+                  <div class="integration-title">Manual · reportas tú</div>
+                  <div class="integration-sub">
+                    Tú cargas los datos cada mes. Sin smart routing ni Pagadero. Tracking solo referencial.
+                  </div>
+                </div>
+                <div class="integration-fee zero">
+                  Fee · <strong>0%</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form-footer">
+          <div class="form-summary">
+            Tu nuevo trato quedará <strong>pendiente de validar el postback</strong> con el operador antes de ir en vivo · duración estimada 24-48h.
+          </div>
+          <div class="form-actions">
+            <button class="deal-btn">Cancelar</button>
+            <button class="deal-btn primary">Siguiente paso →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

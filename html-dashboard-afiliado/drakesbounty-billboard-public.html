@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>reelrider.tv — Slots Night. Real drops.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=VT323&family=JetBrains+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Retrowave palette */
+  --void:       #06010f;
+  --abyss:      #0c051a;
+  --nightshade: #15082a;
+  --twilight:   #2a0a47;
+  --magenta:    #ff006e;
+  --magenta-deep: #c8005a;
+  --cyan:       #00ffff;
+  --cyan-glow:  #00e5e5;
+  --violet:     #8338ec;
+  --amber:      #ffbe0b;
+  --peach:      #ff6b9d;
+  --mist:       #f0e4ff;
+  --dusk:       #b8a5d6;
+  --fog:        #8574a6;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --crt:   'VT323', monospace;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--void);
+}
+
+body {
+  background:
+    radial-gradient(ellipse at top, #3d0a5e 0%, transparent 55%),
+    radial-gradient(ellipse at bottom, rgba(255, 0, 110, 0.15) 0%, transparent 55%),
+    linear-gradient(180deg, var(--abyss) 0%, var(--nightshade) 40%, var(--abyss) 100%);
+  color: var(--mist);
+  font-family: var(--ui);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ============ GLOBAL EFFECTS ============ */
+/* Scanlines */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 3px
+  );
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+}
+
+/* CRT vignette */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Grid floor (fixed) */
+.grid-floor {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300vw;
+  height: 50vh;
+  background-image:
+    linear-gradient(to right, rgba(0, 255, 255, 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 0, 110, 0.35) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: translateX(-50%) perspective(500px) rotateX(62deg);
+  transform-origin: center top;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 1;
+  animation: gridScroll 8s linear infinite;
+}
+
+@keyframes gridScroll {
+  from { background-position: 0 0; }
+  to { background-position: 0 60px; }
+}
+
+/* Sun */
+.sun {
+  position: fixed;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background:
+    linear-gradient(180deg,
+      #ff006e 0%,
+      #ff006e 30%,
+      transparent 32%,
+      transparent 36%,
+      #ff4d94 38%,
+      #ff4d94 48%,
+      transparent 50%,
+      transparent 54%,
+      #ff80b3 56%,
+      #ff80b3 64%,
+      transparent 66%,
+      transparent 70%,
+      #ffb3d1 72%,
+      #ffb3d1 78%,
+      transparent 80%);
+  filter: blur(0.5px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+  box-shadow: 0 0 120px rgba(255, 0, 110, 0.35);
+}
+
+/* Floating orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(131, 56, 236, 0.6) 0%, transparent 70%);
+  top: -80px;
+  left: -100px;
+  animation: float1 20s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.35) 0%, transparent 70%);
+  top: 60%;
+  right: -150px;
+  animation: float2 24s ease-in-out infinite;
+}
+
+@keyframes float1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(60px, 40px); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-80px, -60px); }
+}
+
+/* Main container over effects */
+.page {
+  position: relative;
+  z-index: 10;
+}
+
+/* ============ NAV ============ */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 40px;
+  border-bottom: 1px solid rgba(255, 0, 110, 0.2);
+  backdrop-filter: blur(10px);
+  background: rgba(10, 5, 20, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.nav-brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--magenta);
+  letter-spacing: -0.015em;
+  text-shadow:
+    0 0 10px rgba(255, 0, 110, 0.8),
+    0 0 24px rgba(255, 0, 110, 0.4);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-brand .dot {
+  color: var(--cyan);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.nav-brand em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--mist);
+  text-shadow: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.nav-links a {
+  color: var(--cyan);
+  text-decoration: none;
+  transition: all 0.3s var(--ease);
+  position: relative;
+}
+
+.nav-links a:hover {
+  color: var(--mist);
+  text-shadow: 0 0 10px rgba(240, 228, 255, 0.8);
+}
+
+.nav-links a.live {
+  color: var(--magenta);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links a.live::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 10px var(--magenta);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+
+/* ============ HERO ============ */
+.hero {
+  padding: 80px 40px 60px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 8px 18px;
+  border: 1px solid var(--cyan);
+  margin-bottom: 36px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+  box-shadow:
+    0 0 20px rgba(0, 255, 255, 0.2),
+    inset 0 0 20px rgba(0, 255, 255, 0.08);
+  background: rgba(0, 255, 255, 0.04);
+  animation: tagFlicker 4s infinite;
+}
+
+@keyframes tagFlicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%, 98% { opacity: 0.7; }
+  97% { opacity: 0.3; }
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: clamp(56px, 10vw, 144px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  margin-bottom: 28px;
+  color: var(--mist);
+  text-shadow:
+    3px 3px 0 var(--magenta),
+    6px 6px 0 var(--cyan),
+    0 0 60px rgba(255, 0, 110, 0.4);
+  font-variation-settings: "opsz" 144;
+}
+
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, #ff006e 0%, #8338ec 50%, #00ffff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 30px rgba(131, 56, 236, 0.5));
+}
+
+.hero-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(17px, 2vw, 21px);
+  color: var(--dusk);
+  max-width: 52ch;
+  margin: 0 auto 48px;
+  line-height: 1.55;
+}
+
+.hero-sub strong {
+  color: var(--peach);
+  font-style: normal;
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+}
+
+/* Hero stats bar */
+.hero-stats {
+  display: inline-flex;
+  gap: 0;
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  background: rgba(10, 5, 20, 0.6);
+  backdrop-filter: blur(10px);
+  padding: 6px;
+  box-shadow: 0 0 30px rgba(131, 56, 236, 0.25);
+}
+
+.hero-stat {
+  padding: 10px 24px;
+  border-right: 1px solid rgba(0, 255, 255, 0.18);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-val {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--mist);
+  line-height: 1;
+}
+
+.hero-stat-val em {
+  font-style: italic;
+  color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0, 255, 255, 0.6);
+}
+
+.hero-stat-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+/* ============ SECTION DIVIDER ============ */
+.section-head {
+  padding: 32px 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255, 0, 110, 0.2);
+  margin-bottom: 28px;
+}
+
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--magenta);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 10px rgba(255, 0, 110, 0.6);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 36px;
+  color: var(--mist);
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.section-title em {
+  background: linear-gradient(90deg, #00ffff, #ff006e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fog);
+  padding-bottom: 6px;
+}
+
+/* ============ CAMPAIGNS ============ */
+.campaigns-section {
+  padding: 0 40px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.campaigns {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  grid-auto-rows: minmax(200px, auto);
+}
+
+/* Campaign card */
+.camp {
+  position: relative;
+  background: rgba(10, 5, 20, 0.7);
+  border: 1px solid rgba(255, 0, 110, 0.35);
+  padding: 28px 28px;
+  overflow: hidden;
+  transition: all 0.4s var(--ease);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Glow border on hover */
+.camp::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(135deg, var(--magenta), var(--cyan), var(--violet));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.camp::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--magenta) 40%, var(--cyan) 60%, transparent);
+  opacity: 0.6;
+}
+
+.camp:hover {
+  border-color: var(--cyan);
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 40px rgba(0, 255, 255, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.camp:hover::before { opacity: 1; }
+
+/* Featured (hero) campaign spans 2 */
+.camp.featured {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-height: 340px;
+  padding: 40px 40px;
+  background:
+    radial-gradient(ellipse at 80% 30%, rgba(255, 0, 110, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 70%, rgba(0, 255, 255, 0.2) 0%, transparent 50%),
+    rgba(10, 5, 20, 0.8);
+  border-color: var(--cyan);
+  box-shadow:
+    inset 0 0 60px rgba(255, 0, 110, 0.1),
+    0 0 50px rgba(0, 255, 255, 0.2);
+}
+
+.camp.featured::before {
+  background: linear-gradient(135deg, var(--cyan), var(--magenta), var(--violet), var(--cyan));
+  opacity: 0.5;
+}
+
+.camp-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.camp-op {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.camp-op-logo {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--mist);
+  flex: none;
+  position: relative;
+}
+
+.camp-op-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--magenta), var(--violet));
+  z-index: -1;
+  border: 1px solid rgba(255, 0, 110, 0.5);
+}
+
+.camp.featured .camp-op-logo::before {
+  background: linear-gradient(135deg, var(--cyan), var(--magenta));
+}
+
+.camp-op-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.camp-op-name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--mist);
+  letter-spacing: -0.005em;
+}
+
+.camp-op-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.camp-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.camp-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border: 1px solid;
+}
+
+.camp-badge.top {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(0, 255, 255, 0.08);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.camp-badge.aaa {
+  color: var(--peach);
+  border-color: var(--peach);
+  background: rgba(255, 107, 157, 0.06);
+}
+
+.camp-badge.crypto {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: rgba(255, 190, 11, 0.08);
+}
+
+.camp-badge.new {
+  color: var(--violet);
+  border-color: var(--violet);
+  background: rgba(131, 56, 236, 0.1);
+}
+
+/* Camp body */
+.camp-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--mist);
+  letter-spacing: -0.015em;
+  margin-bottom: 10px;
+  font-variation-settings: "opsz" 72;
+}
+
+.camp.featured .camp-title {
+  font-size: 40px;
+  line-height: 1;
+  margin-bottom: 16px;
+  text-shadow: 0 0 24px rgba(131, 56, 236, 0.5);
+}
+
+.camp.featured .camp-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, #ff006e, #00ffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+
+.camp-desc {
+  font-family: var(--ui);
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--dusk);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.camp.featured .camp-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 17px;
+  color: var(--mist);
+  max-width: 60ch;
+  line-height: 1.45;
+}
+
+.camp-desc em { color: var(--peach); font-style: italic; }
+.camp.featured .camp-desc em { color: var(--cyan); }
+
+/* Camp offer (bonus) */
+.camp-offer {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(0, 255, 255, 0.05);
+  border-left: 2px solid var(--cyan);
+  margin-bottom: 16px;
+}
+
+.camp.featured .camp-offer {
+  background: rgba(255, 0, 110, 0.08);
+  border-left-color: var(--magenta);
+  padding: 18px 20px;
+}
+
+.offer-amount {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--cyan);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  font-variation-settings: "opsz" 72;
+}
+
+.camp.featured .offer-amount {
+  color: var(--magenta);
+  font-size: 32px;
+  text-shadow: 0 0 16px rgba(255, 0, 110, 0.6);
+}
+
+.offer-desc {
+  font-family: var(--ui);
+  font-size: 11px;
+  color: var(--dusk);
+  letter-spacing: 0.02em;
+}
+
+.camp.featured .offer-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--dusk);
+}
+
+/* CTA */
+.camp-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 20px;
+  background: linear-gradient(90deg, var(--magenta), var(--violet));
+  color: var(--mist);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s var(--ease);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.camp-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s var(--ease);
+}
+
+.camp:hover .camp-cta::before {
+  transform: translateX(100%);
+}
+
+.camp.featured .camp-cta {
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  color: var(--void);
+  font-weight: 600;
+  padding: 16px 24px;
+  font-size: 12px;
+  text-shadow: none;
+}
+
+.camp-cta .arrow {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  transition: transform 0.4s var(--ease);
+}
+
+.camp:hover .camp-cta .arrow {
+  transform: translateX(6px);
+}
+
+/* ============ ABOUT STRIP ============ */
+.about {
+  padding: 80px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 60px;
+  align-items: center;
+  border-top: 1px solid rgba(255, 0, 110, 0.2);
+  border-bottom: 1px solid rgba(255, 0, 110, 0.2);
+}
+
+.about-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--mist);
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 144;
+}
+
+.about-text p { margin-bottom: 18px; }
+
+.about-text em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-text strong {
+  font-weight: 500;
+  font-style: normal;
+  color: var(--peach);
+}
+
+.about-socials {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(10, 5, 20, 0.6);
+  border: 1px solid rgba(131, 56, 236, 0.3);
+  text-decoration: none;
+  color: var(--mist);
+  transition: all 0.3s var(--ease);
+  backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+  border-color: var(--cyan);
+  background: rgba(0, 255, 255, 0.06);
+  transform: translateX(4px);
+}
+
+.social-icon {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--violet), var(--magenta));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 18px;
+  flex: none;
+  color: var(--mist);
+}
+
+.social-name {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.social-handle {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--fog);
+  letter-spacing: 0.1em;
+  margin-top: 3px;
+}
+
+.social-link .tag {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 3px 8px;
+  border: 1px solid var(--cyan);
+  opacity: 0.9;
+}
+
+.social-link .tag.live {
+  color: var(--magenta);
+  border-color: var(--magenta);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+
+/* ============ BOUNTY OF THE WEEK — special strip ============ */
+.bow {
+  padding: 64px 40px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bow-wrapper {
+  background:
+    linear-gradient(135deg, rgba(255, 0, 110, 0.15) 0%, rgba(0, 255, 255, 0.08) 100%),
+    rgba(10, 5, 20, 0.85);
+  border: 1px solid;
+  border-image: linear-gradient(135deg, var(--magenta), var(--cyan)) 1;
+  padding: 44px 40px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+}
+
+.bow-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent);
+}
+
+.bow-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 190, 11, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.bow-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+}
+
+.bow-label::before, .bow-label::after {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: var(--amber);
+}
+
+.bow-label::after { flex: 1; opacity: 0.3; }
+
+.bow-headline {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--mist);
+  margin-bottom: 18px;
+  position: relative;
+  font-variation-settings: "opsz" 144;
+}
+
+.bow-headline em {
+  font-style: italic;
+  color: var(--amber);
+  text-shadow: 0 0 20px rgba(255, 190, 11, 0.5);
+}
+
+.bow-body {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 18px;
+  color: var(--dusk);
+  max-width: 68ch;
+  line-height: 1.55;
+  margin-bottom: 26px;
+  position: relative;
+}
+
+.bow-timer {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 18px;
+  background: rgba(10, 5, 20, 0.6);
+  border: 1px solid rgba(255, 190, 11, 0.4);
+  min-width: 70px;
+  text-align: center;
+}
+
+.time-val {
+  font-family: var(--crt);
+  font-size: 32px;
+  color: var(--amber);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(255, 190, 11, 0.6);
+}
+
+.time-lbl {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--fog);
+}
+
+.bow-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 28px;
+  background: var(--amber);
+  color: var(--void);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s var(--ease);
+  position: relative;
+  box-shadow: 0 0 30px rgba(255, 190, 11, 0.3);
+}
+
+.bow-cta:hover {
+  background: var(--mist);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(255, 190, 11, 0.5);
+}
+
+.bow-cta .arrow {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-style: italic;
+  transition: transform 0.4s var(--ease);
+}
+
+.bow-cta:hover .arrow {
+  transform: translateX(6px);
+}
+
+/* ============ FAQ / TRUST ============ */
+.trust {
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(255, 0, 110, 0.2);
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.trust-item {
+  padding: 24px 22px;
+  background: rgba(10, 5, 20, 0.4);
+  border: 1px solid rgba(131, 56, 236, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.trust-icon {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 30px;
+  color: var(--cyan);
+  margin-bottom: 12px;
+  text-shadow: 0 0 14px rgba(0, 255, 255, 0.5);
+}
+
+.trust-title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--mist);
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+
+.trust-text {
+  font-family: var(--ui);
+  font-size: 12px;
+  color: var(--fog);
+  line-height: 1.5;
+}
+
+/* ============ FOOTER ============ */
+.footer {
+  padding: 44px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--fog);
+  gap: 20px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer a {
+  color: var(--fog);
+  text-decoration: none;
+  transition: color 0.3s var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer a:hover {
+  color: var(--cyan);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.powered-by {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+}
+
+.db-mark {
+  width: 18px;
+  height: 18px;
+  opacity: 0.6;
+  transition: opacity 0.3s var(--ease);
+}
+
+.powered-by:hover .db-mark { opacity: 1; }
+
+.disclaimer {
+  font-family: var(--ui);
+  font-size: 10px;
+  color: var(--fog);
+  opacity: 0.6;
+  max-width: 40ch;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: none;
+  text-align: right;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .nav { padding: 16px 20px; }
+  .nav-links { gap: 14px; font-size: 10px; }
+  .hero { padding: 48px 20px 40px; }
+  .hero-stats { flex-wrap: wrap; }
+  .hero-stat { flex: 1; min-width: 140px; padding: 10px 16px; }
+  .section-head { padding: 24px 20px 16px; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .campaigns-section, .about, .bow, .trust, .footer { padding-left: 20px; padding-right: 20px; }
+  .campaigns { grid-template-columns: 1fr; }
+  .camp.featured { grid-column: 1; padding: 28px 24px; }
+  .camp.featured .camp-title { font-size: 28px; }
+  .about { grid-template-columns: 1fr; gap: 32px; padding: 48px 20px; }
+  .about-text { font-size: 18px; }
+  .bow-wrapper { padding: 32px 24px; }
+  .trust-grid { grid-template-columns: 1fr 1fr; }
+  .footer { flex-direction: column; gap: 18px; text-align: center; }
+  .disclaimer { text-align: center; }
+  .sun { width: 280px; height: 280px; top: 22%; }
+  .hero-title { text-shadow: 2px 2px 0 var(--magenta), 4px 4px 0 var(--cyan); }
+  .bow-timer { flex-wrap: wrap; }
+}
+
+@media (max-width: 500px) {
+  .trust-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="grid-floor"></div>
+<div class="sun"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-brand">reelrider<span class="dot">.</span><em>tv</em></a>
+    <div class="nav-links">
+      <a href="#drops">Drops</a>
+      <a href="#bow">This week</a>
+      <a href="#about">About</a>
+      <a href="#" class="live">Live now</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-tag">★ Slots Night · Weekly Drops ★</div>
+
+    <h1 class="hero-title">
+      The only drops<br>
+      <em>worth your time.</em>
+    </h1>
+
+    <p class="hero-sub">
+      <strong>4 casinos.</strong> All tested live on stream. Still paying this week. If I'd bet on it myself, you'll find it here — everything else got cut.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val"><em>127K</em></div>
+        <div class="hero-stat-lbl">Followers</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">840h+</div>
+        <div class="hero-stat-lbl">Streamed</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">€412K</div>
+        <div class="hero-stat-lbl">Paid to posse</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val"><em>3 years</em></div>
+        <div class="hero-stat-lbl">Running</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION HEAD -->
+  <div class="section-head" id="drops">
+    <div class="section-label">
+      <span class="section-num">§ 01</span>
+      <h2 class="section-title">The <em>drops</em></h2>
+    </div>
+    <div class="section-sub">Updated 2 hours ago</div>
+  </div>
+
+  <!-- CAMPAIGNS GRID -->
+  <section class="campaigns-section">
+    <div class="campaigns">
+
+      <!-- Featured spans full width -->
+      <a href="#" class="camp featured">
+        <div class="camp-head">
+          <div class="camp-op">
+            <div class="camp-op-logo">S</div>
+            <div class="camp-op-meta">
+              <div class="camp-op-name">Stakelight</div>
+              <div class="camp-op-tag">Casino · Crypto · Since 2022</div>
+            </div>
+          </div>
+          <div class="camp-badges">
+            <span class="camp-badge top">★ Top pick</span>
+            <span class="camp-badge aaa">AAA · 97</span>
+          </div>
+        </div>
+
+        <h3 class="camp-title">Easter Rush — <em>the fat one</em>.</h3>
+
+        <p class="camp-desc">
+          The one I'm streaming on this week. Stakelight doubled their match bonus for crypto deposits — only for the next 6 days. I've tested it, it pays. Anyone who's been watching knows this is the window.
+        </p>
+
+        <div class="camp-offer">
+          <div>
+            <div class="offer-amount">€1,000 + 300 spins</div>
+            <div class="offer-desc">Match bonus · crypto deposits doubled · until Apr 28</div>
+          </div>
+        </div>
+
+        <div class="camp-cta">
+          <span>Claim the bonus</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Standard card 1 -->
+      <a href="#" class="camp">
+        <div class="camp-head">
+          <div class="camp-op">
+            <div class="camp-op-logo">F</div>
+            <div class="camp-op-meta">
+              <div class="camp-op-name">Fairspin</div>
+              <div class="camp-op-tag">Casino · Crypto</div>
+            </div>
+          </div>
+          <div class="camp-badges">
+            <span class="camp-badge aaa">AAA</span>
+          </div>
+        </div>
+
+        <h3 class="camp-title">Welcome pack, no fuss.</h3>
+
+        <p class="camp-desc">
+          Instant withdrawals, been solid for 2 years straight. Good entry point if you haven't picked a crypto casino yet.
+        </p>
+
+        <div class="camp-offer">
+          <div>
+            <div class="offer-amount">€500 + 200 spins</div>
+            <div class="offer-desc">First deposit · no wagering trap</div>
+          </div>
+        </div>
+
+        <div class="camp-cta">
+          <span>Take the pack</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Standard card 2 -->
+      <a href="#" class="camp">
+        <div class="camp-head">
+          <div class="camp-op">
+            <div class="camp-op-logo">V</div>
+            <div class="camp-op-meta">
+              <div class="camp-op-name">Vaulted</div>
+              <div class="camp-op-tag">Exchange · Casino</div>
+            </div>
+          </div>
+          <div class="camp-badges">
+            <span class="camp-badge crypto">Crypto-only</span>
+            <span class="camp-badge aaa">AA</span>
+          </div>
+        </div>
+
+        <h3 class="camp-title">Crypto Edge — <em>high table</em>.</h3>
+
+        <p class="camp-desc">
+          Exchange + casino in one wallet. Built for the whales who want action without moving funds around. Not for beginners.
+        </p>
+
+        <div class="camp-offer">
+          <div>
+            <div class="offer-amount">150% up to 2 BTC</div>
+            <div class="offer-desc">For serious deposits · KYC required</div>
+          </div>
+        </div>
+
+        <div class="camp-cta">
+          <span>Deposit crypto</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+      <!-- Standard card 3 -->
+      <a href="#" class="camp">
+        <div class="camp-head">
+          <div class="camp-op">
+            <div class="camp-op-logo">C</div>
+            <div class="camp-op-meta">
+              <div class="camp-op-name">Cobalt Trade</div>
+              <div class="camp-op-tag">Exchange · New</div>
+            </div>
+          </div>
+          <div class="camp-badges">
+            <span class="camp-badge new">Just joined</span>
+          </div>
+        </div>
+
+        <h3 class="camp-title">Trading, done cleaner.</h3>
+
+        <p class="camp-desc">
+          For the days off-stream when you want to park capital somewhere sane. Low fees, proper UX, Drake's verified.
+        </p>
+
+        <div class="camp-offer">
+          <div>
+            <div class="offer-amount">$50 bonus</div>
+            <div class="offer-desc">On first trade · no deposit needed</div>
+          </div>
+        </div>
+
+        <div class="camp-cta">
+          <span>Try Cobalt</span>
+          <span class="arrow">→</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- BOUNTY OF THE WEEK -->
+  <section class="bow" id="bow">
+    <div class="bow-wrapper">
+      <div class="bow-label">· Bounty of the week · posse only ·</div>
+
+      <h2 class="bow-headline">
+        Deposit on <em>Stakelight</em>, split <em>€50K</em> with the posse.
+      </h2>
+
+      <p class="bow-body">
+        First 500 reelriders who deposit €50+ on Stakelight this week split a €50,000 pool at the end of the drop. No raffles, no gimmicks — pool splits evenly. If you're in, you're in.
+      </p>
+
+      <div class="bow-timer">
+        <div class="time-unit">
+          <div class="time-val">05</div>
+          <div class="time-lbl">Days</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-val">14</div>
+          <div class="time-lbl">Hours</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-val">22</div>
+          <div class="time-lbl">Min</div>
+        </div>
+        <div class="time-unit">
+          <div class="time-val">47</div>
+          <div class="time-lbl">Sec</div>
+        </div>
+      </div>
+
+      <a href="#" class="bow-cta">
+        Get in on the split
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-text">
+      <p>
+        I've been streaming slots for <em>three years</em>. I don't shill, I don't fake wins, I don't take money from casinos I haven't played at.
+      </p>
+      <p>
+        Every drop on this page is one I'd sit at myself. If an operator stops paying clean or starts pulling shady moves, it's <strong>out of here</strong> the same week — no matter what they offered me.
+      </p>
+      <p>
+        The posse is 127K strong because I've kept it that way. Welcome to slots night.
+      </p>
+    </div>
+
+    <div class="about-socials">
+      <a href="#" class="social-link">
+        <div class="social-icon">T</div>
+        <div>
+          <div class="social-name">Twitch</div>
+          <div class="social-handle">@reelrider</div>
+        </div>
+        <span class="tag live">Live</span>
+      </a>
+      <a href="#" class="social-link">
+        <div class="social-icon">X</div>
+        <div>
+          <div class="social-name">X / Twitter</div>
+          <div class="social-handle">@reelridertv</div>
+        </div>
+        <span class="tag">Follow</span>
+      </a>
+      <a href="#" class="social-link">
+        <div class="social-icon">D</div>
+        <div>
+          <div class="social-name">Discord</div>
+          <div class="social-handle">reelrider's posse</div>
+        </div>
+        <span class="tag">Join</span>
+      </a>
+      <a href="#" class="social-link">
+        <div class="social-icon">Y</div>
+        <div>
+          <div class="social-name">YouTube</div>
+          <div class="social-handle">Stream highlights</div>
+        </div>
+        <span class="tag">Watch</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust">
+    <div class="section-head" style="padding: 0; margin-bottom: 0; border-bottom: none;">
+      <div class="section-label">
+        <span class="section-num">§ 03</span>
+        <h2 class="section-title">Why <em>trust this page</em></h2>
+      </div>
+      <div class="section-sub">Verified by Drake's Bounty</div>
+    </div>
+
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">⚖</div>
+        <div class="trust-title">Under The Code</div>
+        <div class="trust-text">Every operator here signed Drake's Bounty's public Code of Conduct. Shaving, retro-changes, late payments = out.</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">★</div>
+        <div class="trust-title">Rated in public</div>
+        <div class="trust-text">Check Drake's Standards Index — every operator's public quarterly rating. No hidden deals, no pay-to-improve.</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">⟳</div>
+        <div class="trust-title">Updated weekly</div>
+        <div class="trust-text">This page is live. If an operator drops below standard, they're gone from here the same week.</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">§</div>
+        <div class="trust-title">Track your drop</div>
+        <div class="trust-text">Every click is tracked so you get credited with your bonus. No lost deposits, no "forgotten" registrations.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <span>© 2026 · reelrider.tv</span>
+    </div>
+
+    <a href="drakesbounty-threshold-v2.html" class="powered-by">
+      <svg class="db-mark" viewBox="0 0 22 22">
+        <circle cx="11" cy="11" r="9" fill="none" stroke="#00ffff" stroke-width="0.8"/>
+        <text x="11" y="15" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="12" font-weight="500" fill="#00ffff">D</text>
+      </svg>
+      <span>Powered by Drake's Bounty</span>
+    </a>
+
+    <div class="disclaimer">
+      18+. Gamble responsibly. All offers subject to operator T&C. This page carries affiliate links.
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

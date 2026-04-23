@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Carta Náutica — Drake's Bounty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #E8DCC0;
+  --paper-warm: #DFD1B1;
+  --paper-dark: #C9B994;
+  --paper-shadow: #A89573;
+  --parchment-aged: #D4BE91;
+  --ink: #1A130C;
+  --ink-soft: #2B2018;
+  --ink-dim: #4D3D2E;
+  --ink-faint: #75624C;
+  --brass: #A67C2E;
+  --brass-light: #C9A961;
+  --brass-deep: #7A5920;
+  --oxblood: #762525;
+  --oxblood-deep: #4F1818;
+  --absinthe: #4A5C3A;
+  --absinthe-light: #6B8257;
+  --sea-deep: #3d5a6b;
+  --sea-mid: #587689;
+  --sea-shallow: #7a9bad;
+  --rule: rgba(26, 19, 12, 0.22);
+  --rule-strong: rgba(26, 19, 12, 0.45);
+  --rule-dim: rgba(26, 19, 12, 0.10);
+  --display: 'Fraunces', Georgia, serif;
+  --ui: 'Work Sans', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--ui);
+  min-height: 100vh;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 20% 20%, #EFE4C9 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 80%, #D6C59E 0%, transparent 60%),
+    var(--paper);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/><feColorMatrix values='0 0 0 0 0.4 0 0 0 0 0.32 0 0 0 0 0.22 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+nav, aside, main, footer { position: relative; z-index: 3; }
+
+/* ============ LAYOUT (reuses Ledger sidebar pattern) ============ */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  border-right: 1px solid var(--rule);
+  padding: 24px 0;
+  background: rgba(26, 19, 12, 0.03);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  padding: 0 24px 24px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-brand .seal { width: 36px; height: 36px; flex: none; }
+
+.sidebar-brand .wordmark {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+.sidebar-brand .wordmark em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+.sidebar-brand .tag {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.sidebar-nav { padding: 24px 0 0; flex: 1; }
+.nav-group { margin-bottom: 24px; }
+.nav-group-label {
+  padding: 6px 24px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s var(--ease);
+  font-variation-settings: "opsz" 72;
+}
+
+.nav-item:hover { color: var(--ink); background: rgba(26, 19, 12, 0.04); }
+
+.nav-item.active {
+  color: var(--oxblood);
+  font-weight: 500;
+  background: rgba(118, 37, 37, 0.06);
+}
+
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--oxblood);
+}
+
+.nav-item .icon {
+  width: 16px;
+  color: var(--ink-faint);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+}
+.nav-item.active .icon { color: var(--oxblood); }
+
+.nav-badge {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 6px;
+  background: var(--oxblood);
+  color: var(--paper);
+}
+.nav-badge.new { background: var(--brass); color: var(--ink); }
+
+.sidebar-user {
+  padding: 16px 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--oxblood);
+  flex: none;
+}
+
+.user-info { overflow: hidden; }
+.user-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-rank {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user-rank::before { content: "★"; color: var(--brass); }
+
+.main { padding: 0; min-width: 0; }
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(26, 19, 12, 0.02);
+}
+
+.topbar-left { display: flex; align-items: baseline; gap: 16px; }
+
+.page-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+
+.page-title-topbar {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  font-style: italic;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+
+.topbar-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+
+.topbar-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ============ CONTENT ============ */
+.content {
+  padding: 28px 32px 48px;
+  max-width: 1500px;
+}
+
+/* Page header */
+.page-header {
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: end;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.page-title {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  margin-bottom: 8px;
+}
+
+.page-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+.page-subtitle {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--ink-dim);
+  max-width: 64ch;
+  line-height: 1.5;
+}
+
+.page-subtitle em { color: var(--ink); }
+
+/* Live tracker */
+.live-tracker {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+}
+
+.live-stat {
+  padding: 10px 18px;
+  border-right: 1px solid var(--rule);
+  text-align: center;
+}
+.live-stat:last-child { border-right: none; }
+
+.live-stat-val {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 20px;
+  color: var(--ink);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  font-variation-settings: "opsz" 72;
+}
+
+.live-stat-val em {
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 14px;
+}
+
+.live-stat-lbl {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+}
+
+.live-stat.pulse .live-stat-val {
+  color: var(--oxblood);
+}
+
+.live-stat.pulse .live-stat-lbl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.live-stat.pulse .live-stat-lbl::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--oxblood);
+  animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+/* ============ MAP LAYOUT ============ */
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  min-height: 640px;
+}
+
+/* ============ THE CHART ITSELF ============ */
+.chart-frame {
+  position: relative;
+  border: 8px solid transparent;
+  background:
+    linear-gradient(135deg, #d4be91, #e8dcc0) border-box;
+  padding: 0;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 60px rgba(26, 19, 12, 0.15),
+    0 10px 40px rgba(26, 19, 12, 0.12);
+}
+
+/* Fancy multi-ring chart frame */
+.chart-frame::before {
+  content: "";
+  position: absolute;
+  top: 4px; left: 4px; right: 4px; bottom: 4px;
+  border: 1px solid #4d3d2e;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.chart-frame::after {
+  content: "";
+  position: absolute;
+  top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border: 0.5px solid rgba(77, 61, 46, 0.5);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Corner ornaments */
+.chart-corner {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  z-index: 11;
+  pointer-events: none;
+  color: var(--oxblood);
+}
+
+.chart-corner.tl { top: 8px; left: 8px; }
+.chart-corner.tr { top: 8px; right: 8px; transform: scaleX(-1); }
+.chart-corner.bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+.chart-corner.br { bottom: 8px; right: 8px; transform: scale(-1, -1); }
+
+/* Cartouche (title panel on map) */
+.cartouche {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse at center, #f0e4c9 0%, #d4be91 100%);
+  border: 1px solid var(--ink-dim);
+  padding: 8px 22px;
+  z-index: 20;
+  text-align: center;
+  box-shadow:
+    inset 0 0 12px rgba(26, 19, 12, 0.12),
+    2px 3px 8px rgba(26, 19, 12, 0.2);
+}
+
+.cartouche::before, .cartouche::after {
+  content: "❦";
+  color: var(--oxblood);
+  margin: 0 8px;
+  font-size: 10px;
+  vertical-align: middle;
+}
+
+.cartouche-title {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  display: inline-block;
+  vertical-align: middle;
+  font-variation-settings: "opsz" 72;
+}
+
+.cartouche-sub {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* Map SVG */
+.chart-svg {
+  display: block;
+  width: 100%;
+  height: 640px;
+  background: radial-gradient(ellipse at center, #98b4c2 0%, #7a9bad 40%, #587689 75%, #3d5a6b 100%);
+}
+
+/* ============ SIDE PANEL ============ */
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  max-height: 640px;
+}
+
+.panel-card {
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  padding: 18px 20px;
+}
+
+.panel-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-label::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--oxblood);
+}
+
+.panel-title {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 17px;
+  color: var(--ink);
+  margin-bottom: 14px;
+  font-variation-settings: "opsz" 72;
+}
+
+.panel-title em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+
+/* Islands list */
+.island-list { list-style: none; }
+
+.island-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule-dim);
+}
+
+.island-row:last-child { border-bottom: none; }
+
+.island-marker {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--ink-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 10px;
+  color: var(--paper);
+  flex: none;
+}
+
+.island-info { min-width: 0; }
+
+.island-name {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.1;
+  font-variation-settings: "opsz" 72;
+}
+
+.island-coords {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.island-ships {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  text-align: right;
+  font-weight: 500;
+}
+
+.island-ships .pct {
+  font-size: 9px;
+  color: var(--ink-faint);
+  display: block;
+  margin-top: 1px;
+}
+
+/* Live feed */
+.feed-list {
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.feed-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule-dim);
+  align-items: start;
+  animation: feedEnter 0.5s var(--ease);
+}
+
+@keyframes feedEnter {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.feed-flag {
+  font-size: 14px;
+  line-height: 1.2;
+  flex: none;
+  margin-top: 2px;
+}
+
+.feed-text {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.4;
+}
+
+.feed-text strong { font-style: normal; color: var(--ink); font-weight: 500; }
+.feed-text em { color: var(--oxblood); }
+
+.feed-time {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* Drake whisper card */
+.drake-card {
+  background: rgba(26, 19, 12, 0.05);
+  border-left: 3px solid var(--oxblood);
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.drake-mark {
+  width: 32px;
+  height: 32px;
+  flex: none;
+}
+
+.drake-msg {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.45;
+}
+
+.drake-msg strong { font-style: normal; font-weight: 500; color: var(--ink); }
+.drake-msg em { color: var(--oxblood); }
+
+.drake-sig {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-top: 8px;
+  display: block;
+  font-style: normal;
+}
+
+/* ============ LEGEND BAR (bottom) ============ */
+.legend-bar {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 252, 244, 0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.legend-group {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-dim);
+  font-variation-settings: "opsz" 72;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.legend-swatch.ship-eu { background: var(--oxblood); }
+.legend-swatch.ship-latam { background: var(--brass); }
+.legend-swatch.ship-asia { background: var(--absinthe); }
+.legend-swatch.ship-other { background: var(--ink-faint); }
+
+.legend-swatch.route-hot {
+  background: transparent;
+  border: 2px solid var(--oxblood);
+}
+
+.legend-swatch.route-normal {
+  background: transparent;
+  border: 1px dashed var(--ink-dim);
+}
+
+.legend-scale {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ============ ANIMATIONS ============ */
+@keyframes shipSail1 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes shipSail2 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes shipSail3 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes shipSail4 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes shipSail5 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes shipSail6 {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+
+@keyframes pulseIsland {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes waterShimmer {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes compassSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Ships using offset-path */
+.ship {
+  offset-rotate: auto 0deg;
+  will-change: offset-distance;
+}
+
+.ship-1 { offset-path: path('M 600 430 Q 500 380 360 320 T 190 240'); animation: shipSail1 14s linear infinite; }
+.ship-2 { offset-path: path('M 600 430 Q 650 360 720 280 T 860 180'); animation: shipSail2 16s linear infinite 1s; }
+.ship-3 { offset-path: path('M 600 430 Q 680 460 820 480 T 980 460'); animation: shipSail3 18s linear infinite 3s; }
+.ship-4 { offset-path: path('M 600 430 Q 550 500 430 540 T 280 550'); animation: shipSail4 20s linear infinite 2s; }
+.ship-5 { offset-path: path('M 600 430 Q 520 400 400 360 T 240 340'); animation: shipSail5 17s linear infinite 5s; }
+.ship-6 { offset-path: path('M 600 430 Q 680 400 780 380 T 930 340'); animation: shipSail6 19s linear infinite 4s; }
+.ship-7 { offset-path: path('M 600 430 Q 500 380 360 320 T 190 240'); animation: shipSail1 14s linear infinite 6s; }
+.ship-8 { offset-path: path('M 600 430 Q 650 360 720 280 T 860 180'); animation: shipSail2 16s linear infinite 9s; }
+.ship-9 { offset-path: path('M 600 430 Q 680 460 820 480 T 980 460'); animation: shipSail3 18s linear infinite 11s; }
+.ship-10 { offset-path: path('M 600 430 Q 520 400 400 360 T 240 340'); animation: shipSail5 17s linear infinite 12s; }
+
+/* Route lines dashed animation */
+.route-line {
+  fill: none;
+  stroke-dasharray: 4 6;
+  animation: routeDash 3s linear infinite;
+}
+
+@keyframes routeDash {
+  to { stroke-dashoffset: -10; }
+}
+
+.route-hot {
+  stroke: rgba(118, 37, 37, 0.55);
+  stroke-width: 1.4;
+}
+
+.route-normal {
+  stroke: rgba(26, 19, 12, 0.35);
+  stroke-width: 0.8;
+}
+
+/* Island labels flicker */
+.island-label {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 13px;
+  fill: var(--ink);
+  letter-spacing: 0.02em;
+  paint-order: stroke;
+  stroke: rgba(232, 220, 192, 0.9);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.island-label.featured { fill: var(--oxblood); font-weight: 600; }
+
+.island-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  fill: var(--ink-faint);
+  text-transform: uppercase;
+  paint-order: stroke;
+  stroke: rgba(232, 220, 192, 0.9);
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+}
+
+/* Compass animation */
+.compass-rose {
+  transform-origin: center;
+  animation: compassSpin 120s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .map-layout { grid-template-columns: 1fr; }
+  .side-panel { max-height: none; }
+  .chart-svg { height: 500px; }
+}
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    padding: 12px 20px;
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+    overflow-x: auto;
+  }
+  .sidebar-brand { border-bottom: none; padding: 0 16px 0 0; border-right: 1px solid var(--rule); }
+  .sidebar-nav, .sidebar-user { display: none; }
+  .topbar, .content { padding-left: 20px; padding-right: 20px; }
+  .page-header { grid-template-columns: 1fr; gap: 16px; }
+  .page-title { font-size: 38px; }
+  .chart-svg { height: 420px; }
+  .cartouche { display: none; }
+  .legend-bar { flex-direction: column; align-items: flex-start; }
+  .chart-corner { width: 24px; height: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="drakesbounty-threshold-v2.html" class="sidebar-brand">
+      <svg class="seal" viewBox="0 0 46 46">
+        <circle cx="23" cy="23" r="18" fill="none" stroke="#1A130C" stroke-width="1.2"/>
+        <path d="M13 22 Q13 18 15.5 17 L30.5 17 Q33 18 33 22 L33 22.5 L13 22.5 Z" fill="#1A130C"/>
+        <rect x="11" y="22.3" width="24" height="1.7" fill="#1A130C"/>
+        <rect x="13.5" y="19.8" width="19" height="0.8" fill="#A67C2E"/>
+        <path d="M19 29.5 Q21 30.5 23 30.5 Q25 30.5 27 29.5" stroke="#1A130C" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <div class="wordmark">Drake<em>'s</em></div>
+        <div class="tag">La Carta Náutica</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <div class="nav-group-label">· El Gremio ·</div>
+        <a href="drakesbounty-ledger.html" class="nav-item">
+          <span class="icon">§</span>
+          El Ledger
+        </a>
+        <a href="#" class="nav-item active">
+          <span class="icon">⤫</span>
+          La Carta Náutica
+          <span class="nav-badge new">LIVE</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">⚑</span>
+          Bounties
+          <span class="nav-badge">3</span>
+        </a>
+        <a href="drakesbounty-billboard-editor.html" class="nav-item">
+          <span class="icon">▦</span>
+          El Billboard
+        </a>
+        <a href="drakesbounty-compass.html" class="nav-item">
+          <span class="icon">✢</span>
+          La Brújula
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">◆</span>
+          El Arsenal
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Comunidad ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">⦿</span>
+          La Posse
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✦</span>
+          El Almanaque
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">✉</span>
+          Los Telegramas
+          <span class="nav-badge">2</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Dinero ·</div>
+        <a href="#" class="nav-item">
+          <span class="icon">$</span>
+          El Pagadero
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">※</span>
+          Libro de Cuentas
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">· Referencia ·</div>
+        <a href="drakesbounty-code.html" class="nav-item">
+          <span class="icon">⚖</span>
+          El Código
+        </a>
+        <a href="drakesbounty-standards-index.html" class="nav-item">
+          <span class="icon">★</span>
+          Standards Index
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">E</div>
+      <div class="user-info">
+        <div class="user-name">elena.kicks</div>
+        <div class="user-rank">Marshal</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="page-label">Folio VII</span>
+        <span class="page-title-topbar">La Carta Náutica</span>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">Último día</button>
+        <button class="topbar-btn">Última semana</button>
+        <button class="topbar-btn">Exportar carta</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">La <em>Carta Náutica</em></h1>
+          <p class="page-subtitle">
+            Cada barco es un visitante tuyo cruzando el Mar de Drake. Cada isla, un operador. Observa en vivo desde dónde zarpan, qué rutas toman y qué puertos alcanzan. <em>Tu flota, en tiempo real.</em>
+          </p>
+        </div>
+
+        <div class="live-tracker">
+          <div class="live-stat pulse">
+            <div class="live-stat-val">142</div>
+            <div class="live-stat-lbl">En alta mar</div>
+          </div>
+          <div class="live-stat">
+            <div class="live-stat-val">18<em>/h</em></div>
+            <div class="live-stat-lbl">Llegadas</div>
+          </div>
+          <div class="live-stat">
+            <div class="live-stat-val">14<em>,2%</em></div>
+            <div class="live-stat-lbl">Conversión</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ MAP + SIDE PANEL ============ -->
+      <div class="map-layout">
+
+        <!-- THE CHART -->
+        <div class="chart-frame">
+
+          <!-- Corner ornaments -->
+          <svg class="chart-corner tl" viewBox="0 0 36 36">
+            <path d="M2 2 L 12 2 M 2 2 L 2 12" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            <path d="M 6 6 L 14 6 L 6 14" stroke="currentColor" stroke-width="0.8" fill="none"/>
+            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+          </svg>
+          <svg class="chart-corner tr" viewBox="0 0 36 36">
+            <path d="M2 2 L 12 2 M 2 2 L 2 12" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            <path d="M 6 6 L 14 6 L 6 14" stroke="currentColor" stroke-width="0.8" fill="none"/>
+            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+          </svg>
+          <svg class="chart-corner bl" viewBox="0 0 36 36">
+            <path d="M2 2 L 12 2 M 2 2 L 2 12" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            <path d="M 6 6 L 14 6 L 6 14" stroke="currentColor" stroke-width="0.8" fill="none"/>
+            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+          </svg>
+          <svg class="chart-corner br" viewBox="0 0 36 36">
+            <path d="M2 2 L 12 2 M 2 2 L 2 12" stroke="currentColor" stroke-width="1.2" fill="none"/>
+            <path d="M 6 6 L 14 6 L 6 14" stroke="currentColor" stroke-width="0.8" fill="none"/>
+            <circle cx="4" cy="4" r="1.5" fill="currentColor"/>
+          </svg>
+
+          <!-- Cartouche -->
+          <div class="cartouche">
+            <div>
+              <span class="cartouche-title">Mare Bountium — Carta del Creador</span>
+            </div>
+            <div class="cartouche-sub">Confeccionada por Drake · MMXXVI · elena.kicks</div>
+          </div>
+
+          <!-- THE MAP SVG -->
+          <svg class="chart-svg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
+
+            <defs>
+              <!-- Water pattern with fine wave lines -->
+              <pattern id="waterPattern" x="0" y="0" width="60" height="30" patternUnits="userSpaceOnUse">
+                <path d="M 0 15 Q 15 10 30 15 T 60 15" fill="none" stroke="rgba(61, 90, 107, 0.2)" stroke-width="0.5"/>
+                <path d="M 0 5 Q 15 0 30 5 T 60 5" fill="none" stroke="rgba(61, 90, 107, 0.15)" stroke-width="0.3"/>
+                <path d="M 0 25 Q 15 20 30 25 T 60 25" fill="none" stroke="rgba(61, 90, 107, 0.12)" stroke-width="0.3"/>
+              </pattern>
+
+              <pattern id="deepWater" x="0" y="0" width="80" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 0 20 Q 20 14 40 20 T 80 20" fill="none" stroke="rgba(26, 35, 46, 0.25)" stroke-width="0.6"/>
+              </pattern>
+
+              <!-- Island fill -->
+              <radialGradient id="islandGrad">
+                <stop offset="0%" stop-color="#D4BE91"/>
+                <stop offset="60%" stop-color="#B8A27A"/>
+                <stop offset="100%" stop-color="#8F7556"/>
+              </radialGradient>
+
+              <radialGradient id="islandFeaturedGrad">
+                <stop offset="0%" stop-color="#E8DCC0"/>
+                <stop offset="50%" stop-color="#C9A961"/>
+                <stop offset="100%" stop-color="#7A5920"/>
+              </radialGradient>
+
+              <!-- Drop shadow filter for ships -->
+              <filter id="shipShadow">
+                <feGaussianBlur stdDeviation="0.5"/>
+              </filter>
+
+              <!-- Sepia vignette -->
+              <radialGradient id="sepiaVignette" cx="50%" cy="50%" r="70%">
+                <stop offset="60%" stop-color="transparent"/>
+                <stop offset="100%" stop-color="rgba(77, 61, 46, 0.35)"/>
+              </radialGradient>
+
+              <!-- Ship symbol (reusable) -->
+              <symbol id="shipSymbol" viewBox="-8 -10 16 20">
+                <!-- Hull -->
+                <path d="M -6 3 Q -6 6 -4 7 L 4 7 Q 6 6 6 3 L 5 1 L -5 1 Z"
+                      fill="currentColor" stroke="#1A130C" stroke-width="0.4"/>
+                <!-- Deck line -->
+                <line x1="-5" y1="1" x2="5" y2="1" stroke="#1A130C" stroke-width="0.3" opacity="0.6"/>
+                <!-- Mast -->
+                <line x1="0" y1="-10" x2="0" y2="1" stroke="#1A130C" stroke-width="0.6"/>
+                <!-- Main sail -->
+                <path d="M 0 -9 L 4 -2 L 0 -2 Z" fill="#F0E4C9" stroke="#1A130C" stroke-width="0.3"/>
+                <path d="M 0 -9 L -3 -3 L 0 -3 Z" fill="#E8DCC0" stroke="#1A130C" stroke-width="0.3"/>
+                <!-- Flag -->
+                <path d="M 0 -10 L 3 -9 L 0 -8 Z" fill="currentColor" stroke="#1A130C" stroke-width="0.3"/>
+              </symbol>
+
+              <!-- Origin port marker -->
+              <symbol id="portSymbol" viewBox="-24 -24 48 48">
+                <circle r="20" fill="rgba(118, 37, 37, 0.15)" stroke="#762525" stroke-width="0.8" stroke-dasharray="2 2"/>
+                <circle r="14" fill="rgba(232, 220, 192, 0.9)" stroke="#762525" stroke-width="1.2"/>
+                <circle r="14" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+                <!-- Compass rose inside -->
+                <path d="M 0 -10 L 2 0 L 0 2 L -2 0 Z" fill="#762525"/>
+                <path d="M 0 10 L 2 0 L 0 -2 L -2 0 Z" fill="#4F1818"/>
+                <path d="M 10 0 L 0 2 L -2 0 L 0 -2 Z" fill="#4F1818" opacity="0.7"/>
+                <path d="M -10 0 L 0 -2 L 2 0 L 0 2 Z" fill="#762525" opacity="0.7"/>
+                <circle r="2" fill="#1A130C"/>
+                <circle r="1" fill="#A67C2E"/>
+              </symbol>
+            </defs>
+
+            <!-- Sea base with grid -->
+            <rect width="1200" height="640" fill="url(#waterPattern)"/>
+
+            <!-- Deeper waters (darker patches to suggest depth) -->
+            <ellipse cx="150" cy="550" rx="180" ry="80" fill="url(#deepWater)" opacity="0.5"/>
+            <ellipse cx="1050" cy="550" rx="200" ry="90" fill="url(#deepWater)" opacity="0.5"/>
+            <ellipse cx="600" cy="620" rx="400" ry="50" fill="url(#deepWater)" opacity="0.4"/>
+
+            <!-- Latitude/longitude grid -->
+            <g stroke="rgba(26, 19, 12, 0.12)" stroke-width="0.3" stroke-dasharray="1 3">
+              <line x1="0" y1="120" x2="1200" y2="120"/>
+              <line x1="0" y1="240" x2="1200" y2="240"/>
+              <line x1="0" y1="360" x2="1200" y2="360"/>
+              <line x1="0" y1="480" x2="1200" y2="480"/>
+              <line x1="200" y1="0" x2="200" y2="640"/>
+              <line x1="400" y1="0" x2="400" y2="640"/>
+              <line x1="600" y1="0" x2="600" y2="640"/>
+              <line x1="800" y1="0" x2="800" y2="640"/>
+              <line x1="1000" y1="0" x2="1000" y2="640"/>
+            </g>
+
+            <!-- Coordinate labels -->
+            <g font-family="JetBrains Mono" font-size="8" fill="rgba(26, 19, 12, 0.35)" letter-spacing="1.5">
+              <text x="5" y="125">40°N</text>
+              <text x="5" y="245">30°N</text>
+              <text x="5" y="365">20°N</text>
+              <text x="5" y="485">10°N</text>
+              <text x="200" y="635" text-anchor="middle">20°W</text>
+              <text x="400" y="635" text-anchor="middle">10°W</text>
+              <text x="600" y="635" text-anchor="middle">0°</text>
+              <text x="800" y="635" text-anchor="middle">10°E</text>
+              <text x="1000" y="635" text-anchor="middle">20°E</text>
+            </g>
+
+            <!-- Compass rose (top right) -->
+            <g transform="translate(1090, 90)">
+              <circle r="55" fill="rgba(232, 220, 192, 0.4)" stroke="#4D3D2E" stroke-width="0.8"/>
+              <circle r="50" fill="none" stroke="#4D3D2E" stroke-width="0.4" opacity="0.5"/>
+              <g class="compass-rose">
+                <!-- 16-point compass -->
+                <g>
+                  <path d="M 0 -48 L 5 0 L 0 5 L -5 0 Z" fill="#762525"/>
+                  <path d="M 0 48 L 5 0 L 0 -5 L -5 0 Z" fill="#4F1818"/>
+                  <path d="M 48 0 L 0 5 L -5 0 L 0 -5 Z" fill="#4F1818" opacity="0.75"/>
+                  <path d="M -48 0 L 0 -5 L 5 0 L 0 5 Z" fill="#762525" opacity="0.75"/>
+                </g>
+                <g fill="#A67C2E" opacity="0.9">
+                  <path d="M 34 -34 L 3 -3 L -3 3 Z" transform="rotate(0)"/>
+                  <path d="M 34 34 L 3 3 L -3 -3 Z" transform="rotate(0)"/>
+                  <path d="M -34 34 L -3 3 L 3 -3 Z" transform="rotate(0)"/>
+                  <path d="M -34 -34 L -3 -3 L 3 3 Z" transform="rotate(0)"/>
+                </g>
+                <circle r="3.5" fill="#1A130C"/>
+                <circle r="1.5" fill="#A67C2E"/>
+              </g>
+              <!-- Cardinal letters (outside rotation) -->
+              <text x="0" y="-40" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="11" font-weight="600" fill="#762525">N</text>
+              <text x="0" y="43" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="10" font-weight="500" fill="#4D3D2E">S</text>
+              <text x="-40" y="3" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="10" font-weight="500" fill="#4D3D2E">O</text>
+              <text x="40" y="3" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="10" font-weight="500" fill="#4D3D2E">E</text>
+            </g>
+
+            <!-- Scale bar (bottom left) -->
+            <g transform="translate(50, 590)">
+              <line x1="0" y1="0" x2="140" y2="0" stroke="#4D3D2E" stroke-width="1.5"/>
+              <line x1="0" y1="-4" x2="0" y2="4" stroke="#4D3D2E" stroke-width="1.5"/>
+              <line x1="35" y1="-3" x2="35" y2="3" stroke="#4D3D2E" stroke-width="1"/>
+              <line x1="70" y1="-4" x2="70" y2="4" stroke="#4D3D2E" stroke-width="1.5"/>
+              <line x1="105" y1="-3" x2="105" y2="3" stroke="#4D3D2E" stroke-width="1"/>
+              <line x1="140" y1="-4" x2="140" y2="4" stroke="#4D3D2E" stroke-width="1.5"/>
+              <text x="0" y="-8" font-family="JetBrains Mono" font-size="8" fill="#4D3D2E" letter-spacing="1">0</text>
+              <text x="70" y="-8" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4D3D2E" letter-spacing="1">500</text>
+              <text x="140" y="-8" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4D3D2E" letter-spacing="1">1.000 clicks</text>
+              <text x="70" y="18" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="10" fill="#4D3D2E">· Escala de Tráfico ·</text>
+            </g>
+
+            <!-- Wind indicator (bottom right) -->
+            <g transform="translate(1100, 570)">
+              <text text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#4D3D2E" letter-spacing="2">VIENTOS</text>
+              <g transform="translate(0, 18)">
+                <path d="M -20 0 L 20 0" stroke="#4D3D2E" stroke-width="1.2"/>
+                <path d="M 12 -5 L 20 0 L 12 5" stroke="#4D3D2E" stroke-width="1.2" fill="none"/>
+                <text y="20" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="10" fill="#4D3D2E">del Este</text>
+              </g>
+            </g>
+
+            <!-- Route lines -->
+            <g fill="none">
+              <!-- Hot routes (top performers) -->
+              <path class="route-line route-hot" d="M 600 430 Q 500 380 360 320 T 190 240"/>
+              <path class="route-line route-hot" d="M 600 430 Q 650 360 720 280 T 860 180"/>
+              <!-- Normal routes -->
+              <path class="route-line route-normal" d="M 600 430 Q 680 460 820 480 T 980 460"/>
+              <path class="route-line route-normal" d="M 600 430 Q 550 500 430 540 T 280 550"/>
+              <path class="route-line route-normal" d="M 600 430 Q 520 400 400 360 T 240 340"/>
+              <path class="route-line route-normal" d="M 600 430 Q 680 400 780 380 T 930 340"/>
+            </g>
+
+            <!-- ============ ISLANDS ============ -->
+
+            <!-- STAKELIGHT ISLAND (top-left, biggest, featured) -->
+            <g transform="translate(190, 240)">
+              <!-- Shoreline glow -->
+              <ellipse cx="0" cy="0" rx="95" ry="70" fill="rgba(232, 220, 192, 0.3)"/>
+              <!-- Island base -->
+              <path d="M -75 -15
+                       Q -80 -35 -60 -45
+                       Q -40 -58 -10 -52
+                       Q 20 -56 45 -42
+                       Q 72 -38 78 -18
+                       Q 85 5 70 25
+                       Q 55 45 25 42
+                       Q 0 52 -25 40
+                       Q -55 42 -72 22
+                       Q -82 5 -75 -15 Z"
+                    fill="url(#islandFeaturedGrad)" stroke="#4D3D2E" stroke-width="1"/>
+              <!-- Hatching for texture -->
+              <path d="M -60 -10 Q -40 -20 -20 -15 M -30 0 Q -10 -5 15 0 M 0 15 Q 20 10 40 15 M -50 20 Q -30 25 -15 20"
+                    fill="none" stroke="rgba(26, 19, 12, 0.25)" stroke-width="0.4"/>
+              <!-- Peaks (mountain triangles) -->
+              <path d="M -35 -5 L -28 -22 L -22 -5 Z" fill="#4D3D2E" opacity="0.55"/>
+              <path d="M -10 2 L -2 -18 L 6 2 Z" fill="#4D3D2E" opacity="0.7"/>
+              <path d="M 18 -3 L 28 -24 L 38 -3 Z" fill="#4D3D2E" opacity="0.5"/>
+              <!-- Tiny palm hint -->
+              <circle cx="55" cy="15" r="3" fill="#4A5C3A" opacity="0.6"/>
+              <circle cx="-55" cy="20" r="3" fill="#4A5C3A" opacity="0.6"/>
+              <!-- Flag on highest peak -->
+              <line x1="-2" y1="-18" x2="-2" y2="-35" stroke="#1A130C" stroke-width="1"/>
+              <path d="M -2 -35 L 10 -32 L -2 -28 Z" fill="#762525" stroke="#1A130C" stroke-width="0.4"/>
+              <!-- Star marker -->
+              <circle cx="-2" cy="-2" r="6" fill="#F0E4C9" stroke="#762525" stroke-width="0.8"/>
+              <text x="-2" y="2" text-anchor="middle" font-family="Fraunces" font-size="9" font-weight="700" fill="#762525">S</text>
+              <!-- Labels -->
+              <text x="0" y="70" text-anchor="middle" class="island-label featured">Isla Stakelight</text>
+              <text x="0" y="84" text-anchor="middle" class="island-sub">AAA · 38% · TOP PICK</text>
+            </g>
+
+            <!-- FAIRSPIN ISLAND (top-middle) -->
+            <g transform="translate(860, 180)">
+              <ellipse cx="0" cy="0" rx="70" ry="50" fill="rgba(232, 220, 192, 0.25)"/>
+              <path d="M -55 -10 Q -60 -28 -40 -35 Q -15 -42 10 -38 Q 40 -40 55 -25 Q 65 -5 58 18 Q 42 35 15 32 Q -15 40 -38 30 Q -60 18 -60 -2 Q -62 -8 -55 -10 Z"
+                    fill="url(#islandGrad)" stroke="#4D3D2E" stroke-width="1"/>
+              <path d="M -40 -5 Q -20 -12 0 -8 M -10 5 Q 10 0 30 5 M -30 15 Q -10 20 10 15"
+                    fill="none" stroke="rgba(26, 19, 12, 0.25)" stroke-width="0.4"/>
+              <path d="M -20 -2 L -14 -18 L -8 -2 Z" fill="#4D3D2E" opacity="0.55"/>
+              <path d="M 8 0 L 15 -15 L 22 0 Z" fill="#4D3D2E" opacity="0.65"/>
+              <circle cx="-2" cy="-2" r="5" fill="#F0E4C9" stroke="#4D3D2E" stroke-width="0.6"/>
+              <text x="-2" y="2" text-anchor="middle" font-family="Fraunces" font-size="8" font-weight="600" fill="#4D3D2E">F</text>
+              <text x="0" y="55" text-anchor="middle" class="island-label">Isla Fairspin</text>
+              <text x="0" y="67" text-anchor="middle" class="island-sub">AAA · 22%</text>
+            </g>
+
+            <!-- VAULTED ISLAND (right-middle) -->
+            <g transform="translate(980, 460)">
+              <ellipse cx="0" cy="0" rx="60" ry="44" fill="rgba(232, 220, 192, 0.25)"/>
+              <path d="M -45 -5 Q -52 -22 -32 -30 Q -8 -35 15 -32 Q 38 -30 50 -18 Q 58 2 50 22 Q 32 34 8 30 Q -18 36 -38 25 Q -52 10 -48 -2 Q -52 -6 -45 -5 Z"
+                    fill="url(#islandGrad)" stroke="#4D3D2E" stroke-width="1"/>
+              <path d="M -30 -2 Q -10 -8 10 -4 M -15 8 Q 5 3 25 8"
+                    fill="none" stroke="rgba(26, 19, 12, 0.25)" stroke-width="0.4"/>
+              <path d="M -10 0 L -4 -14 L 2 0 Z" fill="#4D3D2E" opacity="0.6"/>
+              <path d="M 12 2 L 18 -12 L 24 2 Z" fill="#4D3D2E" opacity="0.5"/>
+              <circle cx="0" cy="-1" r="5" fill="#F0E4C9" stroke="#4D3D2E" stroke-width="0.6"/>
+              <text x="0" y="3" text-anchor="middle" font-family="Fraunces" font-size="8" font-weight="600" fill="#4A5C3A">V</text>
+              <text x="0" y="50" text-anchor="middle" class="island-label">Isla Vaulted</text>
+              <text x="0" y="62" text-anchor="middle" class="island-sub">AA · 16% · CRYPTO</text>
+            </g>
+
+            <!-- BYTECRAFT ISLAND (bottom-middle-left) -->
+            <g transform="translate(280, 550)">
+              <ellipse cx="0" cy="0" rx="52" ry="36" fill="rgba(232, 220, 192, 0.2)"/>
+              <path d="M -40 -5 Q -45 -18 -28 -25 Q -8 -28 14 -25 Q 32 -22 42 -12 Q 48 4 40 18 Q 22 28 -2 24 Q -24 28 -38 18 Q -48 6 -44 -2 Z"
+                    fill="url(#islandGrad)" stroke="#4D3D2E" stroke-width="1"/>
+              <path d="M -25 -3 Q -5 -8 12 -4" fill="none" stroke="rgba(26, 19, 12, 0.25)" stroke-width="0.4"/>
+              <path d="M -8 0 L -2 -12 L 4 0 Z" fill="#4D3D2E" opacity="0.55"/>
+              <circle cx="0" cy="-1" r="4.5" fill="#F0E4C9" stroke="#4D3D2E" stroke-width="0.6"/>
+              <text x="0" y="3" text-anchor="middle" font-family="Fraunces" font-size="8" font-weight="600" fill="#4D3D2E">B</text>
+              <text x="0" y="42" text-anchor="middle" class="island-label">Isla Bytecraft</text>
+              <text x="0" y="54" text-anchor="middle" class="island-sub">AA · 12% · TRADING</text>
+            </g>
+
+            <!-- COBALT TRADE ISLAND (top-right smaller) -->
+            <g transform="translate(930, 340)">
+              <ellipse cx="0" cy="0" rx="42" ry="30" fill="rgba(232, 220, 192, 0.22)"/>
+              <path d="M -32 -3 Q -38 -16 -22 -22 Q -5 -26 12 -22 Q 28 -19 36 -8 Q 40 8 30 18 Q 14 24 -5 20 Q -25 23 -34 14 Q -40 4 -36 -2 Z"
+                    fill="url(#islandGrad)" stroke="#4D3D2E" stroke-width="1"/>
+              <path d="M -8 -2 L -3 -10 L 2 -2 Z" fill="#4D3D2E" opacity="0.55"/>
+              <circle cx="0" cy="-1" r="4" fill="#F0E4C9" stroke="#4D3D2E" stroke-width="0.6"/>
+              <text x="0" y="2" text-anchor="middle" font-family="Fraunces" font-size="7" font-weight="600" fill="#4A5C3A">C</text>
+              <text x="0" y="38" text-anchor="middle" class="island-label">I. Cobalt</text>
+              <text x="0" y="50" text-anchor="middle" class="island-sub">AA · 8%</text>
+            </g>
+
+            <!-- MUSTANG ISLAND (small, bottom-left, troubled) -->
+            <g transform="translate(240, 340)">
+              <ellipse cx="0" cy="0" rx="35" ry="24" fill="rgba(232, 220, 192, 0.18)"/>
+              <path d="M -25 -2 Q -30 -12 -18 -18 Q -5 -20 10 -18 Q 22 -15 28 -6 Q 30 6 22 14 Q 10 18 -4 16 Q -20 18 -28 10 Q -32 2 -28 -2 Z"
+                    fill="url(#islandGrad)" stroke="#4D3D2E" stroke-width="1" opacity="0.85"/>
+              <path d="M -5 -2 L 0 -10 L 5 -2 Z" fill="#4D3D2E" opacity="0.55"/>
+              <!-- Warning mark (small red dot) -->
+              <circle cx="0" cy="-1" r="3.5" fill="#762525" stroke="#1A130C" stroke-width="0.5"/>
+              <text x="0" y="1" text-anchor="middle" font-family="Fraunces" font-size="6" font-weight="700" fill="#F0E4C9">!</text>
+              <text x="0" y="32" text-anchor="middle" class="island-label" style="font-size:12px;">I. Mustang</text>
+              <text x="0" y="44" text-anchor="middle" class="island-sub" style="fill:#762525;">BB · 4% · WARN</text>
+            </g>
+
+            <!-- Small decorative islands/rocks -->
+            <g opacity="0.6">
+              <!-- Rocks near bottom -->
+              <ellipse cx="450" cy="600" rx="8" ry="4" fill="#8F7556" stroke="#4D3D2E" stroke-width="0.3"/>
+              <ellipse cx="470" cy="605" rx="5" ry="2" fill="#8F7556" stroke="#4D3D2E" stroke-width="0.3"/>
+              <ellipse cx="750" cy="90" rx="10" ry="5" fill="#8F7556" stroke="#4D3D2E" stroke-width="0.3"/>
+              <ellipse cx="760" cy="95" rx="4" ry="2" fill="#8F7556" stroke="#4D3D2E" stroke-width="0.3"/>
+              <ellipse cx="380" cy="100" rx="7" ry="3" fill="#8F7556" stroke="#4D3D2E" stroke-width="0.3"/>
+            </g>
+
+            <!-- Sea creature (decorative, top-right area) -->
+            <g transform="translate(1050, 540)" opacity="0.35">
+              <path d="M 0 0 Q -15 -8 -25 0 Q -30 8 -22 14 Q -10 20 0 14 Q 8 20 18 14 Q 26 8 22 0 Q 15 -8 0 0 Z"
+                    fill="none" stroke="#4D3D2E" stroke-width="0.8"/>
+              <circle cx="-18" cy="-2" r="1" fill="#4D3D2E"/>
+              <path d="M 22 0 L 30 -5 L 32 5 Q 28 2 22 2 Z" fill="none" stroke="#4D3D2E" stroke-width="0.6"/>
+              <text x="0" y="28" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="8" fill="#4D3D2E">· Hic sunt dracones ·</text>
+            </g>
+
+            <!-- Decorative mermaid/wave flourish (top-left area) -->
+            <g transform="translate(80, 480)" opacity="0.3">
+              <path d="M 0 0 Q 5 -8 15 -8 Q 25 -6 28 4 M 0 0 Q -5 -8 -15 -8" stroke="#4D3D2E" stroke-width="0.6" fill="none"/>
+              <text x="0" y="16" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="8" fill="#4D3D2E">· Mare Magnum ·</text>
+            </g>
+
+            <!-- ============ ORIGIN PORT ============ -->
+            <!-- Port of Elena (the creator's port) -->
+            <g>
+              <use href="#portSymbol" x="600" y="430"/>
+              <text x="600" y="470" text-anchor="middle" class="island-label featured" style="font-size: 14px;">Puerto Elena</text>
+              <text x="600" y="484" text-anchor="middle" class="island-sub">TU PUERTO · 127K ALMAS</text>
+            </g>
+
+            <!-- ============ SHIPS ON ROUTES (animated) ============ -->
+            <!-- Ships to Stakelight (route 1 - hot) -->
+            <g class="ship ship-1" style="color: #762525;">
+              <use href="#shipSymbol"/>
+            </g>
+            <g class="ship ship-7" style="color: #A67C2E;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Ships to Fairspin (route 2 - hot) -->
+            <g class="ship ship-2" style="color: #762525;">
+              <use href="#shipSymbol"/>
+            </g>
+            <g class="ship ship-8" style="color: #4A5C3A;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Ship to Vaulted (route 3) -->
+            <g class="ship ship-3" style="color: #A67C2E;">
+              <use href="#shipSymbol"/>
+            </g>
+            <g class="ship ship-9" style="color: #762525;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Ship to Bytecraft (route 4) -->
+            <g class="ship ship-4" style="color: #4A5C3A;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Ship to Cobalt Trade (route 6) -->
+            <g class="ship ship-6" style="color: #A67C2E;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Ships to Mustang (route 5) -->
+            <g class="ship ship-5" style="color: #75624C;">
+              <use href="#shipSymbol"/>
+            </g>
+            <g class="ship ship-10" style="color: #75624C;">
+              <use href="#shipSymbol"/>
+            </g>
+
+            <!-- Vignette -->
+            <rect width="1200" height="640" fill="url(#sepiaVignette)" pointer-events="none"/>
+
+          </svg>
+
+        </div>
+
+        <!-- ============ SIDE PANEL ============ -->
+        <aside class="side-panel">
+
+          <!-- Islands summary -->
+          <div class="panel-card">
+            <div class="panel-label">§ Islas</div>
+            <h3 class="panel-title">Los <em>puertos</em> de destino</h3>
+
+            <ul class="island-list">
+              <li class="island-row">
+                <div class="island-marker" style="background: #762525;">S</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Stakelight</div>
+                  <div class="island-coords">34°N · 18°O · AAA</div>
+                </div>
+                <div class="island-ships">
+                  5.632
+                  <span class="pct">38%</span>
+                </div>
+              </li>
+              <li class="island-row">
+                <div class="island-marker" style="background: #A67C2E;">F</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Fairspin</div>
+                  <div class="island-coords">36°N · 9°E · AAA</div>
+                </div>
+                <div class="island-ships">
+                  3.260
+                  <span class="pct">22%</span>
+                </div>
+              </li>
+              <li class="island-row">
+                <div class="island-marker" style="background: #4A5C3A;">V</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Vaulted</div>
+                  <div class="island-coords">22°N · 13°E · AA</div>
+                </div>
+                <div class="island-ships">
+                  2.371
+                  <span class="pct">16%</span>
+                </div>
+              </li>
+              <li class="island-row">
+                <div class="island-marker" style="background: #4D3D2E;">B</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Bytecraft</div>
+                  <div class="island-coords">13°N · 16°O · AA</div>
+                </div>
+                <div class="island-ships">
+                  1.778
+                  <span class="pct">12%</span>
+                </div>
+              </li>
+              <li class="island-row">
+                <div class="island-marker" style="background: #6B8257;">C</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Cobalt</div>
+                  <div class="island-coords">26°N · 10°E · AA</div>
+                </div>
+                <div class="island-ships">
+                  1.185
+                  <span class="pct">8%</span>
+                </div>
+              </li>
+              <li class="island-row">
+                <div class="island-marker" style="background: #75624C;">M</div>
+                <div class="island-info">
+                  <div class="island-name">Isla Mustang</div>
+                  <div class="island-coords" style="color: #762525;">25°N · 19°O · BB</div>
+                </div>
+                <div class="island-ships">
+                  594
+                  <span class="pct">4%</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Live feed -->
+          <div class="panel-card">
+            <div class="panel-label">
+              <span style="color:#762525; display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:6px; height:6px; border-radius:50%; background:#762525; display:inline-block; animation: livePulse 1.5s infinite;"></span>
+                En vivo
+              </span>
+            </div>
+            <h3 class="panel-title">Partes del <em>vigía</em></h3>
+
+            <ul class="feed-list">
+              <li class="feed-item">
+                <span class="feed-flag">🇪🇸</span>
+                <div class="feed-text">
+                  Barco de <strong>Madrid</strong> zarpa hacia <em>Stakelight</em>
+                </div>
+                <span class="feed-time">ahora</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇲🇽</span>
+                <div class="feed-text">
+                  Barco de <strong>CDMX</strong> ancla en <em>Fairspin</em> · depósito
+                </div>
+                <span class="feed-time">12s</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇦🇷</span>
+                <div class="feed-text">
+                  Flota de <strong>3 barcos</strong> rumbo a <em>Vaulted</em>
+                </div>
+                <span class="feed-time">28s</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇪🇸</span>
+                <div class="feed-text">
+                  Barco de <strong>Barcelona</strong> ancla en <em>Stakelight</em> · registro
+                </div>
+                <span class="feed-time">41s</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇨🇴</span>
+                <div class="feed-text">
+                  Barco de <strong>Bogotá</strong> zarpa · móvil
+                </div>
+                <span class="feed-time">1m</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇵🇪</span>
+                <div class="feed-text">
+                  Barco de <strong>Lima</strong> ancla en <em>Fairspin</em> · depósito €50
+                </div>
+                <span class="feed-time">1m</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇻🇪</span>
+                <div class="feed-text">
+                  Barco de <strong>Caracas</strong> rumbo a <em>Vaulted</em> · crypto
+                </div>
+                <span class="feed-time">2m</span>
+              </li>
+              <li class="feed-item">
+                <span class="feed-flag">🇨🇱</span>
+                <div class="feed-text">
+                  Barco de <strong>Santiago</strong> ancla en <em>Bytecraft</em>
+                </div>
+                <span class="feed-time">2m</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Drake's whisper -->
+          <div class="drake-card">
+            <svg class="drake-mark" viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="14" fill="none" stroke="#762525" stroke-width="1"/>
+              <circle cx="16" cy="16" r="11" fill="none" stroke="#762525" stroke-width="0.5" opacity="0.5"/>
+              <text x="16" y="21" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="16" font-weight="500" fill="#762525">D</text>
+            </svg>
+            <div class="drake-msg">
+              Tu flota española está cruzando mares agitados hacia <em>Isla Stakelight</em>. La Brújula reportó ayer <strong>vientos favorables</strong> por esa ruta — mantén el rumbo.
+              <span class="drake-sig">— Drake · Cuaderno de bitácora</span>
+            </div>
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- Legend -->
+      <div class="legend-bar">
+        <div class="legend-group">
+          <div class="legend-item">
+            <span class="legend-swatch ship-eu"></span>
+            Barcos de Europa
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch ship-latam"></span>
+            Barcos de LATAM
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch ship-asia"></span>
+            Barcos de Asia
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch ship-other"></span>
+            Otros mares
+          </div>
+        </div>
+
+        <div class="legend-group">
+          <div class="legend-item">
+            <span class="legend-swatch route-hot"></span>
+            Rutas calientes
+          </div>
+          <div class="legend-item">
+            <span class="legend-swatch route-normal"></span>
+            Rutas estables
+          </div>
+        </div>
+
+        <div class="legend-scale">Actualizado cada 3 segundos</div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

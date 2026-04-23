@@ -115,8 +115,9 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 - [x] Fase 2 — Ledger: shell (sidebar) + deck principal con señal mock; subsecciones con copy narrativo; Standards Index mínima
 - [x] Fase 2 — Billboard: editor (hero + publish) + URL pública `/{locale}/b/{handle}` (retrowave) + `0002` (copy + `tracking_url`)
 - [x] Fase 2 — Tracking: `GET /api/r?bc=` (click + redirect) y `POST /api/postback` (conversiones, Bearer secret)
-- [ ] Fase 3 — Pagadero (estados de cobro) + payouts USDC/SEPA
-- [ ] Fase 4 — Map Room y Compass con datos reales; Arsenal IA
+- [x] Fase 2+ — Deck del Ledger con datos reales (clicks/conversiones 7d); Map Room (geo); Bounties (tabla creador + lista operador); Payday (cofre 30d + últimos postbacks)
+- [ ] Fase 3 — Pagadero v2: estados de cobro, rieles, payouts USDC/SEPA
+- [ ] Fase 4 — Compass (smart routing en UI) + Arsenal IA
 
 ## Script de base de datos
 

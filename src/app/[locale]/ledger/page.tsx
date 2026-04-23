@@ -1,6 +1,11 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/session";
-import { getMockOverview } from "@/lib/ledger/mock-stats";
+import { createClient } from "@/lib/supabase/server";
+import {
+  getCreatorClickSeries,
+  getCreatorConversions7d,
+  getOperatorSummary,
+} from "@/lib/ledger/stats";
 import { Link } from "@/i18n/navigation";
 
 export default async function LedgerOverviewPage({
@@ -15,14 +20,54 @@ export default async function LedgerOverviewPage({
   if (!session?.profile) return null;
 
   const t = await getTranslations("Ledger");
-  const seed = session.user.id;
-  const mock = getMockOverview(seed);
+  const supabase = await createClient();
+  const { user, profile } = session;
   const displayName =
-    session.profile.display_name ||
-    session.profile.handle ||
-    session.user.email ||
-    t("memberFallback");
-  const max = Math.max(...mock.series, 1);
+    profile.display_name || profile.handle || user.email || t("memberFallback");
+
+  if (profile.role === "operator") {
+    const op = await getOperatorSummary(supabase, user.id);
+    const cur = op.currency;
+    return (
+      <div className="max-w-[1000px]">
+        <p className="eyebrow mb-3">{t("operatorDeckOverline")}</p>
+        <h1
+          className="font-display text-4xl md:text-5xl leading-tight mb-2"
+          style={{ fontVariationSettings: '"opsz" 144' }}
+        >
+          {t("operatorOverviewTitle", { name: displayName })}
+        </h1>
+        <p className="font-display italic text-lg text-ink-soft mb-10 max-w-2xl">
+          {t("operatorOverviewSubtitle")}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+          <StatCard
+            label={t("kpiActiveBountiesOp")}
+            value={String(op.activeBounties)}
+          />
+          <StatCard
+            label={t("kpiConversions7dOp")}
+            value={String(op.conv7d)}
+          />
+          <StatCard
+            label={t("kpiVolume7dOp")}
+            value={formatMoney(op.volumeCents7d, cur, locale)}
+          />
+        </div>
+        <p className="text-sm text-ink-faint font-mono max-w-2xl">
+          {t("operatorDeckFootnote")}
+        </p>
+      </div>
+    );
+  }
+
+  const { series, total7d, byCountry } = await getCreatorClickSeries(
+    supabase,
+    user.id,
+  );
+  const conv = await getCreatorConversions7d(supabase, user.id);
+  const hasSignal = total7d > 0 || conv.count > 0;
+  const max = Math.max(...series, 1);
 
   return (
     <div className="max-w-[1000px]">
@@ -34,26 +79,26 @@ export default async function LedgerOverviewPage({
         {t("overviewTitle", { name: displayName })}
       </h1>
       <p className="font-display italic text-lg text-ink-soft mb-10 max-w-2xl">
-        {t("overviewSubtitle")}
+        {t(hasSignal ? "overviewSubtitleLive" : "overviewSubtitle")}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
         <StatCard
           label={t("kpiClicks7d")}
-          value={String(mock.clicks7d)}
+          value={String(total7d)}
         />
         <StatCard
           label={t("kpiConversions7d")}
-          value={String(mock.conversions7d)}
+          value={String(conv.count)}
         />
         <StatCard
           label={t("kpiEstEur")}
-          value={`€${mock.estCommissionEur.toFixed(0)}`}
+          value={formatMoney(conv.commissionCents, conv.currency, locale)}
         />
       </div>
 
       <div className="border border-rule bg-paper-warm/30 p-6 md:p-8 mb-10">
-        <div className="flex items-baseline justify-between gap-4 mb-6">
+        <div className="flex items-baseline justify-between gap-4 mb-6 flex-wrap">
           <h2
             className="font-display text-2xl"
             style={{ fontVariationSettings: '"opsz" 96' }}
@@ -61,11 +106,16 @@ export default async function LedgerOverviewPage({
             {t("chart7dTitle")}
           </h2>
           <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-ink-faint">
-            {t("chartMockLabel")}
+            {t("chartLiveLabel")}
           </span>
         </div>
+        {!hasSignal && (
+          <p className="text-sm text-ink-faint font-display italic mb-4">
+            {t("chartEmptyHint")}
+          </p>
+        )}
         <div className="flex items-end justify-between gap-1 h-32 border-b border-rule pb-0">
-          {mock.series.map((v, i) => (
+          {series.map((v, i) => (
             <div
               key={i}
               className="flex-1 min-w-0 flex flex-col items-center gap-1"
@@ -81,6 +131,16 @@ export default async function LedgerOverviewPage({
             </div>
           ))}
         </div>
+        {byCountry.length > 0 && (
+          <p className="mt-4 text-xs text-ink-faint font-mono">
+            {t("topGeoHint", {
+              list: byCountry
+                .slice(0, 3)
+                .map((c) => `${c.code} (${c.count})`)
+                .join(" · "),
+            })}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -130,4 +190,17 @@ function StatCard({ label, value }: { label: string; value: string }) {
       <p className="font-display text-3xl text-ink tabular-nums">{value}</p>
     </div>
   );
+}
+
+function formatMoney(
+  cents: number,
+  currency: string,
+  locale: string,
+): string {
+  const n = (cents ?? 0) / 100;
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency && currency.length === 3 ? currency : "EUR",
+    maximumFractionDigits: 0,
+  }).format(n);
 }

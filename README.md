@@ -112,10 +112,11 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 
 - [x] Fase 1 — Scaffolding: Next.js + Tailwind Drake + i18n + Supabase base
 - [x] Fase 1 — Threshold + auth flow (email/pass + magic link + OAuth Google/Twitch/Discord) con firma del Código
-- [ ] Fase 2 — Ledger (dashboard del creador con datos reales)
-- [ ] Fase 2 — Billboard editor + página pública del creador
+- [x] Fase 2 — Ledger: shell (sidebar) + deck principal con señal mock; subsecciones con copy narrativo; Standards Index mínima
+- [x] Fase 2 — Billboard: editor (hero + publish) + URL pública `/{locale}/b/{handle}` (retrowave) + `0002` (copy + `tracking_url`)
+- [x] Fase 2 — Tracking: `GET /api/r?bc=` (click + redirect) y `POST /api/postback` (conversiones, Bearer secret)
 - [ ] Fase 3 — Pagadero (estados de cobro) + payouts USDC/SEPA
-- [ ] Fase 4 — Standards Index + Compass (smart routing básico)
+- [ ] Fase 4 — Map Room y Compass con datos reales; Arsenal IA
 
 ## Script de base de datos
 

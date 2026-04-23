@@ -6,10 +6,9 @@ import { updateSupabaseSession } from "./lib/supabase/middleware";
 const intlMiddleware = createIntlMiddleware(routing);
 
 /**
- * Next.js only runs `src/middleware.ts` — `proxy.ts` is ignored. This chain:
- * 1) next-intl: `/` → `/en` (or locale negotation), 2) Supabase session refresh.
+ * Edge proxy (Next.js 16+): 1) next-intl: `/` → `/en` (o negociación), 2) Supabase session.
  */
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
 
   if (process.env.NEXT_PUBLIC_SUPABASE_URL) {

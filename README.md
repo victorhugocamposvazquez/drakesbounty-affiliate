@@ -16,7 +16,7 @@ drakes-affiliate/
 │   ├── components/
 │   ├── i18n/                  # Configuración next-intl
 │   ├── lib/supabase/          # Clientes Supabase (browser/server/proxy)
-│   └── middleware.ts          # i18n redirect / → /en + Supabase session refresh
+│   └── proxy.ts                # i18n redirect / → /en + Supabase session refresh (Next.js 16+)
 ├── next.config.ts
 ├── package.json
 └── tsconfig.json

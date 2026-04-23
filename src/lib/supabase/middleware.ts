@@ -5,7 +5,7 @@ import type { NextRequest, NextResponse } from "next/server";
  * Refreshes the Supabase auth session by reading/writing cookies on the
  * incoming request. This keeps the user logged in across navigations.
  *
- * MUST be called from the top-level middleware on every request.
+ * MUST be called from the top-level proxy (`src/proxy.ts`) on every request.
  */
 export async function updateSupabaseSession(
   request: NextRequest,

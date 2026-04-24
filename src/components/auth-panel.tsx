@@ -3,13 +3,7 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import {
-  signUpWithPassword,
-  signInWithPassword,
-  signInWithMagicLink,
-  signInWithOAuth,
-  type OAuthProvider,
-} from "@/lib/auth/actions";
+import type { AuthResult, OAuthProvider } from "@/lib/auth/credentials";
 import { StepIndicator } from "./step-indicator";
 
 type Role = "creator" | "operator";
@@ -48,12 +42,20 @@ export function AuthPanel({
   function handleOAuth(provider: OAuthProvider) {
     setError(null);
     startTransition(async () => {
-      const res = await signInWithOAuth({ provider, role, locale });
-      if (!res.ok) {
-        setError(res.error);
-        return;
+      try {
+        const res = await postAuth<OAuthRes>("/api/auth/oauth", {
+          provider,
+          role,
+          locale,
+        });
+        if (!res.ok) {
+          setError(res.error);
+          return;
+        }
+        window.location.href = res.url;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "error");
       }
-      window.location.href = res.url;
     });
   }
 
@@ -63,39 +65,49 @@ export function AuthPanel({
     setMagicSent(false);
 
     startTransition(async () => {
-      if (mode === "magic") {
-        const res = await signInWithMagicLink({ email, role, locale });
-        if (!res.ok) setError(res.error);
-        else setMagicSent(true);
-        return;
-      }
+      try {
+        if (mode === "magic") {
+          const res = await postAuth<AuthResult>("/api/auth/magic-link", {
+            email,
+            role,
+            locale,
+          });
+          if (!res.ok) setError(res.error);
+          else setMagicSent(true);
+          return;
+        }
 
-      if (mode === "signup") {
-        const res = await signUpWithPassword({
+        if (mode === "signup") {
+          const res = await postAuth<AuthResult>("/api/auth/signup", {
+            email,
+            password,
+            role,
+            locale,
+          });
+          if (!res.ok) {
+            setError(res.error);
+            return;
+          }
+          if (res.needsEmailConfirm) {
+            setMagicSent(true);
+            return;
+          }
+          window.location.href = `/${locale}/oath/${role}`;
+          return;
+        }
+
+        const res = await postAuth<AuthResult>("/api/auth/signin", {
           email,
           password,
-          role,
-          locale,
         });
         if (!res.ok) {
           setError(res.error);
           return;
         }
-        if (res.needsEmailConfirm) {
-          setMagicSent(true);
-          return;
-        }
         window.location.href = `/${locale}/oath/${role}`;
-        return;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "error");
       }
-
-      // signin
-      const res = await signInWithPassword({ email, password });
-      if (!res.ok) {
-        setError(res.error);
-        return;
-      }
-      window.location.href = `/${locale}/oath/${role}`;
     });
   }
 
@@ -293,10 +305,27 @@ export function AuthPanel({
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+type OAuthRes = { ok: true; url: string } | { ok: false; error: string };
+
+async function postAuth<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  const res = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const text = await res.text();
+  try {
+    return (text ? JSON.parse(text) : {}) as T;
+  } catch {
+    throw new Error("not_json");
+  }
+}
+
 function humanizeError(
   error: string,
   t: (key: string) => string,
 ): string {
+  if (error === "not_json") return t("errorInvalidInput");
   const lower = error.toLowerCase();
   if (lower.includes("already registered") || lower.includes("already been registered"))
     return t("errorAlreadyRegistered");

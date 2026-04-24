@@ -32,12 +32,12 @@ export default async function LedgerOverviewPage({
       <div className="max-w-[1000px]">
         <p className="eyebrow mb-3">{t("operatorDeckOverline")}</p>
         <h1
-          className="font-display text-4xl md:text-5xl leading-tight mb-2"
+          className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-2"
           style={{ fontVariationSettings: '"opsz" 144' }}
         >
           {t("operatorOverviewTitle", { name: displayName })}
         </h1>
-        <p className="font-display italic text-lg text-ink-soft mb-10 max-w-2xl">
+        <p className="font-display italic text-base sm:text-lg text-ink-soft mb-8 sm:mb-10 max-w-2xl">
           {t("operatorOverviewSubtitle")}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
@@ -73,12 +73,12 @@ export default async function LedgerOverviewPage({
     <div className="max-w-[1000px]">
       <p className="eyebrow mb-3">{t("overviewOverline")}</p>
       <h1
-        className="font-display text-4xl md:text-5xl leading-tight mb-2"
+        className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-2"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {t("overviewTitle", { name: displayName })}
       </h1>
-      <p className="font-display italic text-lg text-ink-soft mb-10 max-w-2xl">
+      <p className="font-display italic text-base sm:text-lg text-ink-soft mb-8 sm:mb-10 max-w-2xl">
         {t(hasSignal ? "overviewSubtitleLive" : "overviewSubtitle")}
       </p>
 
@@ -97,7 +97,7 @@ export default async function LedgerOverviewPage({
         />
       </div>
 
-      <div className="border border-rule bg-paper-warm/30 p-6 md:p-8 mb-10">
+      <div className="border border-rule bg-paper-warm/30 p-4 sm:p-6 md:p-8 mb-10">
         <div className="flex items-baseline justify-between gap-4 mb-6 flex-wrap">
           <h2
             className="font-display text-2xl"
@@ -143,8 +143,8 @@ export default async function LedgerOverviewPage({
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="border border-rule p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="border border-rule p-4 sm:p-6">
           <p className="eyebrow text-oxblood mb-2">{t("cardMapTeaserK")}</p>
           <h3
             className="font-display text-2xl mb-3"
@@ -160,7 +160,7 @@ export default async function LedgerOverviewPage({
             {t("cardMapCta")} →
           </Link>
         </div>
-        <div className="border border-rule p-6">
+        <div className="border border-rule p-4 sm:p-6">
           <p className="eyebrow text-oxblood mb-2">{t("cardBoardTeaserK")}</p>
           <h3
             className="font-display text-2xl mb-3"

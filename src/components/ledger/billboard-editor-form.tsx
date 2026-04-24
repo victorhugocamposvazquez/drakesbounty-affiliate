@@ -49,8 +49,8 @@ export function BillboardEditorForm({
   }
 
   return (
-    <div className="max-w-2xl space-y-8">
-      <div className="border border-rule bg-paper-warm/20 p-5">
+    <div className="max-w-2xl space-y-6 sm:space-y-8">
+      <div className="border border-rule bg-paper-warm/20 p-4 sm:p-5">
         <p className="eyebrow mb-2 text-ink-faint">{t("publicUrlLabel")}</p>
         <a
           href={publicUrl}
@@ -70,7 +70,7 @@ export function BillboardEditorForm({
         <input
           value={headline}
           onChange={(e) => setHeadline(e.target.value)}
-          className="w-full bg-transparent border-b border-rule py-2 font-display text-2xl focus:border-oxblood focus:outline-none"
+          className="w-full bg-transparent border-b border-rule py-2 font-display text-xl sm:text-2xl focus:border-oxblood focus:outline-none"
         />
       </label>
 
@@ -79,7 +79,7 @@ export function BillboardEditorForm({
         <input
           value={subline}
           onChange={(e) => setSubline(e.target.value)}
-          className="w-full bg-transparent border-b border-rule py-2 font-display text-lg focus:border-oxblood focus:outline-none"
+          className="w-full bg-transparent border-b border-rule py-2 font-display text-base sm:text-lg focus:border-oxblood focus:outline-none"
         />
       </label>
 

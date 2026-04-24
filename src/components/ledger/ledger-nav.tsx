@@ -39,14 +39,38 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
   const pathname = usePathname();
   const t = useTranslations("LedgerShell");
   const guild = role === "operator" ? GUILD.filter((i) => i.href !== "/ledger/billboard") : GUILD;
+  const mobileItems = [...guild, ...COMMUNITY, ...MONEY];
 
   return (
-    <nav className="sidebar-nav">
-      <NavGroup label={t("groupGuild")} items={guild} pathname={pathname} t={t} />
-      <NavGroup label={t("groupCommunity")} items={COMMUNITY} pathname={pathname} t={t} />
-      <NavGroup label={t("groupMoney")} items={MONEY} pathname={pathname} t={t} />
-      <NavGroup label={t("groupReference")} items={REF} pathname={pathname} t={t} />
-    </nav>
+    <>
+      <div className="md:hidden px-4 py-3 border-b border-rule bg-paper/70">
+        <div className="flex gap-2 overflow-x-auto pb-1">
+          {mobileItems.map((item) => {
+            const active = isActive(pathname, item.href);
+            return (
+              <Link
+                key={`m-${item.href}`}
+                href={item.href}
+                className={`shrink-0 px-3 py-1.5 border text-xs font-mono uppercase tracking-wide transition-colors ${
+                  active
+                    ? "border-oxblood text-oxblood bg-oxblood/[0.06]"
+                    : "border-rule text-ink-dim hover:text-oxblood hover:border-oxblood"
+                }`}
+              >
+                {t(item.labelKey)}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      <nav className="sidebar-nav hidden md:block">
+        <NavGroup label={t("groupGuild")} items={guild} pathname={pathname} t={t} />
+        <NavGroup label={t("groupCommunity")} items={COMMUNITY} pathname={pathname} t={t} />
+        <NavGroup label={t("groupMoney")} items={MONEY} pathname={pathname} t={t} />
+        <NavGroup label={t("groupReference")} items={REF} pathname={pathname} t={t} />
+      </nav>
+    </>
   );
 }
 

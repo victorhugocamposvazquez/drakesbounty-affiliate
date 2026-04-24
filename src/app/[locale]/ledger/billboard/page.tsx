@@ -22,7 +22,7 @@ export default async function LedgerBillboardPage({
       <div className="max-w-xl">
         <p className="eyebrow text-oxblood mb-2">{t("operatorGateOverline")}</p>
         <h1
-          className="font-display text-4xl mb-3"
+          className="font-display text-3xl sm:text-4xl mb-3"
           style={{ fontVariationSettings: '"opsz" 144' }}
         >
           {t("operatorGateTitle")}
@@ -68,12 +68,12 @@ export default async function LedgerBillboardPage({
     <div className="max-w-3xl">
       <p className="eyebrow mb-3 text-oxblood">{t("overline")}</p>
       <h1
-        className="font-display text-4xl md:text-5xl leading-tight mb-2"
+        className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-2"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {t("title")}
       </h1>
-      <p className="font-display italic text-ink-soft mb-10 max-w-2xl">
+      <p className="font-display italic text-base sm:text-lg text-ink-soft mb-8 sm:mb-10 max-w-2xl">
         {t("subtitle")}
       </p>
 

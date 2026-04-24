@@ -42,7 +42,7 @@ export default async function BountiesPage({
       <div className="max-w-4xl">
         <p className="eyebrow text-oxblood mb-2">{t("bountiesOpOverline")}</p>
         <h1
-          className="font-display text-4xl md:text-5xl mb-2"
+          className="font-display text-3xl sm:text-4xl md:text-5xl mb-2"
           style={{ fontVariationSettings: '"opsz" 144' }}
         >
           {t("bountiesOpTitle")}
@@ -89,7 +89,7 @@ export default async function BountiesPage({
     <div className="max-w-4xl">
       <p className="eyebrow text-oxblood mb-2">{t("bountiesCrOverline")}</p>
       <h1
-        className="font-display text-4xl md:text-5xl mb-2"
+        className="font-display text-3xl sm:text-4xl md:text-5xl mb-2"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {t("bountiesCrTitle")}
@@ -102,7 +102,7 @@ export default async function BountiesPage({
       )}
       {list.length > 0 && (
         <div className="border border-rule overflow-x-auto">
-          <table className="w-full text-left text-sm">
+          <table className="w-full min-w-[620px] text-left text-sm">
             <thead>
               <tr className="border-b border-rule font-mono text-[10px] uppercase tracking-widest text-ink-faint">
                 <th className="p-3">{t("thCampaign")}</th>

@@ -44,8 +44,10 @@ export default async function PaydayPage({
   }
 
   const supabase = await createClient();
-  const s30 = await getCreatorCommission30d(supabase, session.user.id);
-  const recent = await getRecentConversions(supabase, session.user.id, 18);
+  const [s30, recent] = await Promise.all([
+    getCreatorCommission30d(supabase, session.user.id),
+    getRecentConversions(supabase, session.user.id, 18),
+  ]);
   const cur = s30.currency;
 
   return (

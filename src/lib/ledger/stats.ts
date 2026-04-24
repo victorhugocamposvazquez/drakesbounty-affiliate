@@ -134,17 +134,18 @@ export async function getOperatorSummary(
 }> {
   const since = utcDayStart(6);
 
-  const { count: active } = await supabase
-    .from("bounties")
-    .select("*", { count: "exact", head: true })
-    .eq("operator_id", operatorId)
-    .eq("status", "active");
-
-  const { data: convs } = await supabase
-    .from("conversions")
-    .select("commission_cents, amount_cents, currency")
-    .eq("operator_id", operatorId)
-    .gte("occurred_at", since.toISOString());
+  const [{ count: active }, { data: convs }] = await Promise.all([
+    supabase
+      .from("bounties")
+      .select("*", { count: "exact", head: true })
+      .eq("operator_id", operatorId)
+      .eq("status", "active"),
+    supabase
+      .from("conversions")
+      .select("commission_cents, amount_cents, currency")
+      .eq("operator_id", operatorId)
+      .gte("occurred_at", since.toISOString()),
+  ]);
 
   if (!convs) {
     return {

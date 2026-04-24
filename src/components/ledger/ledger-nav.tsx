@@ -30,6 +30,7 @@ const REF: NavItem[] = [
   { href: "/code", labelKey: "navCode" },
   { href: "/standards-index", labelKey: "navStandards" },
 ];
+const LEDGER_SCROLL_TARGET_KEY = "ledger-mobile-chip-target";
 
 function isActive(pathname: string, href: string) {
   if (href === "/ledger") return pathname === "/ledger" || pathname === "";
@@ -44,6 +45,7 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
   const guild = sections[0].items;
   const mobileItems = [...guild, ...COMMUNITY, ...MONEY];
   const prefetchTargets = sections.flatMap((section) => section.items.map((item) => item.href));
+  const chipsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     // Warm key sections to make inter-ledger navigation snappier.
@@ -52,10 +54,35 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
     });
   }, [prefetchTargets, router]);
 
+  useEffect(() => {
+    const container = chipsRef.current;
+    if (!container) return;
+    const targetHref =
+      typeof window !== "undefined"
+        ? window.sessionStorage.getItem(LEDGER_SCROLL_TARGET_KEY)
+        : null;
+    const targetChip = targetHref
+      ? container.querySelector<HTMLElement>(`[data-chip-href="${targetHref}"]`)
+      : null;
+    const activeChip = container.querySelector<HTMLElement>(`[data-chip-active="true"]`);
+    const chipToScroll = targetChip ?? activeChip;
+    if (!chipToScroll) return;
+    requestAnimationFrame(() => {
+      chipToScroll.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
+      if (targetHref && typeof window !== "undefined") {
+        window.sessionStorage.removeItem(LEDGER_SCROLL_TARGET_KEY);
+      }
+    });
+  }, [pathname, mobileItems]);
+
   return (
     <>
       <div className="md:hidden px-4 py-3 border-b border-rule bg-paper/70">
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div ref={chipsRef} className="flex gap-2 overflow-x-auto pb-1">
           {mobileItems.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -63,6 +90,9 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
                 key={`m-${item.href}`}
                 href={item.href}
                 prefetch
+                data-chip-href={item.href}
+                data-chip-active={active ? "true" : "false"}
+                aria-current={active ? "page" : undefined}
                 className={`shrink-0 px-3 py-1.5 border text-xs font-mono uppercase tracking-wide transition-colors ${
                   active
                     ? "border-oxblood text-oxblood bg-oxblood/[0.06]"
@@ -138,7 +168,7 @@ export function LedgerMobileMenu({
         <span className="block w-4 h-[1px] bg-current" />
       </button>
       <div
-        className={`absolute right-0 mt-2 z-30 w-[260px] border border-rule bg-paper shadow-sm p-3 ${open ? "block" : "hidden"}`}
+        className={`absolute right-0 mt-2 z-30 w-[260px] max-h-[70vh] overflow-y-auto border border-rule bg-paper shadow-sm p-3 ${open ? "block" : "hidden"}`}
       >
         {sections.map((group) => (
           <div key={`m-${group.label}`} className="mb-3 last:mb-0">
@@ -153,7 +183,12 @@ export function LedgerMobileMenu({
                     key={`dd-${item.href}`}
                     href={item.href}
                     prefetch
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        window.sessionStorage.setItem(LEDGER_SCROLL_TARGET_KEY, item.href);
+                      }
+                      setOpen(false);
+                    }}
                     className={`flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
                       active ? "text-oxblood bg-oxblood/[0.06]" : "text-ink-dim hover:text-oxblood"
                     }`}

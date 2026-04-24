@@ -61,11 +61,10 @@ export default async function LedgerOverviewPage({
     );
   }
 
-  const { series, total7d, byCountry } = await getCreatorClickSeries(
-    supabase,
-    user.id,
-  );
-  const conv = await getCreatorConversions7d(supabase, user.id);
+  const [{ series, total7d, byCountry }, conv] = await Promise.all([
+    getCreatorClickSeries(supabase, user.id),
+    getCreatorConversions7d(supabase, user.id),
+  ]);
   const hasSignal = total7d > 0 || conv.count > 0;
   const max = Math.max(...series, 1);
 

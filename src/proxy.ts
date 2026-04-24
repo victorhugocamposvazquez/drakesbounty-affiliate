@@ -9,10 +9,10 @@ const intlMiddleware = createIntlMiddleware(routing);
  * Edge proxy (Next.js 16+): 1) next-intl: `/` → `/en` (o negociación), 2) Supabase session.
  */
 export default async function proxy(request: NextRequest) {
-  // Las Server Actions van como POST con cabecera `next-action`. Si pasan por
-  // next-intl (redirect/rewrite), el cliente recibe HTML en lugar del payload de
-  // la acción → "Unexpected token '<' ... is not valid JSON".
-  if (request.method === "POST" && request.headers.has("next-action")) {
+  // Cualquier POST (Server Actions, formularios) no debe pasar por next-intl:
+  // en Vercel/edge a veces la cabecera `next-action` no basta para detectarlas
+  // y el intl devuelve HTML → "Unexpected token '<' ... is not valid JSON".
+  if (request.method === "POST") {
     return NextResponse.next();
   }
 

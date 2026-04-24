@@ -3,7 +3,7 @@ import { BrandMark } from "@/components/brand-mark";
 import { LanguageToggle } from "@/components/language-toggle";
 import { Link } from "@/i18n/navigation";
 import { signOut } from "@/lib/auth/actions";
-import { LedgerNav } from "./ledger-nav";
+import { LedgerMobileMenu, LedgerNav } from "./ledger-nav";
 
 export async function LedgerShell({
   children,
@@ -28,23 +28,23 @@ export async function LedgerShell({
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-[minmax(0,240px)_1fr]">
       <aside className="border-b md:border-b-0 md:border-r border-rule bg-ink/[0.02] flex flex-col md:sticky md:top-0 md:h-screen md:overflow-y-auto">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 border-b border-rule"
-        >
-          <BrandMark size={30} className="text-ink shrink-0 sm:w-9 sm:h-9" />
-          <div className="min-w-0">
-            <div className="font-display text-[11px] sm:text-[13px] tracking-[0.24em] sm:tracking-[0.38em] uppercase font-medium leading-none truncate">
-              {t("brandLine1")}{" "}
-              <em className="italic text-oxblood font-normal">
-                {t("brandLine2")}
-              </em>
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-4 sm:pb-6 border-b border-rule">
+          <Link href="/" className="flex items-center gap-3 min-w-0">
+            <BrandMark size={30} className="text-ink shrink-0 sm:w-9 sm:h-9" />
+            <div className="min-w-0">
+              <div className="font-display text-[11px] sm:text-[13px] tracking-[0.24em] sm:tracking-[0.38em] uppercase font-medium leading-none truncate">
+                {t("brandLine1")}{" "}
+                <em className="italic text-oxblood font-normal">
+                  {t("brandLine2")}
+                </em>
+              </div>
+              <div className="hidden sm:block font-mono text-[8px] tracking-[0.3em] uppercase text-ink-faint mt-1">
+                {t("ledgerTag")}
+              </div>
             </div>
-            <div className="hidden sm:block font-mono text-[8px] tracking-[0.3em] uppercase text-ink-faint mt-1">
-              {t("ledgerTag")}
-            </div>
-          </div>
-        </Link>
+          </Link>
+          <LedgerMobileMenu role={role} />
+        </div>
 
         <LedgerNav role={role} />
 

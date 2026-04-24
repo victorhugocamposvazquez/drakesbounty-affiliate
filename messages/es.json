@@ -207,7 +207,8 @@
     "errorAlreadyRegistered": "Ya existe una cuenta con ese correo. Prueba a entrar.",
     "errorInvalidCredentials": "Correo o contraseña incorrectos.",
     "errorNotConfirmed": "Tu correo no está confirmado todavía.",
-    "errorInvalidInput": "Revisa los datos introducidos."
+    "errorInvalidInput": "Revisa los datos introducidos.",
+    "errorProviderMisconfigured": "Configuración de acceso incompleta. Revisa SUPABASE_URL y claves en Vercel."
   },
   "Ledger": {
     "overline": "· Ledger personal · Edición I ·",

@@ -113,10 +113,10 @@ export function AuthPanel({
 
   if (magicSent) {
     return (
-      <div className="max-w-xl mx-auto px-8 py-20 text-center">
+      <div className="max-w-xl mx-auto px-5 sm:px-8 py-14 sm:py-20 text-center">
         <p className="eyebrow mb-3">{t("checkEmailOverline")}</p>
         <h1
-          className="font-display text-5xl md:text-6xl leading-tight mb-4"
+          className="font-display text-4xl sm:text-5xl md:text-6xl leading-tight mb-4"
           style={{ fontVariationSettings: '"opsz" 144' }}
         >
           {t("checkEmailTitle")}
@@ -140,8 +140,8 @@ export function AuthPanel({
   }
 
   return (
-    <div className="max-w-xl mx-auto px-8 py-16">
-      <div className="flex items-center justify-between mb-12">
+    <div className="max-w-xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
+      <div className="flex items-center justify-between gap-4 mb-8 sm:mb-12">
         <Link
           href="/"
           className="font-mono text-[10px] tracking-[0.28em] uppercase text-ink-faint hover:text-ink transition-colors"
@@ -155,12 +155,12 @@ export function AuthPanel({
         {role === "creator" ? tOath("creatorOverline") : tOath("operatorOverline")}
       </p>
       <h1
-        className="font-display text-5xl md:text-6xl leading-tight mb-2"
+        className="font-display text-4xl sm:text-5xl md:text-6xl leading-tight mb-2"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {t("thresholdTitle")}
       </h1>
-      <p className="font-display italic text-lg text-ink-soft mb-12">
+      <p className="font-display italic text-base sm:text-lg text-ink-soft mb-10 sm:mb-12">
         {t("thresholdSubtitle")}
       </p>
 
@@ -326,6 +326,7 @@ function humanizeError(
   t: (key: string) => string,
 ): string {
   if (error === "not_json") return t("errorInvalidInput");
+  if (error === "auth_provider_misconfigured") return t("errorProviderMisconfigured");
   const lower = error.toLowerCase();
   if (lower.includes("already registered") || lower.includes("already been registered"))
     return t("errorAlreadyRegistered");

@@ -178,7 +178,7 @@ export function OathForm({
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-8 py-16">
+    <div className="max-w-3xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
       {/* Header */}
       <div className="flex items-center justify-between mb-12">
         <Link
@@ -195,7 +195,7 @@ export function OathForm({
         {role === "creator" ? t("creatorOverline") : t("operatorOverline")}
       </p>
       <h1
-        className="font-display text-5xl md:text-6xl leading-tight mb-2"
+        className="font-display text-4xl sm:text-5xl md:text-6xl leading-tight mb-2"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {step === 1 && t("step1Title")}
@@ -587,7 +587,7 @@ function SealedScreen({
   }).format(new Date());
 
   return (
-    <div className="max-w-2xl mx-auto px-8 py-16 text-center">
+    <div className="max-w-2xl mx-auto px-5 sm:px-8 py-12 sm:py-16 text-center">
       <div className="flex justify-center mb-10">
         <WaxSeal
           size={220}
@@ -598,7 +598,7 @@ function SealedScreen({
       </div>
       <p className="eyebrow mb-3">{t("sealedTitle")}</p>
       <h1
-        className="font-display text-5xl md:text-6xl leading-tight mb-3"
+        className="font-display text-4xl sm:text-5xl md:text-6xl leading-tight mb-3"
         style={{ fontVariationSettings: '"opsz" 144' }}
       >
         {role === "creator" ? t("creatorOathTitle") : t("operatorOathTitle")}

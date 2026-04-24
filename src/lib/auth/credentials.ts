@@ -21,6 +21,17 @@ const roleSchema = z.enum(["creator", "operator"]);
 const localeSchema = z.enum(["en", "es"]);
 const providerSchema = z.enum(["google", "twitch", "discord"]);
 
+function normalizeAuthError(error: unknown): string {
+  if (error instanceof Error) {
+    const msg = error.message || "";
+    if (msg.includes("Unexpected token '<'") || msg.includes("is not valid JSON")) {
+      return "auth_provider_misconfigured";
+    }
+    return msg;
+  }
+  return "unknown_auth_error";
+}
+
 function buildCallbackUrl(role: Role, locale: Locale, next?: string): string {
   const params = new URLSearchParams({
     role,
@@ -49,24 +60,28 @@ export async function runSignUpWithPassword(input: {
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signUp({
-    email: parsed.data.email,
-    password: parsed.data.password,
-    options: {
-      data: {
-        role: parsed.data.role,
-        locale: parsed.data.locale,
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: parsed.data.email,
+      password: parsed.data.password,
+      options: {
+        data: {
+          role: parsed.data.role,
+          locale: parsed.data.locale,
+        },
+        emailRedirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
       },
-      emailRedirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
-    },
-  });
+    });
 
-  if (error) {
-    return { ok: false, error: error.message };
+    if (error) {
+      return { ok: false, error: error.message };
+    }
+
+    const needsEmailConfirm = !data.session;
+    return { ok: true, needsEmailConfirm };
+  } catch (error) {
+    return { ok: false, error: normalizeAuthError(error) };
   }
-
-  const needsEmailConfirm = !data.session;
-  return { ok: true, needsEmailConfirm };
 }
 
 export async function runSignInWithPassword(input: {
@@ -79,12 +94,16 @@ export async function runSignInWithPassword(input: {
   if (!parsed.success) return { ok: false, error: "invalid_credentials" };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({
-    email: parsed.data.email,
-    password: parsed.data.password,
-  });
-  if (error) return { ok: false, error: error.message };
-  return { ok: true };
+  try {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  } catch (error) {
+    return { ok: false, error: normalizeAuthError(error) };
+  }
 }
 
 export async function runSignInWithMagicLink(input: {
@@ -98,19 +117,23 @@ export async function runSignInWithMagicLink(input: {
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email: parsed.data.email,
-    options: {
-      shouldCreateUser: true,
-      data: {
-        role: parsed.data.role,
-        locale: parsed.data.locale,
+  try {
+    const { error } = await supabase.auth.signInWithOtp({
+      email: parsed.data.email,
+      options: {
+        shouldCreateUser: true,
+        data: {
+          role: parsed.data.role,
+          locale: parsed.data.locale,
+        },
+        emailRedirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
       },
-      emailRedirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
-    },
-  });
-  if (error) return { ok: false, error: error.message };
-  return { ok: true, magicLinkSent: true };
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true, magicLinkSent: true };
+  } catch (error) {
+    return { ok: false, error: normalizeAuthError(error) };
+  }
 }
 
 export async function runSignInWithOAuth(input: {
@@ -128,14 +151,18 @@ export async function runSignInWithOAuth(input: {
   if (!parsed.success) return { ok: false, error: "invalid_input" };
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: parsed.data.provider,
-    options: {
-      redirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
-    },
-  });
-  if (error || !data?.url) {
-    return { ok: false, error: error?.message ?? "oauth_failed" };
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: parsed.data.provider,
+      options: {
+        redirectTo: buildCallbackUrl(parsed.data.role, parsed.data.locale),
+      },
+    });
+    if (error || !data?.url) {
+      return { ok: false, error: error?.message ?? "oauth_failed" };
+    }
+    return { ok: true, url: data.url };
+  } catch (error) {
+    return { ok: false, error: normalizeAuthError(error) };
   }
-  return { ok: true, url: data.url };
 }

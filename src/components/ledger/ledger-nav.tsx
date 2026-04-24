@@ -40,10 +40,56 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
   const t = useTranslations("LedgerShell");
   const guild = role === "operator" ? GUILD.filter((i) => i.href !== "/ledger/billboard") : GUILD;
   const mobileItems = [...guild, ...COMMUNITY, ...MONEY];
+  const mobileMenuGroups = [
+    { label: t("groupGuild"), items: guild },
+    { label: t("groupCommunity"), items: COMMUNITY },
+    { label: t("groupMoney"), items: MONEY },
+    { label: t("groupReference"), items: REF },
+  ];
 
   return (
     <>
       <div className="md:hidden px-4 py-3 border-b border-rule bg-paper/70">
+        <div className="flex items-center justify-end mb-2">
+          <details className="relative">
+            <summary className="list-none cursor-pointer px-2.5 py-1.5 border border-rule text-ink-dim hover:text-oxblood hover:border-oxblood transition-colors">
+              <span className="sr-only">Open ledger menu</span>
+              <span className="block w-4 h-[1px] bg-current mb-1" />
+              <span className="block w-4 h-[1px] bg-current mb-1" />
+              <span className="block w-4 h-[1px] bg-current" />
+            </summary>
+            <div className="absolute right-0 mt-2 z-30 w-[260px] border border-rule bg-paper shadow-sm p-3">
+              {mobileMenuGroups.map((group) => (
+                <div key={group.label} className="mb-3 last:mb-0">
+                  <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-ink-faint mb-1.5">
+                    {group.label}
+                  </p>
+                  <div className="space-y-1">
+                    {group.items.map((item) => {
+                      const active = isActive(pathname, item.href);
+                      return (
+                        <Link
+                          key={`dd-${item.href}`}
+                          href={item.href}
+                          className={`flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
+                            active ? "text-oxblood bg-oxblood/[0.06]" : "text-ink-dim hover:text-oxblood"
+                          }`}
+                        >
+                          <span>{t(item.labelKey)}</span>
+                          {item.badge && (
+                            <span className="font-mono text-[9px] px-1.5 py-0.5 bg-oxblood text-paper">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </details>
+        </div>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {mobileItems.map((item) => {
             const active = isActive(pathname, item.href);

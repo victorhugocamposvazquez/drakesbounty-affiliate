@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
@@ -38,10 +38,19 @@ function isActive(pathname: string, href: string) {
 
 export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations("LedgerShell");
   const sections = getSections(role, t);
   const guild = sections[0].items;
   const mobileItems = [...guild, ...COMMUNITY, ...MONEY];
+  const prefetchTargets = sections.flatMap((section) => section.items.map((item) => item.href));
+
+  useEffect(() => {
+    // Warm key sections to make inter-ledger navigation snappier.
+    prefetchTargets.forEach((href) => {
+      router.prefetch(href);
+    });
+  }, [prefetchTargets, router]);
 
   return (
     <>
@@ -53,6 +62,7 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
               <Link
                 key={`m-${item.href}`}
                 href={item.href}
+                prefetch
                 className={`shrink-0 px-3 py-1.5 border text-xs font-mono uppercase tracking-wide transition-colors ${
                   active
                     ? "border-oxblood text-oxblood bg-oxblood/[0.06]"
@@ -142,6 +152,7 @@ export function LedgerMobileMenu({
                   <Link
                     key={`dd-${item.href}`}
                     href={item.href}
+                    prefetch
                     onClick={() => setOpen(false)}
                     className={`flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
                       active ? "text-oxblood bg-oxblood/[0.06]" : "text-ink-dim hover:text-oxblood"
@@ -199,6 +210,7 @@ function NavGroup({
           <Link
             key={item.href}
             href={item.href}
+            prefetch
             className={`flex items-center gap-3.5 px-6 py-2.5 font-display text-[15px] relative transition-all duration-300 ${
               active
                 ? "text-oxblood font-medium bg-oxblood/[0.06]"

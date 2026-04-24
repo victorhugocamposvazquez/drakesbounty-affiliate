@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -88,16 +89,47 @@ export function LedgerMobileMenu({
   const pathname = usePathname();
   const t = useTranslations("LedgerShell");
   const sections = getSections(role, t);
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function onPointerDown(event: PointerEvent) {
+      if (!menuRef.current) return;
+      const target = event.target as Node | null;
+      if (target && !menuRef.current.contains(target)) {
+        setOpen(false);
+      }
+    }
+
+    if (open) {
+      document.addEventListener("pointerdown", onPointerDown);
+    }
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
 
   return (
-    <details className="md:hidden relative">
-      <summary className="list-none cursor-pointer px-2.5 py-1.5 border border-rule text-ink-dim hover:text-oxblood hover:border-oxblood transition-colors">
+    <div className="md:hidden relative" ref={menuRef}>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-label="Open ledger menu"
+        onClick={() => setOpen((v) => !v)}
+        className="px-2.5 py-1.5 border border-rule text-ink-dim hover:text-oxblood hover:border-oxblood transition-colors"
+      >
         <span className="sr-only">Open ledger menu</span>
         <span className="block w-4 h-[1px] bg-current mb-1" />
         <span className="block w-4 h-[1px] bg-current mb-1" />
         <span className="block w-4 h-[1px] bg-current" />
-      </summary>
-      <div className="absolute right-0 mt-2 z-30 w-[260px] border border-rule bg-paper shadow-sm p-3">
+      </button>
+      <div
+        className={`absolute right-0 mt-2 z-30 w-[260px] border border-rule bg-paper shadow-sm p-3 ${open ? "block" : "hidden"}`}
+      >
         {sections.map((group) => (
           <div key={`m-${group.label}`} className="mb-3 last:mb-0">
             <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-ink-faint mb-1.5">
@@ -110,6 +142,7 @@ export function LedgerMobileMenu({
                   <Link
                     key={`dd-${item.href}`}
                     href={item.href}
+                    onClick={() => setOpen(false)}
                     className={`flex items-center justify-between gap-2 px-2 py-1.5 text-sm transition-colors ${
                       active ? "text-oxblood bg-oxblood/[0.06]" : "text-ink-dim hover:text-oxblood"
                     }`}
@@ -127,7 +160,7 @@ export function LedgerMobileMenu({
           </div>
         ))}
       </div>
-    </details>
+    </div>
   );
 }
 

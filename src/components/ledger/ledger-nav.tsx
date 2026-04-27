@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -11,14 +11,14 @@ const GUILD: NavItem[] = [
   { href: "/ledger", labelKey: "navLedger" },
   { href: "/ledger/billboard", labelKey: "navBillboard" },
   { href: "/ledger/map-room", labelKey: "navMapRoom" },
-  { href: "/ledger/bounties", labelKey: "navBounties", badge: "3" },
+  { href: "/ledger/bounties", labelKey: "navBounties" },
   { href: "/ledger/arsenal", labelKey: "navArsenal" },
 ];
 
 const COMMUNITY: NavItem[] = [
   { href: "/ledger/posse", labelKey: "navPosse" },
   { href: "/ledger/almanac", labelKey: "navAlmanac" },
-  { href: "/ledger/wires", labelKey: "navWires", badge: "2" },
+  { href: "/ledger/wires", labelKey: "navWires" },
 ];
 
 const MONEY: NavItem[] = [
@@ -42,9 +42,14 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
   const router = useRouter();
   const t = useTranslations("LedgerShell");
   const sections = getSections(role, t);
-  const guild = sections[0].items;
-  const mobileItems = [...guild, ...COMMUNITY, ...MONEY];
-  const prefetchTargets = sections.flatMap((section) => section.items.map((item) => item.href));
+  const mobileItems = useMemo(
+    () => [...getSections(role, t)[0].items, ...COMMUNITY, ...MONEY],
+    [role, t],
+  );
+  const prefetchTargets = useMemo(
+    () => getSections(role, t).flatMap((section) => section.items.map((item) => item.href)),
+    [role, t],
+  );
   const chipsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -121,7 +126,19 @@ export function LedgerNav({ role }: { role: "creator" | "operator" | "admin" }) 
   );
 }
 
+/**
+ * Al cambiar de ruta, el panel se remonta (key) y el menú vuelve a cerrado sin setState en un effect.
+ */
 export function LedgerMobileMenu({
+  role,
+}: {
+  role: "creator" | "operator" | "admin";
+}) {
+  const pathname = usePathname();
+  return <LedgerMobileMenuPanel key={pathname} role={role} />;
+}
+
+function LedgerMobileMenuPanel({
   role,
 }: {
   role: "creator" | "operator" | "admin";
@@ -131,10 +148,6 @@ export function LedgerMobileMenu({
   const sections = getSections(role, t);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     function onPointerDown(event: PointerEvent) {

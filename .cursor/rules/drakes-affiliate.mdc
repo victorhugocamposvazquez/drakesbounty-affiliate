@@ -1,0 +1,20 @@
+---
+description: Drake's Bounty — afiliados (contexto fijo del repo)
+alwaysApply: true
+---
+
+# Drake’s Bounty — app de creadores (este repo)
+
+- **Stack:** Next.js 16 App Router, React 19, TypeScript, Tailwind 4, **next-intl** (`/en`, `/es`, `localePrefix: "always"`).
+- **Edge:** `src/proxy.ts` (no `middleware.ts`). **Todo POST** pasa en limpio: no re-enviar a next-intl en POST (Server Actions / APIs devuelven JSON). Ver comentarios en `proxy.ts`.
+- **Rutas raíz:** `app/layout.tsx` mínimo + `app/page.tsx` redirect a `/${defaultLocale}`. Páginas bajo `app/[locale]/...`.
+- **i18n:** Cadenas de UI en `messages/en.json` y `messages/es.json` (no hardcodear textos de producto en componentes).
+- **Auth:** Lógica en `lib/auth/credentials.ts`; el cliente llama a **`/api/auth/*`** (no depender de Server Actions para signup/signin en edge problemático).
+- **Supabase:** Clientes en `lib/supabase/`. **Migraciones** solo en `supabase/migrations/`; aplicar en el proyecto Supabase; no inventar esquemas en docs sin SQL.
+- **Tracking:** Clicks `GET /api/r`, conversiones `POST /api/postback` (Bearer `POSTBACK_SECRET`, idempotencia operador + `external_id`). Ver `src/app/api/`.
+- **Ecosistema:** Existe o existirá app **backoffice** en otro repo + Vercel; **misma instancia Supabase**; no duplicar migraciones allí. Detalle: `docs/ecosistema-repos.md`.
+- **Cambios:** Toca solo lo pedido; no refactors o carpetas ajenas “de paso”.
+
+## Next.js 16
+
+Si dudas de API: revisar notas de deprecación y docs en el repo, no asumir Next 14/15.

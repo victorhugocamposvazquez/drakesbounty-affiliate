@@ -2,6 +2,11 @@
 
 SaaS de afiliación para gambling / trading / cripto con universo narrativo propio (el Gremio, el Código, el Ledger, el Pagadero, la Carta Náutica…).
 
+## Repos relacionados
+
+- Este repo = **app de afiliados** (Ledger, Billboard, etc.).
+- **Backoffice de operaciones** = otro repositorio Next (p. ej. `drakes-ops`) y otro deploy (p. ej. `ops.tudominio.com`). Misma instancia **Supabase**; convenciones en [`docs/ecosistema-repos.md`](docs/ecosistema-repos.md). Para **arrancar ops** con diseño HTML + contexto del afiliado: [`docs/copiar-a-drakes-ops/README.md`](docs/copiar-a-drakes-ops/README.md).
+
 ## Estructura
 
 ```
@@ -118,6 +123,13 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 - [x] Fase 2+ — Deck del Ledger con datos reales (clicks/conversiones 7d); Map Room (geo); Bounties (tabla creador + lista operador); Payday (cofre 30d + últimos postbacks)
 - [x] Fase 3 (parcial) — Pagadero v2 base: solicitudes de cobro (Settlement), rieles USDC/SEPA y registro de estado (Wires)
 - [x] Fase 4 (parcial) — Compass en el deck (siguientes pasos según señal 7d) + Arsenal (atajos + copy hoja de ruta IA) + Almanac (glosario) + Posse (roadmap); IA generativa pendiente
+- [x] Ajustes transversales — `.env.example` sin secretos reales; `robots.txt` + `sitemap.xml`; `GET /api/health`; Ledger con `noindex`; badges inventados retirados del nav
+
+## Próximo (fuera de este repo o fase posterior)
+
+- **drakes-ops** — backoffice (imports CSV, conciliación, staff) según [`docs/copiar-a-drakes-ops/README.md`](docs/copiar-a-drakes-ops/README.md).
+- **Arsenal** — generación con modelo cuando defináis proveedor y política de datos.
+- **Pagadero** — refinar si el pagador final es operador vs Casa (modelo de negocio).
 
 ## Script de base de datos
 

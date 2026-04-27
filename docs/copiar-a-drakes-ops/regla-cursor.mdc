@@ -1,0 +1,22 @@
+---
+description: Drake's Bounty — backoffice (ops) alineado con drakes-affiliate
+alwaysApply: true
+---
+
+# drakes-ops (backoffice interno)
+
+- **Hermano de producto:** el repo **drakes-affiliate** (app creadores: Ledger, Billboard, `/api/r`, `/api/postback`). No es un monorepo; comparten **la misma instancia Supabase**.
+
+- **Esquema de base de datos:** la fuente de verdad vive en `drakes-affiliate/supabase/migrations/`. **No crear** un segundo juego de migraciones divergente aquí; pedir cambios de tablas vía el repo afiliado y aplicar SQL en Supabase.
+
+- **Importante para datos:**
+  - `conversions` debe respetar la misma lógica que el postback del afiliado: idempotencia por **`(operator_id, external_id)`**.
+  - Clicks: tabla `clicks` (orígenes desde `/api/r` en el afiliado). CSV/ops no suele reemplazar eso sin criterio explícito.
+
+- **Seguridad:** `SUPABASE_SERVICE_ROLE_KEY` **solo** en Route Handlers / Server Actions / jobs de servidor. Nunca inyectar al bundle del cliente. Pantalla de staff: restringir acceso (rol, allowlist, etc.).
+
+- **Diseño:** portar HTML de referencia desde la carpeta del repo (p. ej. `reference/`) a componentes React; mantener el tono visual pero estructura Next App Router.
+
+- **SEO:** backoffice con **noindex** / `robots.txt` desaconsejado para indexar.
+
+- **Contexto colaborativo:** leer en este repo (si está copiado) `docs/drakes-affiliate-context.md` para tablas, APIs y variables.

@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState, useTransition } from "react";
 import { useLocale } from "next-intl";
 import { useTranslations } from "next-intl";
 import { BillboardFrame } from "@/components/billboard/billboard-frame";
+import { BillboardThemeMini } from "@/components/billboard/billboard-theme-mini";
 import type { BillboardCampaignView } from "@/components/billboard/billboard-frame";
 import type { BillboardTheme } from "@/lib/billboard-theme";
 import { BILLBOARD_THEMES } from "@/lib/billboard-theme";
@@ -31,6 +32,7 @@ export function BillboardEditorForm({
   avatarUrl: string | null;
 }) {
   const t = useTranslations("Billboard");
+  const tPublic = useTranslations("PublicBillboard");
   const locale = useLocale() as "en" | "es";
   const [headline, setHeadline] = useState(initialHeadline);
   const [subline, setSubline] = useState(initialSubline);
@@ -87,7 +89,7 @@ export function BillboardEditorForm({
   }, [headline, locale, published, subline, t, theme]);
 
   return (
-    <div className="max-w-4xl space-y-8 sm:space-y-10">
+    <div className="max-w-4xl space-y-8 sm:space-y-10 text-ink">
       <div className="border border-rule bg-paper-warm/20 p-4 sm:p-5">
         <p className="eyebrow mb-2 text-ink-faint">{t("publicUrlLabel")}</p>
         <a
@@ -112,9 +114,9 @@ export function BillboardEditorForm({
               key={id}
               type="button"
               onClick={() => setTheme(id)}
-              className={`text-left rounded border-2 transition-colors overflow-hidden bg-paper/30 ${
+              className={`text-left rounded-t border-2 transition-colors overflow-hidden bg-paper/30 shadow-sm ${
                 theme === id
-                  ? "border-oxblood ring-1 ring-oxblood/30"
+                  ? "border-oxblood ring-2 ring-oxblood/20"
                   : "border-rule/50 hover:border-rule"
               }`}
             >
@@ -124,25 +126,21 @@ export function BillboardEditorForm({
               <p className="px-2 pb-1 text-xs text-ink-faint line-clamp-2">
                 {t(`themeBlurb_${id}` as "themeBlurb_retrowave")}
               </p>
-              <div className="h-20 w-full border-t border-rule/40">
-                {id === "retrowave" && (
-                  <div className="h-full w-full bg-gradient-to-br from-[#0c051a] via-[#15082a] to-[#1a0a1f] relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-40 [background:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.2)_2px)]" />
-                    <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-cyan-500/25 to-transparent" />
-                  </div>
-                )}
-                {id === "minimal" && (
-                  <div className="h-full w-full bg-gradient-to-b from-slate-950 to-slate-800 flex items-end justify-end p-2">
-                    <span className="text-[6px] font-mono text-emerald-500/60">· · ·</span>
-                  </div>
-                )}
-                {id === "broadsheet" && (
-                  <div className="h-full w-full bg-[#ebe4d8] border-t-2 border-stone-900 p-1">
-                    <div className="h-1.5 w-full bg-stone-900" />
-                    <div className="h-0.5 w-2/3 bg-stone-400 mt-1" />
-                  </div>
-                )}
+              <div className="w-full border-t border-rule/40 p-0">
+                <BillboardThemeMini
+                  theme={id}
+                  displayName={displayName}
+                  handle={handle}
+                  heroTitle={headline}
+                  heroSub={subline}
+                  avatarUrl={avatarUrl}
+                  sampleBountyLine={t("miniSampleOffer")}
+                  ctaLabel={tPublic("cta")}
+                />
               </div>
+              <p className="px-2 py-1.5 text-[9px] font-mono text-ink-faint text-center border-t border-rule/30">
+                {theme === id ? t("layoutSelected") : t("layoutTapToUse")}
+              </p>
             </button>
           ))}
         </div>
@@ -175,7 +173,9 @@ export function BillboardEditorForm({
       <div>
         <p className="eyebrow text-oxblood mb-2">{t("livePreviewLabel")}</p>
         <p className="text-sm text-ink-soft mb-3 max-w-2xl">{t("livePreviewHelp")}</p>
-        <div className="border-2 border-rule rounded-sm overflow-hidden shadow-lg">
+        <div
+          className="border-2 border-rule rounded-sm overflow-y-auto max-h-[min(78vh,44rem)] bg-paper/15 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)] isolate [contain:inline-size]"
+        >
           <BillboardFrame
             theme={theme}
             displayName={displayName}

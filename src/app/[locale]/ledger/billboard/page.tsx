@@ -16,7 +16,16 @@ export default async function LedgerBillboardPage({
   const t = await getTranslations("Billboard");
 
   const session = await getCurrentProfile();
-  if (!session?.profile) return null;
+  if (!session?.profile) {
+    return (
+      <div className="max-w-md">
+        <p className="eyebrow text-oxblood mb-2">{t("overline")}</p>
+        <p className="text-ink-soft font-mono text-sm">
+          {t("sessionError")}
+        </p>
+      </div>
+    );
+  }
 
   if (session.profile.role !== "creator" && session.profile.role !== "admin") {
     return (

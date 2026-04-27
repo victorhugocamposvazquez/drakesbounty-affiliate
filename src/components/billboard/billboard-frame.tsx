@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { absoluteUrl } from "@/lib/env";
 import { Link } from "@/i18n/navigation";
@@ -35,7 +36,60 @@ type Props = {
   avatarUrl: string | null;
   /** Tighter layout for editor thumbnails. */
   compact?: boolean;
+  /**
+   * In the Ledger live preview: no `fixed` backgrounds (avoids full-viewport paint),
+   * no navigation from CTA/footer links.
+   */
+  contained?: boolean;
 };
+
+function CtaOrPreviewLink({
+  href,
+  contained,
+  className,
+  children,
+}: {
+  href: string;
+  contained: boolean;
+  className: string;
+  children: ReactNode;
+}) {
+  if (contained) {
+    return (
+      <span className={className} title="Preview: links are active on the public page only.">
+        {children}
+      </span>
+    );
+  }
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  );
+}
+
+function FooterBackLink({
+  contained,
+  className,
+  children,
+}: {
+  contained: boolean;
+  className: string;
+  children: ReactNode;
+}) {
+  if (contained) {
+    return (
+      <span className={className} title="Preview only — link on the public page.">
+        {children}
+      </span>
+    );
+  }
+  return (
+    <Link href="/" className={className}>
+      {children}
+    </Link>
+  );
+}
 
 function LogoOrAvatar({
   avatarUrl,
@@ -124,6 +178,7 @@ export function BillboardFrame({
   campaigns,
   avatarUrl,
   compact = false,
+  contained = false,
 }: Props) {
   const t = useTranslations("PublicBillboard");
   const active = campaigns.filter(
@@ -139,7 +194,9 @@ export function BillboardFrame({
         className={
           compact
             ? "min-h-0 text-slate-100 font-sans"
-            : "min-h-screen relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 font-sans"
+            : contained
+              ? "min-h-0 relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 font-sans"
+              : "min-h-screen relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 font-sans"
         }
       >
         <header
@@ -224,12 +281,13 @@ export function BillboardFrame({
                           t={t}
                         />
                       </div>
-                      <a
+                      <CtaOrPreviewLink
                         href={href}
+                        contained={contained}
                         className="shrink-0 inline-flex items-center justify-center text-sm font-semibold px-4 py-2 rounded-md border border-emerald-400/60 text-emerald-200 hover:bg-emerald-950/80"
                       >
                         {t("cta")}
-                      </a>
+                      </CtaOrPreviewLink>
                     </div>
                   </li>
                 );
@@ -242,12 +300,12 @@ export function BillboardFrame({
             <p className="text-slate-600 text-xs font-mono tracking-widest">
               {t("footer", { year: "MMXXVI" })}
             </p>
-            <Link
-              href="/"
+            <FooterBackLink
+              contained={contained}
               className="inline-block mt-2 text-emerald-400/80 text-sm font-mono hover:underline"
             >
               {t("backDrake")} →
-            </Link>
+            </FooterBackLink>
           </footer>
         )}
       </div>
@@ -260,7 +318,9 @@ export function BillboardFrame({
         className={
           compact
             ? "min-h-0 bg-[#f0ebe3] text-stone-900 font-serif"
-            : "min-h-screen relative overflow-hidden bg-[#ebe4d8] text-stone-900 font-serif"
+            : contained
+              ? "min-h-0 relative overflow-hidden bg-[#ebe4d8] text-stone-900 font-serif"
+              : "min-h-screen relative overflow-hidden bg-[#ebe4d8] text-stone-900 font-serif"
         }
       >
         <div
@@ -357,12 +417,13 @@ export function BillboardFrame({
                           t={t}
                         />
                       </div>
-                      <a
+                      <CtaOrPreviewLink
                         href={href}
+                        contained={contained}
                         className="shrink-0 inline-flex items-center justify-center text-sm sm:text-base font-bold px-5 py-2.5 bg-stone-900 text-[#f0ebe3] rounded-full hover:bg-stone-800"
                       >
                         {t("cta")}
-                      </a>
+                      </CtaOrPreviewLink>
                     </div>
                   </li>
                 );
@@ -375,12 +436,12 @@ export function BillboardFrame({
             <p className="text-stone-600 text-xs font-mono tracking-widest">
               {t("footer", { year: "MMXXVI" })}
             </p>
-            <Link
-              href="/"
+            <FooterBackLink
+              contained={contained}
               className="inline-block mt-2 text-stone-800 text-sm font-mono hover:underline"
             >
               {t("backDrake")} →
-            </Link>
+            </FooterBackLink>
           </footer>
         )}
       </div>
@@ -388,16 +449,19 @@ export function BillboardFrame({
   }
 
   // retrowave (default)
+  const retroPos = contained ? "absolute" : "fixed";
   return (
     <div
       className={
         compact
           ? "min-h-0 font-sans text-inherit"
-          : "min-h-screen relative overflow-hidden font-sans"
+          : contained
+            ? "relative min-h-0 overflow-hidden font-sans"
+            : "min-h-screen relative overflow-hidden font-sans"
       }
     >
       <div
-        className="pointer-events-none fixed inset-0 z-0"
+        className={`pointer-events-none ${retroPos} inset-0 z-0`}
         style={{
           background: compact
             ? "linear-gradient(180deg, #0c051a 0%, #15082a 50%, #06010f 100%)"
@@ -409,7 +473,11 @@ export function BillboardFrame({
       {!compact && (
         <>
           <div
-            className="pointer-events-none fixed bottom-0 left-1/2 -translate-x-1/2 w-[300vw] h-[50vh] opacity-60 z-0"
+            className={`pointer-events-none ${retroPos} bottom-0 left-1/2 -translate-x-1/2 w-[300vw] opacity-60 z-0 ${
+              contained
+                ? "h-[min(40%,8rem)] max-h-36"
+                : "h-[50vh]"
+            }`}
             style={{
               backgroundImage: `
             linear-gradient(to right, rgba(0, 255, 255, 0.25) 1px, transparent 1px),
@@ -419,7 +487,9 @@ export function BillboardFrame({
               transformOrigin: "center top",
             }}
           />
-          <div className="pointer-events-none fixed inset-0 z-[1] mix-blend-multiply opacity-70 [background:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.12)_2px,rgba(0,0,0,0.12)_3px)]" />
+          <div
+            className={`pointer-events-none ${retroPos} inset-0 z-[1] mix-blend-multiply opacity-70 [background:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,0,0,0.12)_2px,rgba(0,0,0,0.12)_3px)]`}
+          />
         </>
       )}
 
@@ -519,12 +589,13 @@ export function BillboardFrame({
                         t={t}
                       />
                     </div>
-                    <a
+                    <CtaOrPreviewLink
                       href={href}
+                      contained={contained}
                       className="shrink-0 inline-flex items-center justify-center [font-family:var(--font-crt)] text-sm sm:text-xl px-4 py-2 sm:px-6 sm:py-3 bg-[#ff006e] text-white hover:bg-[#c8005a]"
                     >
                       {t("cta")}
-                    </a>
+                    </CtaOrPreviewLink>
                   </div>
                 </li>
               );
@@ -538,12 +609,12 @@ export function BillboardFrame({
           <p className="text-[#6b5a8a] text-xs font-mono tracking-widest">
             {t("footer", { year: "MMXXVI" })}
           </p>
-          <Link
-            href="/"
+          <FooterBackLink
+            contained={contained}
             className="inline-block mt-3 text-[#00ffff] text-sm font-mono hover:underline"
           >
             {t("backDrake")} →
-          </Link>
+          </FooterBackLink>
         </footer>
       )}
     </div>

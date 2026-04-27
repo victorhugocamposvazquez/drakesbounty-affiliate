@@ -274,10 +274,14 @@ function PreviewPanel({
   compactHeight: boolean;
   className?: string;
 }) {
-  const previewShellClass =
-    previewFrame === "mobile"
-      ? "max-w-[min(100%,400px)] mx-auto border-x border-dashed border-rule/40 shadow-inner"
-      : "w-full";
+  const isDesktopFrame = previewFrame === "desktop";
+  // Escritorio: ventana 16/9 (apaisada). Móvil: tira estrecha; en columna ancha, más altura.
+  const phoneMaxH = compactHeight
+    ? "max-h-[min(55vh,28rem)]"
+    : "max-h-[min(85vh,46rem)] shadow-lg";
+  const previewShellClass = isDesktopFrame
+    ? "w-full aspect-[16/9] min-h-0 border-2 border-rule rounded-sm overflow-y-auto overflow-x-hidden bg-paper/15 [contain:layout] shadow-lg"
+    : `w-full max-w-[min(100%,400px)] mx-auto border-x border-dashed border-rule/40 shadow-inner border-2 border-rule rounded-sm overflow-y-auto overflow-x-hidden bg-paper/15 [contain:layout] ${phoneMaxH}`;
 
   return (
     <div ref={refEl} className={className}>
@@ -313,13 +317,7 @@ function PreviewPanel({
           {t("previewWidthMobile")}
         </button>
       </div>
-      <div
-        className={`${previewShellClass} border-2 border-rule rounded-sm overflow-y-auto bg-paper/15 [contain:layout] mt-2 ${
-          compactHeight
-            ? "max-h-[min(55vh,28rem)]"
-            : "max-h-[min(85vh,46rem)] shadow-lg"
-        }`}
-      >
+      <div className={`${previewShellClass} mt-2`}>
         <BillboardFrame
           theme={theme}
           displayName={displayName}

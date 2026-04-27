@@ -17,4 +17,4 @@ alter table public.creators
   check (billboard_theme in ('retrowave', 'minimal', 'broadsheet'));
 
 comment on column public.creators.billboard_theme is
-  'Public Billboard layout: retrowave (neon), minimal (slate), broadsheet (print).';
+  'Public Billboard layout: retrowave (neon retro), minimal (slate), broadsheet (print).';

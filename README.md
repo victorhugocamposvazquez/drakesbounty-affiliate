@@ -117,7 +117,7 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 - [x] Fase 2 — Tracking: `GET /api/r?bc=` (click + redirect) y `POST /api/postback` (conversiones, Bearer secret)
 - [x] Fase 2+ — Deck del Ledger con datos reales (clicks/conversiones 7d); Map Room (geo); Bounties (tabla creador + lista operador); Payday (cofre 30d + últimos postbacks)
 - [x] Fase 3 (parcial) — Pagadero v2 base: solicitudes de cobro (Settlement), rieles USDC/SEPA y registro de estado (Wires)
-- [ ] Fase 4 — Compass (smart routing en UI) + Arsenal IA
+- [x] Fase 4 (parcial) — Compass en el deck (siguientes pasos según señal 7d) + Arsenal (atajos + copy hoja de ruta IA) + Almanac (glosario) + Posse (roadmap); IA generativa pendiente
 
 ## Script de base de datos
 

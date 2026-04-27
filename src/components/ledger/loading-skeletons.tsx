@@ -8,7 +8,17 @@ export function LedgerOverviewSkeleton() {
       <Block className="h-3 w-44 mb-3" />
       <Block className="h-10 sm:h-12 w-2/3 mb-3" />
       <Block className="h-5 w-full max-w-2xl mb-2" />
-      <Block className="h-5 w-4/5 max-w-xl mb-8" />
+      <Block className="h-5 w-4/5 max-w-xl mb-6" />
+
+      <div className="border border-rule/60 p-4 sm:p-6 mb-8">
+        <Block className="h-3 w-32 mb-3" />
+        <Block className="h-7 w-48 mb-4" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <Block className="h-28 w-full" />
+          <Block className="h-28 w-full" />
+          <Block className="h-28 w-full" />
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
         <div className="border-t border-rule pt-4">
@@ -102,6 +112,27 @@ export function LedgerEditorSkeleton() {
           <Block className="h-10 w-full" />
         </div>
         <Block className="h-10 w-44" />
+      </div>
+    </div>
+  );
+}
+
+/** Text-forward ledger pages (Almanac, Arsenal, Posse). */
+export function LedgerArticleSkeleton() {
+  return (
+    <div className="max-w-3xl">
+      <Block className="h-3 w-36 mb-3" />
+      <Block className="h-10 sm:h-12 w-4/5 mb-3" />
+      <Block className="h-4 w-full max-w-2xl mb-2" />
+      <Block className="h-4 w-3/4 max-w-xl mb-8" />
+      <div className="space-y-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="border border-rule/60 p-4">
+            <Block className="h-3 w-40 mb-2" />
+            <Block className="h-4 w-full" />
+            <Block className="h-4 w-full max-w-[95%] mt-2" />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -247,6 +247,66 @@
     "chartEmptyHint": "Aún no hay clicks. Suelta el Billboard o esos /api/r, y vuelve cuando mueva gente.",
     "topGeoHint": "Top geo: {list}",
     "dayShort": "D{n}",
+    "compassOverline": "· Compass ·",
+    "compassTitle": "Siguientes pasos sugeridos",
+    "compassIntro": "Según tus últimos siete días en el Ledger — no es asesoramiento legal ni de cobros.",
+    "compassItems": {
+      "billboard": {
+        "title": "Publica tu Billboard",
+        "body": "La URL pública y los CTAs trackeados son cómo la Casa atribuye clicks. Empieza aquí si aún no hay señal.",
+        "cta": "The Billboard"
+      },
+      "mapRoom": {
+        "title": "Mira dónde aterriza el tráfico",
+        "body": "Las barras por país muestran dónde disparan tus enlaces. Sirve para paneles y husos.",
+        "cta": "The Map Room"
+      },
+      "bounties": {
+        "title": "Revisa o fija bounties",
+        "body": "Las campañas deben casar con tus paneles y el Código. Mira qué está en vivo para ti.",
+        "cta": "Bounties"
+      },
+      "payday": {
+        "title": "Mira el cofre",
+        "body": "Comisiones anotadas y postbacks recientes — espejo antes de hablar de liquidación.",
+        "cta": "The Payday"
+      },
+      "settlement": {
+        "title": "Libro de liquidación",
+        "body": "Hay comisión registrada en el cable. Revisa saldo y rieles cuando la Casa abra ventana.",
+        "cta": "Settlement Book"
+      },
+      "wires": {
+        "title": "Registro de cables",
+        "body": "Sigue solicitudes de cobro y estado al pasar por revisión.",
+        "cta": "The Wires"
+      },
+      "almanac": {
+        "title": "Lee el glosario",
+        "body": "NGR, CPA, postbacks — el mismo vocabulario que los operadores al negociar.",
+        "cta": "The Almanac"
+      },
+      "arsenal": {
+        "title": "Kit creativo",
+        "body": "Ganchos y formatos por canal irán aquí; de momento usa el Billboard y tus propios assets.",
+        "cta": "The Arsenal"
+      },
+      "opBounties": {
+        "title": "Publica o alimenta bounties",
+        "body": "Hacen falta ofertas antes de que los creadores puedan llevar programas. Tu consola empieza por lo que publicas.",
+        "cta": "Bounties"
+      },
+      "opLedger": {
+        "title": "Foto de la semana",
+        "body": "Volumen y conversiones que la red te atribuye — chequeo antes de cerrar periodos.",
+        "cta": "The Ledger"
+      },
+      "opPayday": {
+        "title": "Espejo lado creador",
+        "body": "Mira qué postbacks hemos registrado para que financiero concilie con banco.",
+        "cta": "The Payday"
+      }
+    },
     "cardMapTeaserK": "· Brújula ·",
     "cardMapTeaserTitle": "Tu audiencia como islas y barcos",
     "cardMapTeaserBody": "Mapas de calor, embudos y enlaces ruteados — la carta va aquí.",
@@ -327,6 +387,41 @@
     "wiresOpOverline": "· Mensajería de red ·",
     "wiresOpTitle": "The Wires del operador",
     "wiresOpBody": "Canal de incidencias, tratados y conciliación con creadores. Se habilita al conectar la consola de operador.",
+    "arsenalPageOverline": "· The Arsenal ·",
+    "arsenalPageTitle": "Ruta creativa y caja de herramientas",
+    "arsenalPageIntro": "Atajos a lo del deck que cambia lo que enseñas. La generación frase a frase va en hoja de ruta — aún no hay modelo externo.",
+    "arsenalLinkBillboard": "Billboard y URL pública",
+    "arsenalLinkBounties": "Bounties que llevas o financias",
+    "arsenalLinkMap": "Map Room (geos de audiencia)",
+    "arsenalLinkPayday": "Payday (comisiones anotadas)",
+    "arsenalLinkSettlement": "Liquidación y rieles",
+    "arsenalLinkCode": "The Code (obligaciones)",
+    "arsenalLinkStandards": "Standards Index",
+    "arsenalToolkitK": "· Cuando llegue la IA ·",
+    "arsenalToolkitTitle": "Ganchos, tamaños y packs por canal",
+    "arsenalToolkitBody": "Generaremos variantas desde el copy de tratado aprobado, con los mismos IDs de tracking que el Billboard. Podrás rechazar, editar y fijar ganadores antes de publicar.",
+    "almanacPageOverline": "· The Almanac ·",
+    "almanacPageTitle": "Glosario (afiliación + iGaming)",
+    "almanacPageIntro": "Lenguaje común con operadores. Definiciones generales — tu programa o jurisdicción puede usar otros términos.",
+    "glossaryNgrTerm": "NGR (Net Gaming Revenue)",
+    "glossaryNgrDef": "Casi siempre apuestas menos premios, tras bonos, tasas y a veces fraude o chargebacks — de ahí suele salir el % de rev share.",
+    "glossaryCpaTerm": "CPA (Cost Per Acquisition)",
+    "glossaryCpaDef": "Pago fijo al cumplir un evento (p. ej. depósito cualificado) — con KPIs estrictas y hold habitual.",
+    "glossaryRevshareTerm": "Rev share",
+    "glossaryRevshareDef": "Porcentaje sostenido del NGR (o red neta definida) de jugadores referidos, a menudo con cláusulas de arrastre negativo.",
+    "glossaryPostbackTerm": "Postback / S2S",
+    "glossaryPostbackDef": "Evento en servidor que el operador (o la red) llama para registrar conversiones. Nuestro `/api/postback` es ese conducto.",
+    "glossaryFtdTerm": "FTD",
+    "glossaryFtdDef": "Primer depósito — gatillo común de CPA o tramos híbridos del acuerdo.",
+    "glossaryRailTerm": "Rail de pago",
+    "glossaryRailDef": "Forma de mover dinero: SEPA, e-wallet, stablecoin, etc. KYC y mínimos antes de que salga el dinero.",
+    "glossaryNcoTerm": "Negative carryover (NCO)",
+    "glossaryNcoDef": "Si el NGR de un jugador es negativo en un mes, el déficit puede arrastrarse y comerse el NGR positivo futuro hasta recuperarse.",
+    "possePageOverline": "· The Posse ·",
+    "possePageTitle": "Invitaciones y override",
+    "possePageIntro": "Referidos de primer nivel — a quién trajiste, métricas de calidad y tajada en su ledger mientras facturan. No activo en este build.",
+    "posseRoadmapK": "· Orden de build ·",
+    "posseRoadmapBody": "Links de invitación con atribución, comprobación de roles y reglas de override transparentes, después de core ledger y compliance.",
     "sectionStubOverline": "· En construcción ·",
     "stubs": {
       "mapRoomTitle": "The Map Room",

@@ -6,6 +6,11 @@ import {
   getCreatorConversions7d,
   getOperatorSummary,
 } from "@/lib/ledger/stats";
+import {
+  getCreatorCompassItems,
+  getOperatorCompassItems,
+} from "@/lib/ledger/compass";
+import { LedgerCompass } from "@/components/ledger/ledger-compass";
 import { Link } from "@/i18n/navigation";
 
 export default async function LedgerOverviewPage({
@@ -28,6 +33,10 @@ export default async function LedgerOverviewPage({
   if (profile.role === "operator") {
     const op = await getOperatorSummary(supabase, user.id);
     const cur = op.currency;
+    const opCompass = getOperatorCompassItems({
+      activeBounties: op.activeBounties,
+      conv7d: op.conv7d,
+    });
     return (
       <div className="max-w-[1000px]">
         <p className="eyebrow mb-3">{t("operatorDeckOverline")}</p>
@@ -40,6 +49,7 @@ export default async function LedgerOverviewPage({
         <p className="font-display italic text-base sm:text-lg text-ink-soft mb-8 sm:mb-10 max-w-2xl">
           {t("operatorOverviewSubtitle")}
         </p>
+        <LedgerCompass items={opCompass} />
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
           <StatCard
             label={t("kpiActiveBountiesOp")}
@@ -67,6 +77,11 @@ export default async function LedgerOverviewPage({
   ]);
   const hasSignal = total7d > 0 || conv.count > 0;
   const max = Math.max(...series, 1);
+  const creatorCompass = getCreatorCompassItems({
+    totalClicks7d: total7d,
+    conv7d: conv.count,
+    commissionCents7d: conv.commissionCents,
+  });
 
   return (
     <div className="max-w-[1000px]">
@@ -80,6 +95,8 @@ export default async function LedgerOverviewPage({
       <p className="font-display italic text-base sm:text-lg text-ink-soft mb-8 sm:mb-10 max-w-2xl">
         {t(hasSignal ? "overviewSubtitleLive" : "overviewSubtitle")}
       </p>
+
+      <LedgerCompass items={creatorCompass} />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
         <StatCard

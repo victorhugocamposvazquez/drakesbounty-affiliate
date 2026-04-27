@@ -247,6 +247,66 @@
     "chartEmptyHint": "No clicks yet. Drop your Billboard or tracked links, then check back after traffic hits.",
     "topGeoHint": "Top geos: {list}",
     "dayShort": "D{n}",
+    "compassOverline": "· Compass ·",
+    "compassTitle": "Suggested next moves",
+    "compassIntro": "Based on your last seven days on the Ledger — not legal or payout advice.",
+    "compassItems": {
+      "billboard": {
+        "title": "Publish your Billboard",
+        "body": "Public URL and tracked CTAs are how the House attributes clicks. Start here if nothing is moving yet.",
+        "cta": "The Billboard"
+      },
+      "mapRoom": {
+        "title": "See where traffic lands",
+        "body": "Country bars show where your links fire. Use it to tune panels and timezones.",
+        "cta": "The Map Room"
+      },
+      "bounties": {
+        "title": "Pin or review bounties",
+        "body": "Campaigns you run must match your panels and the Code. Check what is live for you.",
+        "cta": "Bounties"
+      },
+      "payday": {
+        "title": "Check the chest",
+        "body": "Recorded commissions and recent postbacks — your mirror before settlement talks.",
+        "cta": "The Payday"
+      },
+      "settlement": {
+        "title": "Settlement book",
+        "body": "You have recorded commission on the wire. Review balance and request rails when the House opens the window.",
+        "cta": "Settlement Book"
+      },
+      "wires": {
+        "title": "Wire log",
+        "body": "Track payout requests and status as they move through review.",
+        "cta": "The Wires"
+      },
+      "almanac": {
+        "title": "Read the glossary",
+        "body": "NGR, CPA, postbacks — same vocabulary as operators when you negotiate.",
+        "cta": "The Almanac"
+      },
+      "arsenal": {
+        "title": "Creative toolkit",
+        "body": "Hooks and formats per channel will land here; for now, use the Billboard and your own assets.",
+        "cta": "The Arsenal"
+      },
+      "opBounties": {
+        "title": "Fund or seed bounties",
+        "body": "Programmes need offers before creators can run them. Your console starts with what you publish.",
+        "cta": "Bounties"
+      },
+      "opLedger": {
+        "title": "Week snapshot",
+        "body": "Volume and conversions the network attributes to your house — sanity-check before closing periods.",
+        "cta": "The Ledger"
+      },
+      "opPayday": {
+        "title": "Creator-side mirror",
+        "body": "See what postbacks we recorded so your finance team can reconcile with bank rails.",
+        "cta": "The Payday"
+      }
+    },
     "cardMapTeaserK": "· Compass ·",
     "cardMapTeaserTitle": "Map your audience as ships and islands",
     "cardMapTeaserBody": "Geo heat, funnels, and your routed links — the Carta is next.",
@@ -327,6 +387,41 @@
     "wiresOpOverline": "· Network dispatch ·",
     "wiresOpTitle": "Operator Wires",
     "wiresOpBody": "Issue routing, treaty notices, and reconciliation with creators. This opens with the operator console rollout.",
+    "arsenalPageOverline": "· The Arsenal ·",
+    "arsenalPageTitle": "Creative route & toolkit",
+    "arsenalPageIntro": "Jump to the pieces of the deck that change what you ship. Generative line-by-line copy lives on the roadmap — nothing calls an external model yet.",
+    "arsenalLinkBillboard": "Billboard & public URL",
+    "arsenalLinkBounties": "Bounties you run or fund",
+    "arsenalLinkMap": "Map Room (audience geos)",
+    "arsenalLinkPayday": "Payday (recorded commission)",
+    "arsenalLinkSettlement": "Settlement & rails",
+    "arsenalLinkCode": "The Code (obligations)",
+    "arsenalLinkStandards": "Standards Index",
+    "arsenalToolkitK": "· When AI lands ·",
+    "arsenalToolkitTitle": "Hooks, sizes, and channel packs",
+    "arsenalToolkitBody": "We will generate variants from approved treaty copy, tied to the same tracking IDs as your Billboard. You will be able to reject, edit, and pin winners before they go live.",
+    "almanacPageOverline": "· The Almanac ·",
+    "almanacPageTitle": "Glossary (affiliate + iGaming)",
+    "almanacPageIntro": "Shared language with operators. Definitions are general — your programme or jurisdiction may use different terms.",
+    "glossaryNgrTerm": "NGR (Net Gaming Revenue)",
+    "glossaryNgrDef": "Typically stakes minus wins, after bonuses, fees, and sometimes fraud and chargebacks — the pot rev-share often takes a % from.",
+    "glossaryCpaTerm": "CPA (Cost Per Acquisition)",
+    "glossaryCpaDef": "Fixed payment when a new player hits an agreed event (e.g. qualified deposit) — strict KPIs and hold windows are normal.",
+    "glossaryRevshareTerm": "Rev share",
+    "glossaryRevshareDef": "Ongoing % of NGR (or defined net) for referred players, often with negative carryover clauses.",
+    "glossaryPostbackTerm": "Postback / S2S",
+    "glossaryPostbackDef": "Server event the operator (or network) calls so the Ledger can record conversions. Our `/api/postback` is that pipe.",
+    "glossaryFtdTerm": "FTD",
+    "glossaryFtdDef": "First-time deposit — a common trigger for CPA or hybrid parts of a deal.",
+    "glossaryRailTerm": "Payout rail",
+    "glossaryRailDef": "Method money moves: SEPA, e-wallet, stablecoin, etc. KYC and minimum thresholds apply before funds leave.",
+    "glossaryNcoTerm": "Negative carryover (NCO)",
+    "glossaryNcoDef": "If a month’s NGR is negative for a player, the deficit can roll forward and eat future positive NGR before you see commission.",
+    "possePageOverline": "· The Posse ·",
+    "possePageTitle": "Invites & overrides",
+    "possePageIntro": "First-level referrals — who you brought, quality metrics, and a cut on their ledger while they earn. Not active in this build.",
+    "posseRoadmapK": "· Build order ·",
+    "posseRoadmapBody": "Invite links with attribution, role checks, and transparent override rules come after core ledger and compliance hooks are stable.",
     "sectionStubOverline": "· Under construction ·",
     "stubs": {
       "mapRoomTitle": "The Map Room",

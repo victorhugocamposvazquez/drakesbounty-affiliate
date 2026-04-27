@@ -217,7 +217,7 @@ function StickyActionBar({
       className="fixed bottom-0 left-0 right-0 z-40 border-t border-rule bg-paper/95 backdrop-blur-md shadow-[0_-4px_24px_rgba(0,0,0,0.08)]
         pl-4 pr-4 sm:pl-6 sm:pr-6 py-3 md:left-60"
     >
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2 sm:gap-3">
+      <div className="max-w-screen-2xl mx-auto flex flex-wrap items-center gap-2 sm:gap-3">
         {isDirty && (
           <span className="font-mono text-[9px] uppercase tracking-widest text-oxblood/90">
             {t("dirtyBadge")}
@@ -497,7 +497,7 @@ export function BillboardEditorForm({
   }, [headline, locale, published, subline, t, theme]);
 
   return (
-    <div className="w-full max-w-7xl space-y-6 sm:space-y-8 text-ink pb-28 text-left">
+    <div className="w-full max-w-screen-2xl space-y-6 sm:space-y-8 text-ink pb-28 text-left">
       <div className="space-y-3">
         <StepPills t={tFn} />
         <p className="text-sm text-ink-faint max-w-2xl">{t("uxIntro")}</p>
@@ -518,7 +518,7 @@ export function BillboardEditorForm({
         </p>
       </div>
 
-      <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.65fr)] lg:gap-8 lg:items-start">
         <div className="space-y-6 sm:space-y-8 min-w-0">
           <div className="space-y-4" id="bb-step-content">
             <p className="eyebrow text-ink-faint">{t("sectionContent")}</p>

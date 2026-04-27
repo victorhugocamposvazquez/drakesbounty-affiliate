@@ -2,6 +2,7 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { absoluteUrl } from "@/lib/env";
+import { normalizeBillboardTheme } from "@/lib/billboard-theme";
 import { BillboardEditorForm } from "@/components/ledger/billboard-editor-form";
 import { Link } from "@/i18n/navigation";
 
@@ -63,9 +64,11 @@ export default async function LedgerBillboardPage({
 
   const publicPath = `/${locale}/b/${session.profile.handle}`;
   const publicUrl = absoluteUrl(publicPath);
+  const displayName =
+    session.profile.display_name || session.profile.handle || "—";
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       <p className="eyebrow mb-3 text-oxblood">{t("overline")}</p>
       <h1
         className="font-display text-3xl sm:text-4xl md:text-5xl leading-tight mb-2"
@@ -81,8 +84,11 @@ export default async function LedgerBillboardPage({
         initialHeadline={cr.billboard_headline || ""}
         initialSubline={cr.billboard_subline || ""}
         initialPublished={cr.billboard_published}
+        initialTheme={normalizeBillboardTheme(cr.billboard_theme)}
         publicUrl={publicUrl}
         handle={session.profile.handle}
+        displayName={displayName}
+        avatarUrl={session.profile.avatar_url}
       />
     </div>
   );

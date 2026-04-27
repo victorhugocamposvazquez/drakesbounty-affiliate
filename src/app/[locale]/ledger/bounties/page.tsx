@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/session";
 import { createClient } from "@/lib/supabase/server";
+import { CreateBountyForm } from "@/components/ledger/create-bounty-form";
 import { Link } from "@/i18n/navigation";
 
 type Row = {
@@ -48,6 +49,7 @@ export default async function BountiesPage({
           {t("bountiesOpTitle")}
         </h1>
         <p className="text-ink-soft mb-8">{t("bountiesOpIntro")}</p>
+        <CreateBountyForm locale={locale} />
         {(!rows || rows.length === 0) && (
           <p className="text-ink-faint font-display italic">{t("bountiesOpEmpty")}</p>
         )}

@@ -5,7 +5,7 @@ SaaS de afiliación para gambling / trading / cripto con universo narrativo prop
 ## Repos relacionados
 
 - Este repo = **app de afiliados** (Ledger, Billboard, etc.).
-- **Backoffice de operaciones** = otro repositorio Next (p. ej. `drakes-ops`) y otro deploy (p. ej. `ops.tudominio.com`). Misma instancia **Supabase**; convenciones en [`docs/ecosistema-repos.md`](docs/ecosistema-repos.md). Para **arrancar ops** con diseño HTML + contexto del afiliado: [`docs/copiar-a-drakes-ops/README.md`](docs/copiar-a-drakes-ops/README.md).
+- **Backoffice (ops)** — lo desarrollas en **otro repositorio** (misma instancia Supabase; migraciones en `supabase/migrations/` aquí, p. ej. `0004` para `import_batches`). Convenciones: [`docs/ecosistema-repos.md`](docs/ecosistema-repos.md) y [`docs/copiar-a-drakes-ops/README.md`](docs/copiar-a-drakes-ops/README.md).
 
 ## Estructura
 
@@ -122,14 +122,18 @@ Abre http://localhost:3000 → te redirige a http://localhost:3000/en (o `/es`).
 - [x] Fase 2 — Tracking: `GET /api/r?bc=` (click + redirect) y `POST /api/postback` (conversiones, Bearer secret)
 - [x] Fase 2+ — Deck del Ledger con datos reales (clicks/conversiones 7d); Map Room (geo); Bounties (tabla creador + lista operador); Payday (cofre 30d + últimos postbacks)
 - [x] Fase 3 (parcial) — Pagadero v2 base: solicitudes de cobro (Settlement), rieles USDC/SEPA y registro de estado (Wires)
-- [x] Fase 4 (parcial) — Compass en el deck (siguientes pasos según señal 7d) + Arsenal (atajos + copy hoja de ruta IA) + Almanac (glosario) + Posse (roadmap); IA generativa pendiente
+- [x] Fase 4 (parcial) — Compass en el deck (siguientes pasos según señal 7d) + Arsenal (asistente OpenAI + banco de copy) + Almanac (glosario) + Posse (roadmap); futuro: packs por canal bajo el Billboard
 - [x] Ajustes transversales — `.env.example` sin secretos reales; `robots.txt` + `sitemap.xml`; `GET /api/health`; Ledger con `noindex`; badges inventados retirados del nav
 
-## Próximo (fuera de este repo o fase posterior)
+## Próximo (fase posterior)
 
-- **drakes-ops** — backoffice (imports CSV, conciliación, staff) según [`docs/copiar-a-drakes-ops/README.md`](docs/copiar-a-drakes-ops/README.md).
-- **Arsenal** — generación con modelo cuando defináis proveedor y política de datos.
+- **Repo backoffice** — parseo CSV → `conversions`, estados de batch, UI de conciliación avanzada.
+- **Arsenal** — asistente de copy con OpenAI en el servidor (`OPENAI_API_KEY` o `ARSENAL_OPENAI_API_KEY`; opcional `ARSENAL_OPENAI_MODEL`). Límite por usuario con ventana deslizante vía `arsenal_ai_rate_log` y env `ARSENAL_AI_RATE_MAX` / `ARSENAL_AI_RATE_WINDOW_MINUTES` (migración `0005`). Sin clave, el formulario queda deshabilitado y el banco estático sigue disponible.
 - **Pagadero** — refinar si el pagador final es operador vs Casa (modelo de negocio).
+
+## APIs de integración (operadores)
+
+Contrato de **tracking** (`/api/r`) y **postback** (`/api/postback`): [`docs/api-integracion.md`](docs/api-integracion.md).
 
 ## Script de base de datos
 

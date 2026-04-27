@@ -2,7 +2,7 @@
 
 1. **`regla-cursor.mdc`** → en el otro repo como **`.cursor/rules/drakes-ops.mdc`** (crea la carpeta `.cursor/rules/` si no existe).
 
-2. **`../contexto-para-drakes-ops.md`** → copia el contenido a **`drakes-ops/docs/drakes-affiliate-context.md`** (o deja en ops solo la copia; el original sigue en el afiliado).
+2. **`../contexto-para-drakes-ops.md`** → copia el contenido a **`drakes-ops/docs/drakes-affiliate-context.md`** (el original se mantiene en este repo).
 
 3. **Primer prompt** al abrir ops en Cursor: ver `ecosistema-repos.md` en el afiliado, sección *Primer prompt (repo casi vacío, solo HTMLs de diseño)*, y añade `@` a la carpeta de HTML.
 

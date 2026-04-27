@@ -1,5 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/auth/session";
+import { ArsenalAiAssistant } from "@/components/ledger/arsenal-ai-assistant";
+import { ArsenalCopyBank } from "@/components/ledger/arsenal-copy-bank";
+import { getArsenalOpenAIKey } from "@/lib/arsenal/openai-generate";
 import { Link } from "@/i18n/navigation";
 
 const ARSENAL_LINKS = [
@@ -23,6 +26,8 @@ export default async function ArsenalPage({
   if (!session?.profile) return null;
 
   const t = await getTranslations("Ledger");
+  const localeKey = (locale === "es" ? "es" : "en") as "en" | "es";
+  const arsenalAiConfigured = Boolean(getArsenalOpenAIKey());
 
   return (
     <div className="max-w-3xl">
@@ -36,6 +41,20 @@ export default async function ArsenalPage({
       <p className="text-ink-soft text-[16px] sm:text-[17px] leading-relaxed mb-8 sm:mb-10 max-w-2xl">
         {t("arsenalPageIntro")}
       </p>
+
+      <ArsenalAiAssistant
+        locale={localeKey}
+        configured={arsenalAiConfigured}
+      />
+
+      <ArsenalCopyBank
+        items={[
+          { title: t("arsenalCopy1Title"), body: t("arsenalCopy1Body") },
+          { title: t("arsenalCopy2Title"), body: t("arsenalCopy2Body") },
+          { title: t("arsenalCopy3Title"), body: t("arsenalCopy3Body") },
+          { title: t("arsenalCopy4Title"), body: t("arsenalCopy4Body") },
+        ]}
+      />
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10 sm:mb-12">
         {ARSENAL_LINKS.map((row) => (

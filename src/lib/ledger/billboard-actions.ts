@@ -9,6 +9,7 @@ const schema = z.object({
   headline: z.string().max(200),
   subline: z.string().max(300),
   published: z.boolean(),
+  theme: z.enum(["retrowave", "minimal", "broadsheet"]),
 });
 
 export type SaveBillboardResult = { ok: true } | { ok: false; error: string };
@@ -38,6 +39,7 @@ export async function saveBillboardSettings(
       billboard_headline: parsed.data.headline,
       billboard_subline: parsed.data.subline,
       billboard_published: parsed.data.published,
+      billboard_theme: parsed.data.theme,
     })
     .eq("id", user.id);
 

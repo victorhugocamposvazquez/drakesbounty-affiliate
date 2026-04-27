@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { PublicBillboard } from "@/components/billboard/public-billboard";
+import { BillboardFrame } from "@/components/billboard/billboard-frame";
+import { normalizeBillboardTheme } from "@/lib/billboard-theme";
 
 type CampaignRow = {
   id: string;
@@ -57,7 +58,7 @@ export default async function PublicBillboardPage({
 
   const { data: cr, error: ce } = await sb
     .from("creators")
-    .select("billboard_headline, billboard_subline, billboard_published, tier, vertical")
+    .select("billboard_headline, billboard_subline, billboard_published, tier, vertical, billboard_theme")
     .eq("id", profile.id)
     .maybeSingle();
 
@@ -99,12 +100,14 @@ export default async function PublicBillboardPage({
   const campaigns = (rawRows ?? []) as unknown as CampaignRow[];
 
   return (
-    <PublicBillboard
+    <BillboardFrame
+      theme={normalizeBillboardTheme(cr.billboard_theme)}
       displayName={profile.display_name || profile.handle || handle}
       handle={profile.handle!}
       heroTitle={cr.billboard_headline}
       heroSub={cr.billboard_subline}
       campaigns={campaigns}
+      avatarUrl={profile.avatar_url}
     />
   );
 }

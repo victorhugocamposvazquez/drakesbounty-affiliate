@@ -9,7 +9,7 @@ Guía para mantener **afiliado** y **backoffice** separados pero alineados.
 | Repo | Rol | Deploy típico |
 |------|-----|----------------|
 | **`drakes-affiliate`** (este) | Producto creador: Ledger, Billboard público, tracking, postback al consumo del afiliado | Vercel → dominio público de afiliación |
-| **`drakes-ops`** (nombre sugerido) | Consola interna: import CSV, revisión, lotes, staff/operador de plataforma | Vercel → subdominio `ops.*` (no indexar en buscadores) |
+| **`drakes-ops`** (u otro nombre; repo aparte) | Consola: import CSV, conciliación, staff/operador | Vercel → subdominio `ops.*` |
 
 Mismo **proyecto Supabase** en ambos (una sola base de verdad). Distintos **proyectos Vercel** y, si puedes, **distintas variables** (mismo `NEXT_PUBLIC_SUPABASE_URL`, distintas políticas de uso de `service_role`).
 

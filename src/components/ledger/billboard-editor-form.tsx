@@ -396,6 +396,7 @@ export function BillboardEditorForm({
     if (!isDirty) return;
     const h = (e: BeforeUnloadEvent) => {
       e.preventDefault();
+      e.returnValue = "";
     };
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
